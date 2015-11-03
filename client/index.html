@@ -15,7 +15,7 @@
   <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
   <link rel="icon" href="img/favicon.ico">
 
-  <title>7 Wonders App</title>
+  <title>7 Wonders</title>
 
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="css/bootstrap.min.css">
@@ -111,7 +111,7 @@
     <div class="controls" ng-class="{'open': controls.open}">
       <div ng-class="controls.background">
         <div class="input">
-          <span class="ion-minus" ng-click="switchSign()" ng-class="{'inactive': !controls.negative}"></span> {{controls.value}}
+          <span class="ion-minus" ng-click="switchSign()" ng-class="{'inactive': !controls.negative}" ng-show="['military', 'money'].indexOf(controls.category) !== -1"></span> {{controls.value}}
         </div>
         <ul class="nav nav-select-player">
           <li>

@@ -1,10 +1,6 @@
 /*jshint asi: false, browser: true, eqeqeq: true, eqnull: true, jquery: true, strict: false, laxcomma: true, nonbsp: true, undef: true, unused: true*/
 /*global angular, FastClick*/
 
-$(function() {
-    FastClick.attach(document.body);
-});
-
 (function () {
   'use strict';
 
@@ -91,7 +87,7 @@ $(function() {
     $scope.categories = [
       {
         name: 'military',
-        icon: 'ion-pinpoint'
+        icon: 'ion-wand'
       },
       {
         name: 'money',
@@ -99,7 +95,7 @@ $(function() {
       },
       {
         name: 'wonder',
-        icon: 'ion-eject'
+        icon: 'ion-android-funnel'
       },
       {
         name: 'buildings',
@@ -111,7 +107,7 @@ $(function() {
       },
       {
         name: 'research',
-        icon: 'ion-university'
+        icon: 'ion-ios-flask'
       },
       {
         name: 'guild',
@@ -254,4 +250,9 @@ $(function() {
 
   /** Directives **/
 
+
+  /** Run **/
+  wonderApp.run(function() {
+    FastClick.attach(document.body);
+  });
 })();

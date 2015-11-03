@@ -13,6 +13,7 @@
       text-align: center;
       border-right: 0 none;
     }
+    &.ion-android-funnel::before { transform: rotate(180deg); }
   }
 
   tr:first-child th {
