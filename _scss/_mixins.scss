@@ -1,0 +1,29 @@
+@mixin score-rows($map) {
+  @each $name, $bg-color in $map {
+    .score .#{$name} td {
+      background-color: fade-out($bg-color, 0.25);
+      &:first-child {
+        padding: 9px 12px 5px;
+        font-size: 20px;
+        text-align: center;
+        color: if((red($bg-color) * 299 + green($bg-color) * 587 + blue($bg-color) * 114) / 1000 > 125 , #000, #fff);
+        background-color: $bg-color;
+      }
+    }
+    .controls > .#{$name} {
+      background-color: fade-out($bg-color, 0.25);
+      color: if((red($bg-color) * 299 + green($bg-color) * 587 + blue($bg-color) * 114) / 1000 > 125 , #000, #fff);
+    }
+  }
+}
+
+@mixin box-shadow() {
+  -webkit-box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.75);
+     -moz-box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.75);
+          box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.75);
+}
+@mixin transition($duration) {
+  -webkit-transition: all $duration;
+     -moz-transition: all $duration;
+          transition: all $duration;
+}

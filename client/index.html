@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="wonderApp">
+
+<head>
+  <!-- Required meta tags always come first -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="HandheldFriendly" content="true" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="white" />
+  <meta name="apple-mobile-web-app-title" content="7 Wonders">
+
+  <!-- Favicons -->
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+  <link rel="icon" href="img/favicon.ico">
+
+  <title>7 Wonders App</title>
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/layout.min.css">
+</head>
+
+<body ng-controller="wonderCtrl">
+
+  <div class="page-header" ng-controller="wonderMenuCtrl">
+    <h2><small>7</small> Wonders</h2>
+    <ul class="nav">
+      <li>
+        <a data-toggle="modal" data-target="#modal-new-game"><span class="ion-refresh"></span></a>
+      </li>
+      <li ng-repeat="(key, menu) in menus">
+        <a id="{{menu.nav}}" class="slide-out-menu" ng-click="open(key)"><span class="{{menu.icon}}"></span></a>
+      </li>
+      <li>
+        <a><span class="ion-stats-bars"></span></a>
+      </li>
+    </ul>
+    <div class="nav-drawers">
+      <!-- NAV-PLAYERS -->
+      <ul id="{{menus['players'].drawer}}" class="slide-out-drawer">
+        <li ng-repeat="(player, score) in players">
+          <span class="ion-drag"></span>
+          <a data-target="{{player | lowercase}}">
+            {{player}}
+            <span class="ion-ios-trash-outline" ng-click="removePlayer(player)"></span>
+          </a>
+        </li>
+        <li>
+          <a id="add-player" class="bg-success cancel" data-toggle="modal" data-target="#modal-player-add">
+            <span class="ion-ios-personadd"></span>
+          </a>
+        </li>
+      </ul>
+      <!-- MODAL -->
+      <div id="modal-player-add" class="modal fade">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title">New Player</h4>
+            </div>
+            <div class="modal-body">
+              <input type="text" class="form-control" placeholder="Playername">
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-success" data-dismiss="modal" ng-click="addPlayer()">Add</button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12 score">
+        <div class="table-responsive">
+          <table class="table table-score">
+            <colgroup>
+              <col width="37px" />
+            </colgroup>
+            <thead>
+              <tr>
+                <th></th>
+                <th ng-repeat="(key, value) in players">{{key}}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="category in categories" ng-class="category.name">
+                <td class="{{category.icon}}"></td>
+                <td ng-repeat="player in players" ng-click="editScore(category.name, player)">{{player[category.name]}}</td>
+              </tr>
+              <tr class="score">
+                <td><span class="ion-ribbon-a"></span></td>
+                <td ng-repeat="player in players" ng-bind="calcTotal(player)"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <button class="btn btn-primary btn-block">Spiel werten</button>
+    </div>
+
+    <div class="controls" ng-class="{'open': controls.open}">
+      <div ng-class="controls.background">
+        <div class="input">
+          <span class="ion-minus" ng-click="switchSign()" ng-class="{'inactive': !controls.negative}"></span> {{controls.value}}
+        </div>
+        <ul class="nav nav-select-player">
+          <li>
+            <a><span class="ion-arrow-left-b"></span></a>
+          </li>
+          <li>
+            <a><span class="ion-arrow-up-b"></span></a>
+          </li>
+          <li>
+            <a><span class="ion-arrow-down-b"></span></a>
+          </li>
+          <li>
+            <a><span class="ion-arrow-right-b"></span></a>
+          </li>
+        </ul>
+        <table class="table">
+          <tr>
+            <td ng-click="editValue(1)">1</td>
+            <td ng-click="editValue(2)">2</td>
+            <td ng-click="editValue(3)">3</td>
+          </tr>
+          <tr>
+            <td ng-click="editValue(4)">4</td>
+            <td ng-click="editValue(5)">5</td>
+            <td ng-click="editValue(6)">6</td>
+          </tr>
+          <tr>
+            <td ng-click="editValue(7)">7</td>
+            <td ng-click="editValue(8)">8</td>
+            <td ng-click="editValue(9)">9</td>
+          </tr>
+          <tr>
+            <td ng-click="clearValue()"><span class="ion-edit"></span></td>
+            <td ng-click="editValue(0)">0</td>
+            <td ng-click="closeControls()"><span class="ion-chevron-down"></span></td>
+          </tr>
+        </table>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Modal Confirm -->
+  <div id="modal-new-game" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-body">
+          <h4 class="modal-title">Bestätigen</h4>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Bestätigen</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+
+  <!-- jQuery first, then Bootstrap JS. -->
+  <script src="js/jquery.min.js"></script>
+  <script src="js/angular.min.js"></script>
+  <script src="js/script.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,95 @@
+.page-header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  margin: 0;
+  padding: 0 0 5px;
+  background-color: #fff;
+  border: 0 none;
+  border-bottom: 3px solid #3699db;
+  text-align: center;
+  z-index: 1000;
+
+  h2 {
+    margin: 0;
+    padding: 9px 20px;
+    small {
+      font-size: 30px;
+      color: #e67e22;
+    }
+  }
+
+  .nav {
+    font-size: 0;
+    li {
+      display: inline-block;
+      width: (100% / 3);
+      a {
+        padding: 0;
+        color: #333;
+        font-size: 28px;
+        background-color: transparent !important;
+        &:hover, &.open {
+          color: #3699db;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}
+
+
+// ---------------------------------------
+// Slide-Out-Menu
+// ---------------------------------------
+.slide-out-drawer {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  overflow: hidden;
+  @include transition(.3s);
+
+  > li {
+    border-top: 1px solid #ddd;
+    > a {
+      padding: 11px 10px 11px 34px;
+      display: block;
+      color: #333;
+      font-size: 16px;
+      cursor: pointer;
+      &:hover {
+        color: #333;
+        background-color: #ddd;
+        text-decoration: none;
+      }
+    }
+    .ion-ios-trash-outline {
+      margin: -7px -10px;
+      padding: 0 15px;
+      font-size: 28px;
+      float: right;
+      height: 34px;
+      &:hover { color: $bg-error; }
+    }
+    .ion-drag {
+//      position: relative;
+      padding: 13px 10px 9px;
+      color: #666;
+      float: left;
+      &::before {
+//        top: 5px;
+//        position: absolute;
+      }
+    }
+  }
+}
+
+#drawer-players {
+  text-align: left;
+  > li > #add-player {
+    padding-top: 0;
+    padding-bottom: 0;
+    font-size: 28px;
+    color: #fff;
+    text-align: center;
+  }
+}

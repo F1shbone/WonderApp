@@ -1,0 +1,26 @@
+$bg-military:  #db1c23;
+$bg-money:     #ffd27c;
+$bg-wonder:    #914723;
+$bg-buildings: #0078b9;
+$bg-trading:   #f8ac19;
+$bg-research:  #00904b;
+$bg-guild:     #644988;
+$bg-leader:    #ededee;
+$bg-city:      #333333;
+$bg-score:     #ffffff;
+
+$bg-success:   #27ae60;
+$bg-error:     #e74c3c;
+
+$score-map: (
+  "military": $bg-military,
+  "money": $bg-money,
+  "wonder": $bg-wonder,
+  "buildings": $bg-buildings,
+  "trading": $bg-trading,
+  "research": $bg-research,
+  "guild": $bg-guild,
+  "leader": $bg-leader,
+  "city": $bg-city,
+  "score": $bg-score
+);

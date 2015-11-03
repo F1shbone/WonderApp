@@ -1,0 +1,65 @@
+@import "../node_modules/ionicons/scss/ionicons";
+
+
+@import "../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/variables";
+@import "../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins";
+// Reset and dependencies
+@import "../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/normalize";
+// Core CSS
+@import "../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/scaffolding";
+@import "../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/type";
+@import "../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/grid";
+@import "../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/tables";
+@import "../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/forms";
+@import "../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/buttons";
+// Components
+@import "../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/component-animations";
+@import "../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/navs";
+@import "../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/close";
+// Components w/ JavaScript
+@import "../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/modals";
+// Utility classes
+@import "../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/utilities";
+@import "../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/responsive-utilities";
+
+
+@import "variables";
+@import "mixins";
+@import "nav";
+@import "modal";
+@import "score";
+@import "control";
+
+
+body {
+  margin-top: 115px;
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+}
+
+.bg-success {
+  color: #fff !important;
+  background-color: $bg-success !important;
+  &:hover { background-color: darken($bg-success, 10%) !important; }
+}
+.bg-error {
+  color: #fff !important;
+  background-color: $bg-error !important;
+  &:hover { background-color: darken($bg-error, 10%) !important; }
+}
+.bg-primary {
+  color: #fff !important;
+  background-color: #3699db !important;
+  &:hover { background-color: darken(#3699db, 10%) !important; }
+}
+
+.btn { border-radius: 0; }
+.btn-success { @extend .bg-success; }
+.btn-primary { @extend .bg-primary; }
+
+
+.table > tbody > tr > td,
+.table > tbody > tr > th,
+.table > thead > tr > td,
+.table > thead > tr > th {
+  padding: 12px;
+}

@@ -1,0 +1,31 @@
+.table-responsive { border: 0 none; }
+
+.score {
+  padding: 0;
+
+  caption { padding: 0 15px; }
+
+  th, td {
+    border-right: 1px solid #ddd;
+    & + th,
+    & + td {
+      min-width: 80px;
+      text-align: center;
+      border-right: 0 none;
+    }
+  }
+
+  tr:first-child th {
+    border-right: 0 none;
+  }
+
+
+  tr:last-child td {
+    border-right: 0 none;
+    border-top: 1px solid #333;
+    padding-bottom: 14px;
+  }
+}
+
+@include score-rows($score-map);
+
