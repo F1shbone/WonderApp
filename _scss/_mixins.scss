@@ -6,8 +6,9 @@
         padding: 9px 12px 5px;
         font-size: 20px;
         text-align: center;
-        color: if((red($bg-color) * 299 + green($bg-color) * 587 + blue($bg-color) * 114) / 1000 > 125 , #000, #fff);
-        background-color: $bg-color;
+//        color: if((red($bg-color) * 299 + green($bg-color) * 587 + blue($bg-color) * 114) / 1000 > 125 , #000, #fff);
+        color: #000;
+        //background-color: $bg-color;
       }
     }
     .controls > .#{$name} {
@@ -26,4 +27,44 @@
   -webkit-transition: all $duration;
      -moz-transition: all $duration;
           transition: all $duration;
+}
+
+@mixin userSelect($val) {
+    -webkit-user-select: $val;
+       -moz-user-select: $val;
+        -ms-user-select: $val;
+            user-select: $val;
+}
+
+@mixin displayFlex() {
+    display: -webkit-box;
+    display:    -moz-box;
+    display:     -ms-flexbox;
+    display: -webkit-flex;
+    display:    -moz-flex;
+    display:         flex;
+}
+
+@mixin flex() {
+    @include displayFlex();
+    -webkit-box-direction: normal;
+    -webkit-box-orient: horizontal;
+    -webkit-flex-direction: horizontal;
+       -moz-flex-direction: horizontal;
+        -ms-flex-direction: horizontal;
+            flex-direction: horizontal;
+    -webkit-box-pack: center;
+       -ms-flex-pack: center;
+    -webkit-justify-content: center;
+       -moz-justify-content: center;
+            justify-content: center;
+}
+
+@mixin flexBox($pos) {
+  -webkit-box-flex: $pos;
+     -moz-box-flex: $pos;
+  -webkit-flex: $pos;
+     -moz-flex: $pos;
+      -ms-flex: $pos;
+          flex: $pos;
 }

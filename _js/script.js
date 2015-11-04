@@ -95,7 +95,7 @@
       },
       {
         name: 'wonder',
-        icon: 'ion-android-funnel'
+        icon: 'ion-eject'
       },
       {
         name: 'buildings',
@@ -256,3 +256,19 @@
     FastClick.attach(document.body);
   });
 })();
+
+
+
+$(function() {
+  var scroll = $(window).scrollTop();
+  if(scroll > 49) scroll = 49;
+  $('.bar-subheader').css('top', 49 - scroll);
+
+
+  $(window).on('scroll', function() {
+    var scroll = $(window).scrollTop();
+
+    if(scroll > 49) scroll = 49;
+    $('.bar-subheader').css('top', 49 - scroll);
+  });
+});

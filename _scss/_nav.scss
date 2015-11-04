@@ -1,95 +1,181 @@
-.page-header {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  margin: 0;
-  padding: 0 0 5px;
-  background-color: #fff;
-  border: 0 none;
-  border-bottom: 3px solid #3699db;
-  text-align: center;
-  z-index: 1000;
-
-  h2 {
-    margin: 0;
-    padding: 9px 20px;
-    small {
-      font-size: 30px;
-      color: #e67e22;
-    }
-  }
-
-  .nav {
-    font-size: 0;
-    li {
-      display: inline-block;
-      width: (100% / 3);
-      a {
-        padding: 0;
-        color: #333;
-        font-size: 28px;
-        background-color: transparent !important;
-        &:hover, &.open {
-          color: #3699db;
-          cursor: pointer;
-        }
-      }
-    }
-  }
-}
-
-
-// ---------------------------------------
-// Slide-Out-Menu
-// ---------------------------------------
-.slide-out-drawer {
-  margin: 0;
-  padding: 0;
-  list-style-type: none;
-  overflow: hidden;
-  @include transition(.3s);
-
-  > li {
-    border-top: 1px solid #ddd;
-    > a {
-      padding: 11px 10px 11px 34px;
-      display: block;
-      color: #333;
-      font-size: 16px;
-      cursor: pointer;
-      &:hover {
-        color: #333;
-        background-color: #ddd;
-        text-decoration: none;
-      }
-    }
-    .ion-ios-trash-outline {
-      margin: -7px -10px;
-      padding: 0 15px;
-      font-size: 28px;
-      float: right;
-      height: 34px;
-      &:hover { color: $bg-error; }
-    }
-    .ion-drag {
-//      position: relative;
-      padding: 13px 10px 9px;
-      color: #666;
-      float: left;
-      &::before {
-//        top: 5px;
-//        position: absolute;
-      }
-    }
-  }
-}
-
-#drawer-players {
-  text-align: left;
-  > li > #add-player {
-    padding-top: 0;
-    padding-bottom: 0;
-    font-size: 28px;
-    color: #fff;
+.bar {
+  @include flex();
+  @include userSelect(none);
+  -webkit-transform: translate3d(0, 0, 0);
+          transform: translate3d(0, 0, 0);
+  position: absolute;
+  right: 0; left: 0; z-index: 9;
+  box-sizing: border-box;
+  padding: 5px;
+  width: 100%;
+  height: 49px;
+  border-width: 0;
+  border-style: solid;
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid #ddd;
+  background-color: white;
+  /* border-width: 1px will actually create 2 device pixels on retina; */
+  background-size: 0;
+  .title {
+    position: absolute;
+    top: 0; right: 0; left: 0;
+    z-index: 0;
+    overflow: hidden;
+    margin: 0 10px;
+    min-width: 30px;
+    height: 49px;
     text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 28px;
+    font-weight: 500;
+    line-height: 44px;
+    &.app-title::first-letter { color: #e67e22; }
+  }
+  a[href] {
+    outline: 0;
+    -webkit-user-drag: none;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-tap-highlight-color: transparent;
+    &:hover {
+      cursor: pointer;
+    }
   }
 }
+
+.bar-header {
+  top: 0;
+  border-top-width: 0;
+  border-bottom-width: 1px;
+}
+
+.bar-subheader {
+  top: 44px;
+  position: fixed;
+  display: block;
+  height: 44px;
+}
+
+.bar-icons {
+  top: 49px;
+  z-index: 5;
+  height: 49px;
+  padding: 0;
+  line-height: 49px;
+  @include displayFlex();
+  .bar-icon {
+    @include flexBox(1);
+    display: block;
+    overflow: hidden;
+    max-width: 150px;
+    height: 100%;
+    color: inherit;
+    text-align: center;
+    text-decoration: none;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 400;
+    .icon {
+      display: block;
+      margin: 0 auto;
+      height: 32px;
+      font-size: 32px;
+    }
+  }
+}
+
+//.page-header {
+//  position: fixed;
+//  top: 0; left: 0; right: 0;
+//  margin: 0;
+//  padding: 0 0 5px;
+//  background-color: #fff;
+//  border: 0 none;
+//  border-bottom: 3px solid #3699db;
+//  text-align: center;
+//  z-index: 1000;
+//
+//  h2 {
+//    margin: 0;
+//    padding: 9px 20px;
+//    small {
+//      font-size: 30px;
+//      color: #e67e22;
+//    }
+//  }
+//
+//  .nav {
+//    font-size: 0;
+//    li {
+//      display: inline-block;
+//      width: (100% / 3);
+//      a {
+//        padding: 0;
+//        color: #333;
+//        font-size: 28px;
+//        background-color: transparent !important;
+//        &:hover, &.open {
+//          color: #3699db;
+//          cursor: pointer;
+//        }
+//      }
+//    }
+//  }
+//}
+//
+//
+//// ---------------------------------------
+//// Slide-Out-Menu
+//// ---------------------------------------
+//.slide-out-drawer {
+//  margin: 0;
+//  padding: 0;
+//  list-style-type: none;
+//  overflow: hidden;
+//  @include transition(.3s);
+//
+//  > li {
+//    font-size: 16px;
+//    border-top: 1px solid #ddd;
+//    > a {
+//      padding: 11px 10px 11px 34px;
+//      display: block;
+//      color: #333;
+//      cursor: pointer;
+//      &:hover {
+//        color: #333;
+//        background-color: #ddd;
+//        text-decoration: none;
+//      }
+//    }
+//    .ion-ios-trash-outline {
+//      margin: -7px -10px;
+//      padding: 0 15px;
+//      font-size: 28px;
+//      float: right;
+//      height: 34px;
+//      &:hover { color: $bg-error; }
+//    }
+//    .ion-drag {
+//      padding: 13px 10px 9px;
+//      color: #666;
+//      float: left;
+//    }
+//
+//    &.nav-header {
+//      padding: 11px 10px 11px 34px;
+//      text-align: center;
+//    }
+//  }
+//}
+//
+//#drawer-players {
+//  text-align: left;
+//  > li > #add-player {
+//    padding-top: 0;
+//    padding-bottom: 0;
+//    font-size: 28px;
+//    color: #fff;
+//    text-align: center;
+//  }
+//}

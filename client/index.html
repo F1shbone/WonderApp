@@ -18,64 +18,42 @@
   <title>7 Wonders</title>
 
   <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="css/bootstrap.min.css">
   <link rel="stylesheet" href="css/layout.min.css">
 </head>
 
 <body ng-controller="wonderCtrl">
 
-  <div class="page-header" ng-controller="wonderMenuCtrl">
-    <h2><small>7</small> Wonders</h2>
-    <ul class="nav">
-      <li>
-        <a data-toggle="modal" data-target="#modal-new-game"><span class="ion-refresh"></span></a>
-      </li>
-      <li ng-repeat="(key, menu) in menus">
-        <a id="{{menu.nav}}" class="slide-out-menu" ng-click="open(key)"><span class="{{menu.icon}}"></span></a>
-      </li>
-      <li>
-        <a><span class="ion-stats-bars"></span></a>
-      </li>
-    </ul>
-    <div class="nav-drawers">
-      <!-- NAV-PLAYERS -->
-      <ul id="{{menus['players'].drawer}}" class="slide-out-drawer">
-        <li ng-repeat="(player, score) in players">
-          <span class="ion-drag"></span>
-          <a data-target="{{player | lowercase}}">
-            {{player}}
-            <span class="ion-ios-trash-outline" ng-click="removePlayer(player)"></span>
-          </a>
-        </li>
-        <li>
-          <a id="add-player" class="bg-success cancel" data-toggle="modal" data-target="#modal-player-add">
-            <span class="ion-ios-personadd"></span>
-          </a>
-        </li>
-      </ul>
-      <!-- MODAL -->
-      <div id="modal-player-add" class="modal fade">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              <h4 class="modal-title">New Player</h4>
-            </div>
-            <div class="modal-body">
-              <input type="text" class="form-control" placeholder="Playername">
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-success" data-dismiss="modal" ng-click="addPlayer()">Add</button>
-            </div>
-          </div>
-          <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-      </div>
-    </div>
+  <div class="bar bar-header">
+    <h1 class="title app-title">7 Wonders</h1>
+  </div>
+  <div class="bar bar-icons bar-subheader">
+    <a class="bar-icon" href="#">
+      <i class="icon ion-refresh"></i>
+    </a>
+    <a class="bar-icon" href="#">
+      <i class="icon ion-person-stalker"></i>
+    </a>
+    <a class="bar-icon" href="#">
+      <i class="icon ion-stats-bars"></i>
+    </a>
   </div>
 
+
+  <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+  <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+  <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+  <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+  <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+  <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+  <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+
+
+
+
+
+
+
+  <!--
   <div class="container">
     <div class="row">
       <div class="col-xs-12 score">
@@ -154,8 +132,10 @@
     </div>
 
   </div>
+  -->
 
   <!-- Modal Confirm -->
+  <!--
   <div id="modal-new-game" class="modal fade">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -167,10 +147,9 @@
           <button type="button" class="btn btn-default" data-dismiss="modal">Bestätigen</button>
         </div>
       </div>
-      <!-- /.modal-content -->
     </div>
-    <!-- /.modal-dialog -->
   </div>
+  -->
 
   <!-- jQuery first, then Bootstrap JS. -->
   <script src="js/jquery.min.js"></script>
