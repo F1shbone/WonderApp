@@ -46,7 +46,7 @@ module.exports = function (grunt) {
       },
       dist: {
         files: {
-          'client/js/script.min.js': ['./node_modules/fastclick/lib/fastclick.js', '_js/**/*.js']
+          'client/js/script.min.js': ['_js/**/*.js']
         }
       }
     },
@@ -59,7 +59,8 @@ module.exports = function (grunt) {
         src: [
           './node_modules/angular/angular.min.js',
           './node_modules/angular-sanitize/angular-sanitize.min.js',
-          './node_modules/angular-bootstrap/ui-bootstrap-tpls.min.js'
+          './node_modules/angular-bootstrap/ui-bootstrap-tpls.min.js',
+          './node_modules/angular-touch/angular-touch.min.js'
         ],
         dest: 'client/js/angular.min.js'
       }

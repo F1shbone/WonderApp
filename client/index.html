@@ -22,20 +22,37 @@
 </head>
 
 <body ng-controller="wonderCtrl">
+  <div class="backdrop" ng-class="{'active': isOpen}"></div>
 
   <div class="bar bar-header">
     <h1 class="title app-title">7 Wonders</h1>
   </div>
-  <div class="bar bar-icons bar-subheader">
-    <a class="bar-icon" href="#">
-      <i class="icon ion-refresh"></i>
-    </a>
-    <a class="bar-icon" href="#">
-      <i class="icon ion-person-stalker"></i>
-    </a>
-    <a class="bar-icon" href="#">
-      <i class="icon ion-stats-bars"></i>
-    </a>
+  <div class="bar bar-footer">
+    <div class="bar-icons">
+      <a class="bar-icon" href="#">
+        <i class="icon ion-refresh"></i>
+      </a>
+      <a class="bar-icon" href="#" ng-click="toggleOpen()">
+        <i class="icon ion-person-stalker"></i>
+      </a>
+      <a class="bar-icon" href="#">
+        <i class="icon ion-stats-bars"></i>
+      </a>
+    </div>
+    <div class="bar-footer-drawer" ng-class="{'open': isOpen}">
+      <ul class="list">
+        <li ng-repeat="(player, score) in players" class="player">
+          <a data-target="{{player | lowercase}}" class="icon-left icon-right">
+            <i class="ion-drag icon"></i>
+            {{player}}
+            <i class="ion-ios-trash-outline icon"></i>
+          </a>
+        </li>
+      </ul>
+      <a id="add-player" class="bg-success cancel" style="display: block;">
+            <span class="ion-ios-personadd"></span>
+          </a>
+    </div>
   </div>
 
 
