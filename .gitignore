@@ -1,3 +1,8 @@
+# Customs
+client/fonts/
+client/js/
+client/css/
+
 # Logs
 logs
 *.log

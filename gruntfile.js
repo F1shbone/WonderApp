@@ -126,7 +126,7 @@ module.exports = function (grunt) {
     'uglify',
     'concat',
     'copy:npm',
-    'copy:xampp'
+//    'copy:xampp'
   ]);
   grunt.registerTask('dev', [
     'default',

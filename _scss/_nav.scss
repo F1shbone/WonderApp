@@ -71,7 +71,7 @@
     margin: 0;
     overflow: hidden;
     @include transition(max-height, .3s);
-    &.open { max-height: 500px; }
+    .menu-open & { max-height: 500px; }
   }
 }
 
@@ -148,16 +148,22 @@
 
 
 .backdrop {
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background-color: transparent;
-  z-index: -9999;
-  transition: background-color .3s;
-  &.active {
-    background-color: rgba(0, 0 ,0 , .6);
+  position: fixed;
+  top: 0; left: 0; right: 0;
+//  z-index: -99999;
+//  opacity: 1;
+  background-color: #000;
+  opacity: .6;
+  height: 100vh;
+  max-height: 0;
+  transition: max-height .3s;
+  .menu-open & {
     z-index: 8;
+    max-height: 100vh;
   }
 }
+
+.menu-open { overflow: hidden; }
 
 
 //.page-header {

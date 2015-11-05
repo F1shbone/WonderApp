@@ -263,8 +263,9 @@
 
   var wonderApp = angular.module('wonderApp', ['ngTouch']);
 
-  wonderApp.controller('wonderCtrl', ['$scope', function ($scope) {
+  wonderApp.controller('wonderCtrl', ['$scope', '$window', function ($scope, $window) {
     $scope.isOpen = false;
+    $scope.offset = 0;
     $scope.players = {
       Bernhard: {
         military: 0,
@@ -335,8 +336,15 @@
     };
 
     $scope.toggleOpen = function() {
+      if(!$scope.isOpen) {
+        $scope.offset = $window.pageYOffset;
+      }
       $scope.isOpen = !$scope.isOpen;
-    }
+      if(!$scope.isOpen) {
+        console.log($scope.offset);
+        $window.pageYOffset = $scope.offset;
+      }
+    };
   }]);
 })();
 
