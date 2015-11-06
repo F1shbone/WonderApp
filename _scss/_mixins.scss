@@ -24,9 +24,9 @@
           box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.75);
 }
 @mixin transition($attr, $duration) {
-  -webkit-transition: $attr $duration;
-     -moz-transition: $attr $duration;
-          transition: $attr $duration;
+  -webkit-transition: $attr $duration ease-in-out;
+     -moz-transition: $attr $duration ease-in-out;
+          transition: $attr $duration ease-in-out;
 }
 
 @mixin userSelect($val) {
