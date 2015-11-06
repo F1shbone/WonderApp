@@ -334,6 +334,7 @@
         leader: 0,
       }
     };
+    $scope.newPlayer = '';
 
     $scope.toggleOpen = function() {
       if(!$scope.isOpen) {
@@ -341,10 +342,26 @@
       }
       $scope.isOpen = !$scope.isOpen;
       if(!$scope.isOpen) {
-        console.log($scope.offset);
         $window.pageYOffset = $scope.offset;
       }
     };
+    $scope.deletePlayer = function(player) {
+      delete $scope.players[player];
+    };
+    $scope.addPlayer = function() {
+      $scope.players[$scope.newPlayer] = {
+        military: 0,
+        money: 0,
+        wonder: 0,
+        buildings: 0,
+        trading: 0,
+        research: 0,
+        guild: 0,
+        city: 0,
+        leader: 0,
+      };
+      $scope.newPlayer = '';
+    }
   }]);
 })();
 

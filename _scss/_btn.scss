@@ -1,0 +1,95 @@
+@mixin btn($map) {
+  @each $name, $color in $map {
+    .btn.btn-#{$name} {
+      border-color: darken($color, 10%);
+      background-color: $color;
+      color: if((red($color) * 299 + green($color) * 587 + blue($color) * 114) / 1000 > 150 , #000, #fff);
+
+      &:hover { background-color: darken($color, 10%); }
+    }
+    .btn-clear.btn-#{$name} {
+      color: $color;
+      background: none;
+    }
+  }
+}
+
+.btn {
+  border-color: #b2b2b2;
+  background-color: transparent;
+  color: #444;
+  position: relative;
+  display: inline-block;
+  margin: 0;
+  padding: 0 12px;
+  min-width: 52px;
+  min-height: 47px;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 2px;
+  vertical-align: top;
+  text-align: center;
+  text-overflow: ellipsis;
+  font-size: 16px;
+  line-height: 42px;
+  cursor: pointer;
+
+  &:hover { background-color: #b2b2b2; }
+  &:after {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    bottom: -6px;
+    left: -6px;
+    content: ' ';
+  }
+
+  .icon:before,
+  &.icon:before,
+  &.icon-left:before,
+  &.icon-right:before {
+    display: inline-block;
+    padding: 2px 0 0 0;
+    vertical-align: inherit;
+    font-size: 24px;
+    line-height: 41px;
+    pointer-events: none;
+  }
+
+  &.icon-left:before {
+    float: left;
+    padding-right: 0.2em;
+    padding-left: 0
+  }
+  &.icon-right:before {
+    float: right;
+    padding-left: 0.2em;
+    padding-right: 0
+  }
+}
+
+@include btn((
+  'primary': $bg-primary,
+  'success': $bg-success,
+  'error': $bg-error,
+  'warning': $bg-warning,
+  'dark': $bg-dark
+));
+
+.btn-block {
+  display: block;
+  border-left: 0 none;
+  border-right: 0 none;
+  border-radius: 0;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  &.icon-left:before,
+  &.icon-right:before {
+    float: none;
+  }
+  .container & {
+    margin-left: -8px;
+    margin-right: -8px;
+  }
+}
+.btn-clear { border: 0 none; }

@@ -26,35 +26,105 @@
 @import "variables";
 @import "mixins";
 @import "nav";
+@import "btn";
+
 @import "modal";
 @import "score";
 @import "control";
 
+*,
+*:before,
+*:after {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
 
 body {
-  margin-top: 115px;
+  margin: 47px 0;
   font-family: "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
 }
 
-.bg-success {
-  color: #fff !important;
-  background-color: $bg-success !important;
-  &:hover { background-color: darken($bg-success, 10%) !important; }
-}
-.bg-error {
-  color: #fff !important;
-  background-color: $bg-error !important;
-  &:hover { background-color: darken($bg-error, 10%) !important; }
-}
-.bg-primary {
-  color: #fff !important;
-  background-color: #3699db !important;
-  &:hover { background-color: darken(#3699db, 10%) !important; }
+.container {
+  margin: 8px;
 }
 
-.btn { border-radius: 0; }
-.btn-success { @extend .bg-success; }
-.btn-primary { @extend .bg-primary; }
+a, button, :focus, a:focus, button:focus, a:active, a:hover {
+  outline: 0;
+}
+
+textarea,
+input[type="text"],
+input[type="password"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="date"],
+input[type="month"],
+input[type="time"],
+input[type="week"],
+input[type="number"],
+input[type="email"],
+input[type="url"],
+input[type="search"],
+input[type="tel"],
+input[type="color"] {
+  border: 0;
+  border-bottom: 1px solid #b2b2b2;
+  display: block;
+  padding-top: 2px;
+  padding-left: 0;
+  height: 34px;
+  color: #111;
+  vertical-align: middle;
+  font-size: 14px;
+  line-height: 16px;
+  @include transition(border-color, .3s);
+  &:focus { border-color: $bg-primary; }
+}
+
+.text-primary { color: $bg-primary; }
+.text-success { color: $bg-success; }
+.text-error { color: $bg-error; }
+.text-warning { color: $bg-warning; }
+.text-dark { color: $bg-dark; }
+
+.item {
+  background-color: #fff;
+  color: #444;
+  position: relative;
+  z-index: 2;
+  display: block;
+  margin: -1px;
+  padding: 16px;
+  font-size: 16px;
+}
+
+.item-input {
+  @include flex();
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  padding: 6px 0 5px 16px;
+  input {
+    width: 100%;
+    -webkit-border-radius: 0;
+    border-radius: 0;
+//    -webkit-box-flex: 1;
+//    -webkit-flex: 1 220px;
+//    -moz-box-flex: 1;
+//    -moz-flex: 1 220px;
+//    -ms-flex: 1 220px;
+//    flex: 1 220px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0;
+    padding-right: 24px;
+    background-color: transparent;
+  }
+}
 
 
 .table > tbody > tr > td,

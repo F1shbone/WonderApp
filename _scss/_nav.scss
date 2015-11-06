@@ -4,18 +4,20 @@
   -webkit-transform: translate3d(0, 0, 0);
           transform: translate3d(0, 0, 0);
   position: absolute;
-  right: 0; left: 0; z-index: 9;
+  right: 0; left: 0;
+  z-index: 9;
   box-sizing: border-box;
   padding: 5px;
-  height: 49px;
+  height: 43px;
   width: 100%;
   border-width: 0;
   border-style: solid;
   border-top: 1px solid transparent;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #b2b2b2;
   background-color: white;
   /* border-width: 1px will actually create 2 device pixels on retina; */
   background-size: 0;
+
   .title {
     position: absolute;
     top: 0; right: 0; left: 0;
@@ -23,15 +25,47 @@
     overflow: hidden;
     margin: 0 10px;
     min-width: 30px;
-    height: 49px;
+    height: 43px;
     text-align: center;
     text-overflow: ellipsis;
     white-space: nowrap;
     font-size: 28px;
     font-weight: 500;
-    line-height: 44px;
+    line-height: 39px;
     &.app-title::first-letter { color: #e67e22; }
   }
+
+  .btn {
+    z-index: 1;
+    padding: 0 8px;
+    min-width: initial;
+    min-height: 31px;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 30px;
+    &.button-icon:before,
+    .icon:before,
+    &.icon:before,
+    &.icon-left:before,
+    &.icon-right:before {
+      padding: 0 2px;
+      font-size: 20px;
+      line-height: 30px;
+    }
+  }
+
+  .title + .btn:last-child,
+  > .btn + .btn:last-child,
+  > .btn.pull-right,
+  .btn.pull-right,
+  .title + .btn-group {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    bottom: 5px;
+  }
+
+
   a[href] {
     outline: 0;
     -webkit-user-drag: none;
@@ -41,6 +75,7 @@
       cursor: pointer;
     }
   }
+
 }
 
 .bar-header {
@@ -50,10 +85,10 @@
 }
 
 .bar-subheader {
-  top: 49px;
+  top: 43px;
   position: fixed;
   display: block;
-  height: 44px;
+  height: 39px;
 }
 
 .bar-footer {
@@ -67,19 +102,22 @@
   display: block;
   .bar-footer-drawer {
     //@include displayFlex();
+    position: relative;
     max-height: 0;
     margin: 0;
     overflow: hidden;
     @include transition(max-height, .3s);
     .menu-open & { max-height: 500px; }
+
+    .item-input .icon { padding-top: 6px; }
   }
 }
 
 .bar-icons {
-  height: 49px;
+  height: 43px;
   padding: 0;
   margin: 0 -5px;
-  line-height: 49px;
+  line-height: 43px;
   flex-flow: row wrap;
   @include displayFlex();
   .bar-icon {
@@ -87,21 +125,25 @@
     display: block;
     overflow: hidden;
     max-width: 150px;
-    height: 46px;
+    height: 40px;
     color: inherit;
     text-align: center;
     text-decoration: none;
     text-overflow: ellipsis;
     white-space: nowrap;
     font-weight: 400;
-    border-top: 3px solid #ddd;
+    border-top: 3px solid #b2b2b2;
     &.active {
       border-color: #e67e22;
+    }
+    &.icon-close .icon {
+      color: $bg-error;
+      &:before { content: "\f12a"; }
     }
     .icon {
       display: block;
       margin: 0 auto;
-      height: 46px;
+      height: 40px;
       line-height: 40px;
       font-size: 32px;
     }
@@ -110,18 +152,18 @@
 
 
 .list {
-  margin: 0 0 5px;
+  margin: 0;
   padding-left: 0;
   list-style-type: none;
   > li {
-    border-bottom: 1px solid #ddd;
-    &:first-child { border-top: 1px solid  #ddd; }
+    border-bottom: 1px solid #b2b2b2;
+    &:first-child { border-top: 1px solid  #b2b2b2; }
   }
   > li > a {
     position: relative;
     display: block;
     padding: 7px 15px;
-    font-size: 18px;
+    font-size: 16px;
 
     .icon {
       position: absolute;
@@ -131,17 +173,20 @@
       -moz-align-items: center;
       align-items: center;
       position: absolute;
+      top: 0;
+      width: 53px;
       height: 100%;
+      padding-top: 1px;
       font-size: 24px;
-      top: 3px;
+      text-align: center;
     }
     &.icon-left {
       padding-left: 54px;
-      > .icon:first-child { left: 15px; }
+      > .icon:first-child { left: 0; }
     }
     &.icon-right {
       padding-right: 54px;
-      > .icon:last-child { right: 15px; }
+      > .icon:last-child { right: 0; }
     }
   }
 }
@@ -216,7 +261,7 @@
 //
 //  > li {
 //    font-size: 16px;
-//    border-top: 1px solid #ddd;
+//    border-top: 1px solid #b2b2b2;
 //    > a {
 //      padding: 11px 10px 11px 34px;
 //      display: block;
@@ -224,7 +269,7 @@
 //      cursor: pointer;
 //      &:hover {
 //        color: #333;
-//        background-color: #ddd;
+//        background-color: #b2b2b2;
 //        text-decoration: none;
 //      }
 //    }

@@ -55,9 +55,6 @@
             flex-direction: horizontal;
     -webkit-box-pack: center;
        -ms-flex-pack: center;
-    -webkit-justify-content: center;
-       -moz-justify-content: center;
-            justify-content: center;
 }
 
 @mixin flexBox($pos) {
