@@ -1,36 +1,12 @@
 @import "../node_modules/ionicons/scss/ionicons";
 
 
-//@import "../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/variables";
-//@import "../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins";
-//// Reset and dependencies
-//@import "../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/normalize";
-//// Core CSS
-//@import "../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/scaffolding";
-//@import "../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/type";
-//@import "../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/grid";
-//@import "../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/tables";
-//@import "../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/forms";
-//@import "../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/buttons";
-//// Components
-//@import "../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/component-animations";
-//@import "../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/navs";
-//@import "../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/close";
-//// Components w/ JavaScript
-//@import "../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/modals";
-//// Utility classes
-//@import "../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/utilities";
-//@import "../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/responsive-utilities";
-
-
 @import "variables";
 @import "mixins";
 @import "nav";
 @import "btn";
 
-@import "modal";
 @import "score";
-@import "control";
 
 *,
 *:before,
@@ -43,10 +19,6 @@
 body {
   margin: 47px 0;
   font-family: "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
-}
-
-.container {
-  margin: 8px;
 }
 
 a, button, :focus, a:focus, button:focus, a:active, a:hover {
@@ -82,50 +54,14 @@ input[type="color"] {
   &:focus { border-color: $bg-primary; }
 }
 
+//HELPER
 .text-primary { color: $bg-primary; }
 .text-success { color: $bg-success; }
 .text-error { color: $bg-error; }
 .text-warning { color: $bg-warning; }
 .text-dark { color: $bg-dark; }
 
-.item {
-  background-color: #fff;
-  color: #444;
-  position: relative;
-  z-index: 2;
-  display: block;
-  margin: -1px;
-  padding: 16px;
-  font-size: 16px;
-}
-
-.item-input {
-  @include flex();
-  -webkit-align-items: center;
-  -moz-align-items: center;
-  align-items: center;
-  position: relative;
-  overflow: hidden;
-  padding: 6px 0 5px 16px;
-  input {
-    width: 100%;
-    -webkit-border-radius: 0;
-    border-radius: 0;
-//    -webkit-box-flex: 1;
-//    -webkit-flex: 1 220px;
-//    -moz-box-flex: 1;
-//    -moz-flex: 1 220px;
-//    -ms-flex: 1 220px;
-//    flex: 1 220px;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    margin: 0;
-    padding-right: 24px;
-    background-color: transparent;
-  }
-}
-
+.hide { display: none !important; }
 
 .table > tbody > tr > td,
 .table > tbody > tr > th,

@@ -1,4 +1,4 @@
-@mixin btn($map) {
+@mixin btn-variation($map) {
   @each $name, $color in $map {
     .btn.btn-#{$name} {
       border-color: darken($color, 10%);
@@ -56,19 +56,45 @@
     pointer-events: none;
   }
 
-  &.icon-left:before {
-    float: left;
-    padding-right: 0.2em;
-    padding-left: 0
+//  &.icon-left:before {
+//    float: left;
+//    padding-right: 0.2em;
+//    padding-left: 0
+//  }
+//  &.icon-right:before {
+//    float: right;
+//    padding-left: 0.2em;
+//    padding-right: 0
+//  }
+
+  .icon {
+    position: absolute;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    -moz-align-items: center;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    width: 53px;
+    height: 100%;
+    padding-top: 1px;
+    font-size: 24px;
+    text-align: center;
   }
-  &.icon-right:before {
-    float: right;
-    padding-left: 0.2em;
-    padding-right: 0
+  &.icon-left {
+    padding-left: 54px;
+    > .icon:before { line-height: 1; }
+    > .icon:first-child { left: 0; }
+  }
+  &.icon-right {
+    padding-right: 54px;
+    > .icon:before { line-height: 1; }
+    > .icon:last-child { right: 0; }
   }
 }
 
-@include btn((
+@include btn-variation((
   'primary': $bg-primary,
   'success': $bg-success,
   'error': $bg-error,
@@ -76,7 +102,7 @@
   'dark': $bg-dark
 ));
 
-.btn-block {
+.btn.btn-block {
   display: block;
   border-left: 0 none;
   border-right: 0 none;
@@ -87,9 +113,10 @@
   &.icon-right:before {
     float: none;
   }
-  .container & {
-    margin-left: -8px;
-    margin-right: -8px;
+}
+.btn.btn-clear {
+  border: 0 none;
+  &.icon:before {
+    font-size: 32px;
   }
 }
-.btn-clear { border: 0 none; }

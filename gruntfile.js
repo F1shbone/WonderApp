@@ -59,7 +59,7 @@ module.exports = function (grunt) {
         src: [
           './node_modules/angular/angular.min.js',
           './node_modules/angular-sanitize/angular-sanitize.min.js',
-          './node_modules/angular-bootstrap/ui-bootstrap-tpls.min.js',
+          './node_modules/angular-route/angular-route.min.js',
           './node_modules/angular-touch/angular-touch.min.js'
         ],
         dest: 'client/js/angular.min.js'
@@ -91,7 +91,7 @@ module.exports = function (grunt) {
             expand: true,
             cwd: './client',
             src: ['**/*'],
-            dest: 'D:/xampp/htdocs/7-Wonders'
+            dest: 'D:/xampp/htdocs/wonderApp'
           }
         ]
       }
@@ -104,16 +104,23 @@ module.exports = function (grunt) {
     watch: {
       scss: {
         files: ['_scss/**/*.scss'],
-        tasks: ['sass'],
+        tasks: ['sass', 'copy:xampp'],
         options: {
           spawn: false
         }
       },
       js: {
         files: ['_js/**/*.js'],
-        tasks: ['uglify:dist'],
+        tasks: ['uglify:dist', 'copy:xampp'],
         options: {
           spawn: false
+        }
+      },
+      html: {
+        files: ['client/**/*.html'],
+        task: ['copy:xampp'],
+        options: {
+          spawn: true
         }
       }
     }
@@ -126,7 +133,7 @@ module.exports = function (grunt) {
     'uglify',
     'concat',
     'copy:npm',
-//    'copy:xampp'
+    'copy:xampp'
   ]);
   grunt.registerTask('dev', [
     'default',

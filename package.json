@@ -24,9 +24,9 @@
   "dependencies": {
     "angular": "^1.4.7",
     "angular-bootstrap": "^0.12.2",
+    "angular-route": "^1.4.7",
     "angular-sanitize": "^1.4.7",
     "angular-touch": "^1.4.7",
-    "bootstrap-sass": "^3.3.5",
     "ionicons": "^2.0.1",
     "jquery": "^2.1.4"
   }

@@ -3,7 +3,7 @@
   @include userSelect(none);
   -webkit-transform: translate3d(0, 0, 0);
           transform: translate3d(0, 0, 0);
-  position: absolute;
+  position: fixed;
   right: 0; left: 0;
   z-index: 9;
   box-sizing: border-box;
@@ -92,7 +92,6 @@
 }
 
 .bar-footer {
-  position: fixed;
   bottom: 0;
   padding: 0;
   height: auto;
@@ -155,10 +154,8 @@
   margin: 0;
   padding-left: 0;
   list-style-type: none;
-  > li {
-    border-bottom: 1px solid #b2b2b2;
-    &:first-child { border-top: 1px solid  #b2b2b2; }
-  }
+  > li > a { border-bottom: 1px solid #b2b2b2; }
+  > li:first-child a { border-top: 1px solid  #b2b2b2; }
   > li > a {
     position: relative;
     display: block;
@@ -182,12 +179,16 @@
     }
     &.icon-left {
       padding-left: 54px;
+      > .icon:before { line-height: 1; }
       > .icon:first-child { left: 0; }
     }
     &.icon-right {
       padding-right: 54px;
+      > .icon:before { line-height: 1; }
       > .icon:last-child { right: 0; }
     }
+
+    &.btn { padding: 0 12px; }
   }
 }
 
