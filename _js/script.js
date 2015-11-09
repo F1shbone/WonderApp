@@ -80,7 +80,7 @@
     });
     $routeProvider.when('/players', {
       templateUrl: 'html/views/players.html',
-      controller: '' //TODO Add Controller
+      controller: 'playerCtrl'
     });
     $routeProvider.when('/statistics', {
       templateUrl: 'html/views/statistics.html',
@@ -88,75 +88,124 @@
     });
   }]);
 
+  /** Controller **/
   wonderApp.controller('wonderCtrl', ['$scope', '$location', function ($scope, $location) {
     $scope.activePath = '/score';
+    $scope.activeWonders = [];
     $scope.previousPath = ['/score'];
+
+    $scope.wonders = [
+      'Abu Simbel',
+      'Alexandria',
+      'Babylon',
+      'Byzanz',
+      'Ephesus',
+      'Gizeh',
+      'Helikanassos',
+      'Manneken Pis',
+      'Olypmpia',
+      'Petra',
+      'Rhodos',
+      'Rom',
+      'Stonehenge',
+      'The Great Wall',
+    ];
+    $scope.randomWonder = function() {
+      var index = Math.floor(Math.random()*$scope.wonders.length);
+      var wonder = $scope.wonders[index];
+      while($scope.activeWonders.indexOf(wonder) > -1) {
+        index = Math.floor(Math.random()*$scope.wonders.length);
+        wonder = $scope.wonders[index];
+      }
+      $scope.activeWonders.push(wonder);
+
+      return wonder;
+    };
+
     $scope.players = {
       Bernhard: {
-        military: 0,
-        money: 1,
-        wonder: 2,
-        buildings: 3,
-        trading: 4,
-        research: 5,
-        guild: 6,
-        city: 7,
-        leader: 8,
+        wonder: $scope.randomWonder(),
+        score: {
+          military: 0,
+          money: 1,
+          wonder: 2,
+          buildings: 3,
+          trading: 4,
+          research: 5,
+          guild: 6,
+          city: 7,
+          leader: 8,
+        }
       },
       Mina: {
-        military: 0,
-        money: 0,
-        wonder: 0,
-        buildings: 0,
-        trading: 0,
-        research: 0,
-        guild: 0,
-        city: 0,
-        leader: 0,
+        wonder: $scope.randomWonder(),
+        score: {
+          military: 0,
+          money: 0,
+          wonder: 0,
+          buildings: 0,
+          trading: 0,
+          research: 0,
+          guild: 0,
+          city: 0,
+          leader: 0,
+        }
       },
       Simon: {
-        military: 0,
-        money: 0,
-        wonder: 0,
-        buildings: 0,
-        trading: 0,
-        research: 0,
-        guild: 0,
-        city: 0,
-        leader: 0,
+        wonder: $scope.randomWonder(),
+        score: {
+          military: 0,
+          money: 0,
+          wonder: 0,
+          buildings: 0,
+          trading: 0,
+          research: 0,
+          guild: 0,
+          city: 0,
+          leader: 0,
+        }
       },
       Christian: {
-        military: 0,
-        money: 0,
-        wonder: 0,
-        buildings: 0,
-        trading: 0,
-        research: 0,
-        guild: 0,
-        city: 0,
-        leader: 0,
+        wonder: $scope.randomWonder(),
+        score: {
+          military: 0,
+          money: 0,
+          wonder: 0,
+          buildings: 0,
+          trading: 0,
+          research: 0,
+          guild: 0,
+          city: 0,
+          leader: 0,
+        }
       },
       Daniel: {
-        military: 0,
-        money: 0,
-        wonder: 0,
-        buildings: 0,
-        trading: 0,
-        research: 0,
-        guild: 0,
-        city: 0,
-        leader: 0,
+        wonder: $scope.randomWonder(),
+        score: {
+          military: 0,
+          money: 0,
+          wonder: 0,
+          buildings: 0,
+          trading: 0,
+          research: 0,
+          guild: 0,
+          city: 0,
+          leader: 0,
+        }
       },
       Michael: {
-        military: 0,
-        money: 0,
-        wonder: 0,
-        buildings: 0,
-        trading: 0,
-        research: 0,
-        guild: 0,
-        city: 0,
-        leader: 0,
+        wonder: $scope.randomWonder(),
+        score: {
+          military: 0,
+          money: 0,
+          wonder: 0,
+          buildings: 0,
+          trading: 0,
+          research: 0,
+          guild: 0,
+          city: 0,
+          leader: 0,
+        }
       }
     };
     $scope.categories = [
@@ -203,29 +252,60 @@
       $scope.activePath = path;
 
       $location.path($scope.activePath);
+
+      if($scope.previousPath.length > 6) $scope.previousPath.shift();
     };
     $scope.previousView = function() {
       $scope.activePath = $scope.previousPath.pop();
       $location.path($scope.activePath);
     };
 
-    $scope.deletePlayer = function(player) {
-      delete $scope.players[player];
-    };
-    $scope.addPlayer = function() {
-//      $scope.players[TODO] = {
-//        military: 0,
-//        money: 0,
-//        wonder: 0,
-//        buildings: 0,
-//        trading: 0,
-//        research: 0,
-//        guild: 0,
-//        city: 0,
-//        leader: 0,
-//      };
-    };
 
     (function() { $location.path($scope.activePath); })();
   }]);
+  wonderApp.controller('playerCtrl', ['$scope', function($scope) {
+    $scope.newPlayerName = '';
+
+    $scope.deletePlayer = function(player) {
+      $scope.$parent.activeWonders.remove(player.wonder);
+      delete $scope.$parent.players[player];
+    };
+    $scope.addPlayer = function() {
+      if($scope.newPlayerName !== '') {
+        $scope.$parent.players[$scope.newPlayerName] = {
+          wonder: $scope.$parent.randomWonder(),
+          score: {
+            military: 0,
+            money: 0,
+            wonder: 0,
+            buildings: 0,
+            trading: 0,
+            research: 0,
+            guild: 0,
+            city: 0,
+            leader: 0,
+          }
+        };
+        $scope.newPlayerName = '';
+      }
+    };
+    $scope.rerollWonder = function(player) {
+      var wonder = $scope.$parent.players[player].wonder;
+      $scope.$parent.activeWonders.remove(wonder);
+      $scope.$parent.players[player].wonder = $scope.$parent.randomWonder();
+    };
+  }]);
 })();
+
+
+//Helper
+Array.prototype.remove = function() {
+    var what, a = arguments, L = a.length, ax;
+    while (L && this.length) {
+        what = a[--L];
+        while ((ax = this.indexOf(what)) !== -1) {
+            this.splice(ax, 1);
+        }
+    }
+    return this;
+};

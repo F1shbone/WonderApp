@@ -35,14 +35,7 @@
   cursor: pointer;
 
   &:hover { background-color: #b2b2b2; }
-  &:after {
-    position: absolute;
-    top: -6px;
-    right: -6px;
-    bottom: -6px;
-    left: -6px;
-    content: ' ';
-  }
+  &:after { content: ' '; }
 
   .icon:before,
   &.icon:before,
@@ -104,11 +97,11 @@
 
 .btn.btn-block {
   display: block;
+  width: calc(100% + 16px);
   border-left: 0 none;
   border-right: 0 none;
   border-radius: 0;
-  margin-top: 5px;
-  margin-bottom: 5px;
+  margin: 5px -8px;
   &.icon-left:before,
   &.icon-right:before {
     float: none;

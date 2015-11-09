@@ -3,8 +3,10 @@
 
 @import "variables";
 @import "mixins";
-@import "nav";
 @import "btn";
+@import "input";
+@import "nav";
+@import "list";
 
 @import "score";
 
@@ -23,36 +25,26 @@ body {
 
 a, button, :focus, a:focus, button:focus, a:active, a:hover {
   outline: 0;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 
-textarea,
-input[type="text"],
-input[type="password"],
-input[type="datetime"],
-input[type="datetime-local"],
-input[type="date"],
-input[type="month"],
-input[type="time"],
-input[type="week"],
-input[type="number"],
-input[type="email"],
-input[type="url"],
-input[type="search"],
-input[type="tel"],
-input[type="color"] {
-  border: 0;
-  border-bottom: 1px solid #b2b2b2;
-  display: block;
-  padding-top: 2px;
-  padding-left: 0;
-  height: 34px;
-  color: #111;
-  vertical-align: middle;
-  font-size: 14px;
-  line-height: 16px;
-  @include transition(border-color, .3s);
-  &:focus { border-color: $bg-primary; }
+
+
+
+//Layout
+.container {
+  padding-left: 8px;
+  padding-right: 8px;
 }
+
+.container:after,
+.container:before {
+  display: table;
+  content: " ";
+}
+
+
+
 
 //HELPER
 .text-primary { color: $bg-primary; }

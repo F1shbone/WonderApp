@@ -1,27 +1,27 @@
 <h3>Mitspieler</h3>
 
 <ul class="list">
-  <li ng-repeat="(player, score) in players" class="player">
-    <a data-target="{{player | lowercase}}" class="icon-left icon-right">
+  <li ng-repeat="(player, obj) in $parent.players" class="player">
+    <a data-target="{{player | lowercase}}" class="item item-double icon-left icon-double-right">
       <i class="ion-drag icon"></i>
       {{player}}
+      <small>{{obj.wonder}}</small>
+      <i class="ion-shuffle icon" ng-click="rerollWonder(player)"></i>
       <i class="ion-ios-trash-outline icon" ng-click="deletePlayer(player)"></i>
     </a>
   </li>
+</ul>
+<ul class="list">
   <li>
-    <a class="btn btn-primary btn-block icon-left ">
-      <i class="icon ion-ios-personadd" ng-click="addPlayer()"></i>
+    <label class="item item-input">
+      <span class="input-label">Name:</span>
+      <input type="text" ng-model="newPlayerName" ng-pattern="word">
+    </label>
+  </li>
+  <li>
+    <a class="item btn btn-primary btn-block icon-left" ng-click="addPlayer()">
+      <i class="icon ion-ios-personadd"></i>
       Mitspieler hinzufügen
     </a>
   </li>
 </ul>
-
-
-
-
-
-
-<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
-<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
-<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
-
