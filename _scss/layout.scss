@@ -7,6 +7,7 @@
 @import "input";
 @import "nav";
 @import "list";
+@import "table";
 
 @import "score";
 
@@ -54,10 +55,3 @@ a, button, :focus, a:focus, button:focus, a:active, a:hover {
 .text-dark { color: $bg-dark; }
 
 .hide { display: none !important; }
-
-.table > tbody > tr > td,
-.table > tbody > tr > th,
-.table > thead > tr > td,
-.table > thead > tr > th {
-  padding: 12px;
-}

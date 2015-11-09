@@ -76,7 +76,7 @@
     $routeProvider.otherwise({redirectTo: '/score'});
     $routeProvider.when('/score', {
       templateUrl: 'html/views/score.html',
-      controller: '' //TODO Add Controller
+      controller: 'scoreCtrl'
     });
     $routeProvider.when('/players', {
       templateUrl: 'html/views/players.html',
@@ -262,6 +262,17 @@
 
 
     (function() { $location.path($scope.activePath); })();
+  }]);
+  wonderApp.controller('scoreCtrl', ['$scope', function($scope) {
+    $scope.calcTotal = function (player) {
+      var total = 0;
+
+      for (var key in player) {
+        total += parseInt(player[key]);
+      }
+
+      return total;
+    };
   }]);
   wonderApp.controller('playerCtrl', ['$scope', function($scope) {
     $scope.newPlayerName = '';

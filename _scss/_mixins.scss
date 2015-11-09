@@ -1,15 +1,10 @@
 @mixin score-rows($map) {
   @each $name, $bg-color in $map {
-    .score .#{$name} td {
-      background-color: fade-out($bg-color, 0.25);
-      &:first-child {
-        padding: 9px 12px 5px;
-        font-size: 20px;
-        text-align: center;
-//        color: if((red($bg-color) * 299 + green($bg-color) * 587 + blue($bg-color) * 114) / 1000 > 125 , #000, #fff);
-        color: #000;
-        //background-color: $bg-color;
-      }
+    .table-score .#{$name} td { background-color: fade-out($bg-color, 0.25); }
+    .table-score .#{$name} th {
+      //color: if((red($bg-color) * 299 + green($bg-color) * 587 + blue($bg-color) * 114) / 1000 > 125 , #000, #fff);
+      color: #000;
+      //background-color: $bg-color;
     }
     .controls > .#{$name} {
       background-color: fade-out($bg-color, 0.25);
@@ -44,7 +39,6 @@
     display:    -moz-flex;
     display:         flex;
 }
-
 @mixin flex() {
     @include displayFlex();
     -webkit-box-direction: normal;
@@ -56,7 +50,6 @@
     -webkit-box-pack: center;
        -ms-flex-pack: center;
 }
-
 @mixin flexBox($pos) {
   -webkit-box-flex: $pos;
      -moz-box-flex: $pos;

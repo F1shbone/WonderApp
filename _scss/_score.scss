@@ -1,12 +1,11 @@
 .table-responsive { border: 0 none; }
 
-.score {
+.table-score {
   padding: 0;
 
   caption { padding: 0 15px; }
 
   th, td {
-    border-right: 1px solid #ddd;
     & + th,
     & + td {
       min-width: 80px;
@@ -15,15 +14,9 @@
     }
   }
 
-  tr:first-child th {
-    border-right: 0 none;
-  }
-
-
-  tr:last-child td {
-    border-right: 0 none;
-    border-top: 1px solid #333;
-    padding-bottom: 14px;
+  > tbody > tr > th {
+    font-size: 24px;
+    padding: 6px 12px 5px;
   }
 }
 
