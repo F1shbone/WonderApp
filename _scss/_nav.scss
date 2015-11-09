@@ -1,95 +1,150 @@
-.page-header {
+.bar {
+  @include flex();
+  @include userSelect(none);
+  -webkit-transform: translate3d(0, 0, 0);
+          transform: translate3d(0, 0, 0);
   position: fixed;
-  top: 0; left: 0; right: 0;
-  margin: 0;
-  padding: 0 0 5px;
-  background-color: #fff;
-  border: 0 none;
-  border-bottom: 3px solid #3699db;
-  text-align: center;
-  z-index: 1000;
+  right: 0; left: 0;
+  z-index: 9;
+  box-sizing: border-box;
+  padding: 5px;
+  height: 43px;
+  width: 100%;
+  border-width: 0;
+  border-style: solid;
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid #b2b2b2;
+  background-color: white;
+  /* border-width: 1px will actually create 2 device pixels on retina; */
+  background-size: 0;
 
-  h2 {
-    margin: 0;
-    padding: 9px 20px;
-    small {
-      font-size: 30px;
-      color: #e67e22;
-    }
-  }
-
-  .nav {
-    font-size: 0;
-    li {
-      display: inline-block;
-      width: (100% / 3);
-      a {
-        padding: 0;
-        color: #333;
-        font-size: 28px;
-        background-color: transparent !important;
-        &:hover, &.open {
-          color: #3699db;
-          cursor: pointer;
-        }
-      }
-    }
-  }
-}
-
-
-// ---------------------------------------
-// Slide-Out-Menu
-// ---------------------------------------
-.slide-out-drawer {
-  margin: 0;
-  padding: 0;
-  list-style-type: none;
-  overflow: hidden;
-  @include transition(.3s);
-
-  > li {
-    border-top: 1px solid #ddd;
-    > a {
-      padding: 11px 10px 11px 34px;
-      display: block;
-      color: #333;
-      font-size: 16px;
-      cursor: pointer;
-      &:hover {
-        color: #333;
-        background-color: #ddd;
-        text-decoration: none;
-      }
-    }
-    .ion-ios-trash-outline {
-      margin: -7px -10px;
-      padding: 0 15px;
-      font-size: 28px;
-      float: right;
-      height: 34px;
-      &:hover { color: $bg-error; }
-    }
-    .ion-drag {
-//      position: relative;
-      padding: 13px 10px 9px;
-      color: #666;
-      float: left;
-      &::before {
-//        top: 5px;
-//        position: absolute;
-      }
-    }
-  }
-}
-
-#drawer-players {
-  text-align: left;
-  > li > #add-player {
-    padding-top: 0;
-    padding-bottom: 0;
-    font-size: 28px;
-    color: #fff;
+  .title {
+    position: absolute;
+    top: 0; right: 0; left: 0;
+    z-index: 0;
+    overflow: hidden;
+    margin: 0 10px;
+    min-width: 30px;
+    height: 43px;
     text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 28px;
+    font-weight: 500;
+    line-height: 39px;
+    &.app-title::first-letter { color: $highlight-color; }
+  }
+
+  .btn {
+    z-index: 1;
+    padding: 0 8px;
+    min-width: initial;
+    min-height: 31px;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 30px;
+    &.button-icon:before,
+    .icon:before,
+    &.icon:before,
+    &.icon-left:before,
+    &.icon-right:before {
+      padding: 0 2px;
+      font-size: 26px;
+      line-height: 30px;
+    }
+  }
+
+  .title + .btn:last-child,
+  > .btn + .btn:last-child,
+  > .btn.pull-right,
+  .btn.pull-right,
+  .title + .btn-group {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    bottom: 5px;
+  }
+
+
+  a[href] {
+    outline: 0;
+    -webkit-user-drag: none;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-tap-highlight-color: transparent;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+}
+
+.bar-header {
+  top: 0;
+  border-top-width: 0;
+  border-bottom-width: 1px;
+}
+
+.bar-subheader {
+  top: 43px;
+  position: fixed;
+  display: block;
+  height: 39px;
+}
+
+.bar-footer {
+  bottom: 0;
+  padding: 0;
+  height: auto;
+  border-top-width: 0;
+  border-bottom-width: 0;
+  flex-flow: row wrap;
+  display: block;
+  .bar-footer-drawer {
+    //@include displayFlex();
+    position: relative;
+    max-height: 0;
+    margin: 0;
+    overflow: hidden;
+    @include transition(max-height, .3s);
+    .menu-open & { max-height: 500px; }
+
+    .item-input .icon { padding-top: 6px; }
+  }
+}
+
+.bar-icons {
+  height: 43px;
+  padding: 0;
+  margin: 0 -5px;
+  line-height: 43px;
+  flex-flow: row wrap;
+  @include displayFlex();
+  .bar-icon {
+    @include flexBox(1);
+    display: block;
+    overflow: hidden;
+    max-width: 150px;
+    height: 40px;
+    color: inherit;
+    text-align: center;
+    text-decoration: none;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 400;
+    border-top: 3px solid #b2b2b2;
+    &.active {
+      border-color: $highlight-color;
+    }
+    &.icon-close .icon {
+      color: $bg-error;
+      &:before { content: "\f12a"; }
+    }
+    .icon {
+      display: block;
+      margin: 0 auto;
+      height: 40px;
+      line-height: 40px;
+      font-size: 32px;
+    }
   }
 }

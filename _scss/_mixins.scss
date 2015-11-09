@@ -1,14 +1,10 @@
 @mixin score-rows($map) {
   @each $name, $bg-color in $map {
-    .score .#{$name} td {
-      background-color: fade-out($bg-color, 0.25);
-      &:first-child {
-        padding: 9px 12px 5px;
-        font-size: 20px;
-        text-align: center;
-        color: if((red($bg-color) * 299 + green($bg-color) * 587 + blue($bg-color) * 114) / 1000 > 125 , #000, #fff);
-        background-color: $bg-color;
-      }
+    .table-score .#{$name} td { background-color: fade-out($bg-color, 0.25); }
+    .table-score .#{$name} th {
+      //color: if((red($bg-color) * 299 + green($bg-color) * 587 + blue($bg-color) * 114) / 1000 > 125 , #000, #fff);
+      color: #000;
+      //background-color: $bg-color;
     }
     .controls > .#{$name} {
       background-color: fade-out($bg-color, 0.25);
@@ -22,8 +18,43 @@
      -moz-box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.75);
           box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.75);
 }
-@mixin transition($duration) {
-  -webkit-transition: all $duration;
-     -moz-transition: all $duration;
-          transition: all $duration;
+@mixin transition($attr, $duration) {
+  -webkit-transition: $attr $duration ease-in-out;
+     -moz-transition: $attr $duration ease-in-out;
+          transition: $attr $duration ease-in-out;
+}
+
+@mixin userSelect($val) {
+    -webkit-user-select: $val;
+       -moz-user-select: $val;
+        -ms-user-select: $val;
+            user-select: $val;
+}
+
+@mixin displayFlex() {
+    display: -webkit-box;
+    display:    -moz-box;
+    display:     -ms-flexbox;
+    display: -webkit-flex;
+    display:    -moz-flex;
+    display:         flex;
+}
+@mixin flex() {
+    @include displayFlex();
+    -webkit-box-direction: normal;
+    -webkit-box-orient: horizontal;
+    -webkit-flex-direction: horizontal;
+       -moz-flex-direction: horizontal;
+        -ms-flex-direction: horizontal;
+            flex-direction: horizontal;
+    -webkit-box-pack: center;
+       -ms-flex-pack: center;
+}
+@mixin flexBox($pos) {
+  -webkit-box-flex: $pos;
+     -moz-box-flex: $pos;
+  -webkit-flex: $pos;
+     -moz-flex: $pos;
+      -ms-flex: $pos;
+          flex: $pos;
 }

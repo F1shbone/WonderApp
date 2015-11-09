@@ -9,8 +9,13 @@ $bg-leader:    #ededee;
 $bg-city:      #333333;
 $bg-score:     #ffffff;
 
-$bg-success:   #27ae60;
-$bg-error:     #e74c3c;
+$bg-primary:   #387ef5;
+$bg-success:   #33cd5f;
+$bg-error:     #e42012;
+$bg-warning:   #e67e22;
+$bg-dark:      #444;
+
+$highlight-color: #e67e22;
 
 $score-map: (
   "military": $bg-military,

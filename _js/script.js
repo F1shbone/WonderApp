@@ -1,87 +1,211 @@
 /*jshint asi: false, browser: true, eqeqeq: true, eqnull: true, jquery: true, strict: false, laxcomma: true, nonbsp: true, undef: true, unused: true*/
-/*global angular, FastClick*/
+/*global angular*/
 
-(function () {
+
+//  /** Controllers **/
+//  wonderApp.controller('wonderCtrl', ['$scope', function ($scope) {
+//    $scope.controls = {
+//      open: false,
+//      background: '',
+//      negative: false,
+//      value: '0',
+//      player: '',
+//      category: ''
+//    };
+//
+//    $scope.editScore = function (category, sender) {
+//      $scope.controls.background = category;
+//      $scope.controls.value = sender[category].toString();
+//      $scope.controls.open = true;
+//      $scope.controls.player = sender;
+//      $scope.controls.category = category;
+//    };
+//    $scope.editValue = function (value) {
+//      if ($scope.controls.value === '0') {
+//        $scope.controls.value = value.toString();
+//      } else {
+//        $scope.controls.value += value.toString();
+//      }
+//    };
+//    $scope.clearValue = function () {
+//      $scope.controls.value = '0';
+//    };
+//    $scope.closeControls = function () {
+//      $scope.controls.player[$scope.controls.category] = (($scope.controls.negative) ? '-' : '') + $scope.controls.value;
+//      $scope.controls.negative = false;
+//      $scope.controls.open = false;
+//    };
+//    $scope.calcTotal = function (player) {
+//      var total = 0;
+//
+//      for (var key in player) {
+//        total += parseInt(player[key]);
+//      }
+//
+//      return total;
+//    };
+//    $scope.switchSign = function() {
+//      $scope.controls.negative = ($scope.controls.negative) ? false : true;
+//    };
+//  }]);
+//
+//  wonderApp.controller('wonderMenuCtrl', ['$scope', '$timeout', function ($scope, $timeout) {
+//    //Setup-Function
+//
+//    //
+//    $scope.newGame = function () {
+//      $scope.$parent.players = [];
+//      $('.table-score tr').each(function () {
+//        $('td, th', this).not(':first-child').remove();
+//      });
+//      $scope.close();
+//    };
+//  }]);
+//
+//
+//  /** Directives **/
+//})();
+
+
+(function() {
   'use strict';
 
-  var wonderApp = angular.module('wonderApp', []);
+  var wonderApp = angular.module('wonderApp', ['ngTouch', 'ngRoute']);
 
-  /** Controllers **/
-  wonderApp.controller('wonderCtrl', ['$scope', function ($scope) {
-    $scope.controls = {
-      open: false,
-      background: '',
-      negative: false,
-      value: '0',
-      player: '',
-      category: ''
+  wonderApp.config(['$routeProvider', function($routeProvider) {
+    $routeProvider.otherwise({redirectTo: '/score'});
+    $routeProvider.when('/score', {
+      templateUrl: 'html/views/score.html',
+      controller: 'scoreCtrl'
+    });
+    $routeProvider.when('/players', {
+      templateUrl: 'html/views/players.html',
+      controller: 'playerCtrl'
+    });
+    $routeProvider.when('/statistics', {
+      templateUrl: 'html/views/statistics.html',
+      controller: '' //TODO Add Controller
+    });
+  }]);
+
+  /** Controller **/
+  wonderApp.controller('wonderCtrl', ['$scope', '$location', function ($scope, $location) {
+    $scope.activePath = '/score';
+    $scope.activeWonders = [];
+    $scope.previousPath = ['/score'];
+
+    $scope.wonders = [
+      'Abu Simbel',
+      'Alexandria',
+      'Babylon',
+      'Byzanz',
+      'Ephesus',
+      'Gizeh',
+      'Helikanassos',
+      'Manneken Pis',
+      'Olypmpia',
+      'Petra',
+      'Rhodos',
+      'Rom',
+      'Stonehenge',
+      'The Great Wall',
+    ];
+    $scope.randomWonder = function() {
+      var index = Math.floor(Math.random()*$scope.wonders.length);
+      var wonder = $scope.wonders[index];
+      while($scope.activeWonders.indexOf(wonder) > -1) {
+        index = Math.floor(Math.random()*$scope.wonders.length);
+        wonder = $scope.wonders[index];
+      }
+      $scope.activeWonders.push(wonder);
+
+      return wonder;
     };
+
     $scope.players = {
       Bernhard: {
-        military: 0,
-        money: 1,
-        wonder: 2,
-        buildings: 3,
-        trading: 4,
-        research: 5,
-        guild: 6,
-        city: 7,
-        leader: 8,
+        wonder: $scope.randomWonder(),
+        score: {
+          military: 0,
+          money: 1,
+          wonder: 2,
+          buildings: 3,
+          trading: 4,
+          research: 5,
+          guild: 6,
+          city: 7,
+          leader: 8,
+        }
       },
       Mina: {
-        military: 0,
-        money: 0,
-        wonder: 0,
-        buildings: 0,
-        trading: 0,
-        research: 0,
-        guild: 0,
-        city: 0,
-        leader: 0,
+        wonder: $scope.randomWonder(),
+        score: {
+          military: 0,
+          money: 0,
+          wonder: 0,
+          buildings: 0,
+          trading: 0,
+          research: 0,
+          guild: 0,
+          city: 0,
+          leader: 0,
+        }
       },
       Simon: {
-        military: 0,
-        money: 0,
-        wonder: 0,
-        buildings: 0,
-        trading: 0,
-        research: 0,
-        guild: 0,
-        city: 0,
-        leader: 0,
+        wonder: $scope.randomWonder(),
+        score: {
+          military: 0,
+          money: 0,
+          wonder: 0,
+          buildings: 0,
+          trading: 0,
+          research: 0,
+          guild: 0,
+          city: 0,
+          leader: 0,
+        }
       },
       Christian: {
-        military: 0,
-        money: 0,
-        wonder: 0,
-        buildings: 0,
-        trading: 0,
-        research: 0,
-        guild: 0,
-        city: 0,
-        leader: 0,
+        wonder: $scope.randomWonder(),
+        score: {
+          military: 0,
+          money: 0,
+          wonder: 0,
+          buildings: 0,
+          trading: 0,
+          research: 0,
+          guild: 0,
+          city: 0,
+          leader: 0,
+        }
       },
       Daniel: {
-        military: 0,
-        money: 0,
-        wonder: 0,
-        buildings: 0,
-        trading: 0,
-        research: 0,
-        guild: 0,
-        city: 0,
-        leader: 0,
+        wonder: $scope.randomWonder(),
+        score: {
+          military: 0,
+          money: 0,
+          wonder: 0,
+          buildings: 0,
+          trading: 0,
+          research: 0,
+          guild: 0,
+          city: 0,
+          leader: 0,
+        }
       },
       Michael: {
-        military: 0,
-        money: 0,
-        wonder: 0,
-        buildings: 0,
-        trading: 0,
-        research: 0,
-        guild: 0,
-        city: 0,
-        leader: 0,
+        wonder: $scope.randomWonder(),
+        score: {
+          military: 0,
+          money: 0,
+          wonder: 0,
+          buildings: 0,
+          trading: 0,
+          research: 0,
+          guild: 0,
+          city: 0,
+          leader: 0,
+        }
       }
     };
     $scope.categories = [
@@ -95,7 +219,7 @@
       },
       {
         name: 'wonder',
-        icon: 'ion-android-funnel'
+        icon: 'ion-eject'
       },
       {
         name: 'buildings',
@@ -123,28 +247,23 @@
       }
     ];
 
-    $scope.editScore = function (category, sender) {
-      $scope.controls.background = category;
-      $scope.controls.value = sender[category].toString();
-      $scope.controls.open = true;
-      $scope.controls.player = sender;
-      $scope.controls.category = category;
+    $scope.changeView = function(path) {
+      $scope.previousPath.push($scope.activePath);
+      $scope.activePath = path;
+
+      $location.path($scope.activePath);
+
+      if($scope.previousPath.length > 6) $scope.previousPath.shift();
     };
-    $scope.editValue = function (value) {
-      if ($scope.controls.value === '0') {
-        $scope.controls.value = value.toString();
-      } else {
-        $scope.controls.value += value.toString();
-      }
+    $scope.previousView = function() {
+      $scope.activePath = $scope.previousPath.pop();
+      $location.path($scope.activePath);
     };
-    $scope.clearValue = function () {
-      $scope.controls.value = '0';
-    };
-    $scope.closeControls = function () {
-      $scope.controls.player[$scope.controls.category] = (($scope.controls.negative) ? '-' : '') + $scope.controls.value;
-      $scope.controls.negative = false;
-      $scope.controls.open = false;
-    };
+
+
+    (function() { $location.path($scope.activePath); })();
+  }]);
+  wonderApp.controller('scoreCtrl', ['$scope', function($scope) {
     $scope.calcTotal = function (player) {
       var total = 0;
 
@@ -154,105 +273,50 @@
 
       return total;
     };
-    $scope.switchSign = function() {
-      $scope.controls.negative = ($scope.controls.negative) ? false : true;
-    };
   }]);
+  wonderApp.controller('playerCtrl', ['$scope', function($scope) {
+    $scope.newPlayerName = '';
 
-  wonderApp.controller('wonderMenuCtrl', ['$scope', '$timeout', function ($scope, $timeout) {
-    //Setup-Function
-    $timeout(function () {
-      for (var item in $scope.menus) {
-        var elem = $('#' + $scope.menus[item].drawer);
-        $scope.menus[item].height = elem.outerHeight();
-        elem.css('max-height', '0px');
-      }
-      $('#modal-player-add').on('shown.bs.modal', function () {
-        $('input', this).focus();
-      });
-    }, 0, false);
-
-    $scope.$openMenu = $();
-    $scope.$openDrawer = $();
-    $scope.menus = {
-      players: {
-        nav: 'nav-players',
-        drawer: 'drawer-players',
-        height: 0,
-        icon: 'ion-person-stalker'
-      }
+    $scope.deletePlayer = function(player) {
+      $scope.$parent.activeWonders.remove(player.wonder);
+      delete $scope.$parent.players[player];
     };
-
-
-    $scope.open = function (sender) {
-      var $sender = $('#' + $scope.menus[sender].nav);
-
-      $scope.$openMenu.removeClass('open');
-      $scope.$openDrawer.css('max-height', '0px');
-      if (!$scope.$openMenu.is($sender)) {
-        //Reset $scope
-        $scope.$openMenu = $sender;
-        $scope.$openDrawer = $('#' + $scope.menus[sender].drawer);
-        //Open
-        $scope.$openMenu.addClass('open');
-        $scope.$openDrawer.css('max-height', $scope.menus[sender].height + 'px');
-      } else {
-        $scope.$openMenu = $();
-        $scope.$openDrawer = $();
-      }
-    };
-    $scope.close = function () {
-      $scope.$openMenu.removeClass('open');
-      $scope.$openDrawer.css('max-height', '0px');
-      $scope.$openMenu = $();
-      $scope.$openDrawer = $();
-    };
-
-    $scope.newGame = function () {
-      $scope.$parent.players = [];
-      $('.table-score tr').each(function () {
-        $('td, th', this).not(':first-child').remove();
-      });
-      $scope.close();
-    };
-
-    $scope.addPlayer = function () {
-      var playerName = $('#modal-player-add input').val();
-
-      if (playerName !== undefined) {
-        $scope.$parent.players[playerName] = {
-          military: 0,
-          money: 0,
-          wonder: 0,
-          buildings: 0,
-          trading: 0,
-          research: 0,
-          guild: 0,
-          city: 0,
-          leader: 0,
+    $scope.addPlayer = function() {
+      if($scope.newPlayerName !== '') {
+        $scope.$parent.players[$scope.newPlayerName] = {
+          wonder: $scope.$parent.randomWonder(),
+          score: {
+            military: 0,
+            money: 0,
+            wonder: 0,
+            buildings: 0,
+            trading: 0,
+            research: 0,
+            guild: 0,
+            city: 0,
+            leader: 0,
+          }
         };
-
-        //Readjust Drawer
-        $scope.menus.players.height += 35;
-        $scope.$openDrawer.css('max-height', $scope.menus.players.height + 'px');
+        $scope.newPlayerName = '';
       }
     };
-    $scope.removePlayer = function (sender) {
-      delete $scope.$parent.players[sender];
-      var tableIndex = $('th[data-id="' + sender.toLowerCase() + '"]').index();
-
-      $('.table-score tr').each(function () {
-        $('td, th', this).get(tableIndex).remove();
-      });
+    $scope.rerollWonder = function(player) {
+      var wonder = $scope.$parent.players[player].wonder;
+      $scope.$parent.activeWonders.remove(wonder);
+      $scope.$parent.players[player].wonder = $scope.$parent.randomWonder();
     };
   }]);
-
-
-  /** Directives **/
-
-
-  /** Run **/
-  wonderApp.run(function() {
-    FastClick.attach(document.body);
-  });
 })();
+
+
+//Helper
+Array.prototype.remove = function() {
+    var what, a = arguments, L = a.length, ax;
+    while (L && this.length) {
+        what = a[--L];
+        while ((ax = this.indexOf(what)) !== -1) {
+            this.splice(ax, 1);
+        }
+    }
+    return this;
+};

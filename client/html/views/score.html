@@ -1,0 +1,28 @@
+<div class="table-responsive">
+  <table class="table table-score">
+    <colgroup>
+      <col width="37px" />
+    </colgroup>
+    <thead>
+      <tr>
+        <th></th>
+        <th ng-repeat="(key, value) in players">{{key}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="category in categories" ng-class="category.name">
+        <th><i class="{{category.icon}}"></i></th>
+        <td ng-repeat="player in players" ng-click="editScore(category.name, player.score)">{{player.score[category.name]}}</td>
+      </tr>
+      <tr class="score">
+        <th><i class="ion-ribbon-a"></i></th>
+        <td ng-repeat="player in players" ng-bind="calcTotal(player.score)"></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<a class="btn btn-primary btn-block icon-left">
+  <i class="icon ion-clipboard"></i>
+  Spiel werten
+</a>
