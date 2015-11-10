@@ -1,0 +1,48 @@
+.alert-container {
+  position: absolute;
+  left: 50%;
+  top: 125px;
+}
+
+.alert {
+  position: relative;
+  left: -50%;
+  width: 300px;
+  text-align: center;
+  .alert-head,
+  .alert-body,
+  .alert-buttons .btn {
+    background-color: rgba(255,255,255,.9);
+  }
+
+  .in & { transform: translateY(25px); }
+}
+
+.alert-head {
+  padding: 15px 15px 0;
+  margin: 0;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.alert-body {
+  padding: 5px 15px 9px;
+  border-bottom: 1px solid #b2b2b2;
+}
+
+.alert-buttons {
+  @include displayFlex();
+  .btn {
+    @include flexBox(1);
+    color: $bg-primary;
+    border: 0 none;
+    border-radius: 0;
+    background-color: rgba(255,255,255,.75);
+    &:first-child { border-bottom-left-radius: 8px; }
+    &:last-child { border-bottom-right-radius: 8px; }
+    & + .btn { border-left: 1px solid #b2b2b2; }
+  }
+}
+
+
+

@@ -1,13 +1,13 @@
 <h3>Mitspieler</h3>
 
 <ul class="list">
-  <li ng-repeat="(player, obj) in $parent.players" class="player">
-    <a data-target="{{player | lowercase}}" class="item item-double icon-left icon-double-right">
+  <li ng-repeat="player in players" class="player">
+    <a data-target="{{player.name | lowercase}}" class="item item-double icon-left icon-double-right">
       <i class="ion-drag icon"></i>
-      {{player}}
-      <small>{{obj.wonder}}</small>
+      {{player.name}}
+      <small>{{player.wonder}}</small>
       <i class="ion-ios-shuffle icon" ng-click="rerollWonder(player)"></i>
-      <i class="ion-ios-trash-outline icon" ng-click="deletePlayer(player)"></i>
+      <i class="ion-ios-trash-outline icon" ng-click="deletePlayer($index)"></i>
     </a>
   </li>
 </ul>
@@ -22,6 +22,12 @@
     <a class="item btn btn-primary btn-block icon-left" ng-click="addPlayer()">
       <i class="icon ion-ios-personadd"></i>
       Mitspieler hinzufügen
+    </a>
+  </li>
+  <li>
+    <a class="item btn btn-primary btn-block icon-left" ng-click="shufflePlayers()">
+      <i class="icon ion-ios-loop-strong"></i>
+      Plätze verteilen
     </a>
   </li>
 </ul>

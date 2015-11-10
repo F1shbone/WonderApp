@@ -1,0 +1,44 @@
+.keyboard-spacer {
+  padding-bottom: 0;
+  @include transition(padding, .3s);
+}
+
+
+.keyboard {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background-color: #fff;
+  text-align: center;
+  transform: translateY(251px);
+  @include transition(transform, .3s);
+  z-index: 100;
+
+  .input {
+    padding: 15px;
+    border-top: 1px solid #ddd;
+    background-color: #fff;
+    font-size: 30px;
+    color: #333;
+
+    .switch-sign {
+      position: absolute;
+      display: inline-block;
+      top: 7px;
+      left: 10px;
+      padding: 10px;
+      color: #000;
+      @include transition(color, .3s);
+      &.inactive { color: #999; }
+    }
+  }
+
+  .table {
+    margin-bottom: 0;
+    font-size: 16px;
+  }
+}
+
+.keyboard-open {
+  &.keyboard-spacer { padding-bottom: 202px; }
+  &.keyboard { transform: translateY(0px); }
+}

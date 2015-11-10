@@ -148,3 +148,8 @@
     }
   }
 }
+
+.nav {
+  padding-left: 0;
+  > li { padding: 10px; }
+}

@@ -3,52 +3,6 @@
 
 
 //  /** Controllers **/
-//  wonderApp.controller('wonderCtrl', ['$scope', function ($scope) {
-//    $scope.controls = {
-//      open: false,
-//      background: '',
-//      negative: false,
-//      value: '0',
-//      player: '',
-//      category: ''
-//    };
-//
-//    $scope.editScore = function (category, sender) {
-//      $scope.controls.background = category;
-//      $scope.controls.value = sender[category].toString();
-//      $scope.controls.open = true;
-//      $scope.controls.player = sender;
-//      $scope.controls.category = category;
-//    };
-//    $scope.editValue = function (value) {
-//      if ($scope.controls.value === '0') {
-//        $scope.controls.value = value.toString();
-//      } else {
-//        $scope.controls.value += value.toString();
-//      }
-//    };
-//    $scope.clearValue = function () {
-//      $scope.controls.value = '0';
-//    };
-//    $scope.closeControls = function () {
-//      $scope.controls.player[$scope.controls.category] = (($scope.controls.negative) ? '-' : '') + $scope.controls.value;
-//      $scope.controls.negative = false;
-//      $scope.controls.open = false;
-//    };
-//    $scope.calcTotal = function (player) {
-//      var total = 0;
-//
-//      for (var key in player) {
-//        total += parseInt(player[key]);
-//      }
-//
-//      return total;
-//    };
-//    $scope.switchSign = function() {
-//      $scope.controls.negative = ($scope.controls.negative) ? false : true;
-//    };
-//  }]);
-//
 //  wonderApp.controller('wonderMenuCtrl', ['$scope', '$timeout', function ($scope, $timeout) {
 //    //Setup-Function
 //
@@ -122,8 +76,9 @@
       return wonder;
     };
 
-    $scope.players = {
-      Bernhard: {
+    $scope.players = [
+      {
+        name: 'Bernhard',
         wonder: $scope.randomWonder(),
         score: {
           military: 0,
@@ -137,7 +92,8 @@
           leader: 8,
         }
       },
-      Mina: {
+      {
+        name: 'Mina',
         wonder: $scope.randomWonder(),
         score: {
           military: 0,
@@ -151,7 +107,8 @@
           leader: 0,
         }
       },
-      Simon: {
+      {
+        name: 'Simon',
         wonder: $scope.randomWonder(),
         score: {
           military: 0,
@@ -165,7 +122,8 @@
           leader: 0,
         }
       },
-      Christian: {
+      {
+        name: 'Christian',
         wonder: $scope.randomWonder(),
         score: {
           military: 0,
@@ -179,21 +137,8 @@
           leader: 0,
         }
       },
-      Daniel: {
-        wonder: $scope.randomWonder(),
-        score: {
-          military: 0,
-          money: 0,
-          wonder: 0,
-          buildings: 0,
-          trading: 0,
-          research: 0,
-          guild: 0,
-          city: 0,
-          leader: 0,
-        }
-      },
-      Michael: {
+      {
+        name: 'Daniel',
         wonder: $scope.randomWonder(),
         score: {
           military: 0,
@@ -207,7 +152,7 @@
           leader: 0,
         }
       }
-    };
+    ];
     $scope.categories = [
       {
         name: 'military',
@@ -260,6 +205,9 @@
       $location.path($scope.activePath);
     };
 
+    $scope.newGame = function() {
+      $scope.players = [];
+    };
 
     (function() { $location.path($scope.activePath); })();
   }]);
@@ -273,17 +221,52 @@
 
       return total;
     };
+    $scope.controls = {
+      open: false,
+      background: '',
+      negative: false,
+      value: '0',
+      player: '',
+      category: '',
+      switchSign: function() {
+        $scope.controls.negative = ($scope.controls.negative) ? false : true;
+      }
+    };
+
+    $scope.editScore = function (category, sender) {
+      $scope.controls.background = category;
+      $scope.controls.value = sender[category].toString();
+      $scope.controls.open = true;
+      $scope.controls.player = sender;
+      $scope.controls.category = category;
+    };
+    $scope.editValue = function (value) {
+      if ($scope.controls.value === '0') {
+        $scope.controls.value = value.toString();
+      } else {
+        $scope.controls.value += value.toString();
+      }
+    };
+    $scope.clearValue = function () {
+      $scope.controls.value = '0';
+    };
+    $scope.closeControls = function () {
+      $scope.controls.player[$scope.controls.category] = (($scope.controls.negative) ? '-' : '') + $scope.controls.value;
+      $scope.controls.negative = false;
+      $scope.controls.open = false;
+    };
   }]);
   wonderApp.controller('playerCtrl', ['$scope', function($scope) {
     $scope.newPlayerName = '';
 
-    $scope.deletePlayer = function(player) {
-      $scope.$parent.activeWonders.remove(player.wonder);
-      delete $scope.$parent.players[player];
+    $scope.deletePlayer = function(playerIndex) {
+      $scope.$parent.activeWonders.remove($scope.$parent.players[playerIndex].wonder);
+      $scope.$parent.players.splice(playerIndex, 1);
     };
     $scope.addPlayer = function() {
       if($scope.newPlayerName !== '') {
-        $scope.$parent.players[$scope.newPlayerName] = {
+        $scope.$parent.players.push({
+          name: $scope.newPlayerName,
           wonder: $scope.$parent.randomWonder(),
           score: {
             military: 0,
@@ -296,14 +279,12 @@
             city: 0,
             leader: 0,
           }
-        };
+        });
         $scope.newPlayerName = '';
       }
     };
-    $scope.rerollWonder = function(player) {
-      var wonder = $scope.$parent.players[player].wonder;
-      $scope.$parent.activeWonders.remove(wonder);
-      $scope.$parent.players[player].wonder = $scope.$parent.randomWonder();
+    $scope.shufflePlayers = function() {
+      $scope.$parent.players.shuffle();
     };
   }]);
 })();
@@ -311,12 +292,21 @@
 
 //Helper
 Array.prototype.remove = function() {
-    var what, a = arguments, L = a.length, ax;
-    while (L && this.length) {
-        what = a[--L];
-        while ((ax = this.indexOf(what)) !== -1) {
-            this.splice(ax, 1);
-        }
+  var what, a = arguments, L = a.length, ax;
+  while (L && this.length) {
+    what = a[--L];
+    while ((ax = this.indexOf(what)) !== -1) {
+      this.splice(ax, 1);
     }
-    return this;
+  }
+  return this;
+};
+Array.prototype.shuffle = function() {
+  for (var n = 0; n < this.length - 1; n++) {
+    var k = n + Math.floor(Math.random() * (this.length - n));
+
+    var temp = this[k];
+    this[k] = this[n];
+    this[n] = temp;
+  }
 };

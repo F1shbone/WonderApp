@@ -4,9 +4,8 @@
     .table-score .#{$name} th {
       //color: if((red($bg-color) * 299 + green($bg-color) * 587 + blue($bg-color) * 114) / 1000 > 125 , #000, #fff);
       color: #000;
-      //background-color: $bg-color;
     }
-    .controls > .#{$name} {
+    .keyboard > .#{$name} {
       background-color: fade-out($bg-color, 0.25);
       color: if((red($bg-color) * 299 + green($bg-color) * 587 + blue($bg-color) * 114) / 1000 > 125 , #000, #fff);
     }

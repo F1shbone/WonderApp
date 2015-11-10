@@ -128,6 +128,11 @@ module.exports = function (grunt) {
 
   // Default task(s).
   grunt.registerTask('default', [
+    'sass',
+    'uglify',
+    'copy:xampp'
+  ]);
+  grunt.registerTask('full', [
     'clean',
     'sass',
     'uglify',
