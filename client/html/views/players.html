@@ -6,7 +6,7 @@
       <i class="ion-drag icon"></i>
       {{player.name}}
       <small>{{player.wonder}}</small>
-      <i class="ion-ios-shuffle icon" ng-click="rerollWonder(player)"></i>
+      <i class="ion-ios-shuffle icon" ng-click="rerollWonder($index)"></i>
       <i class="ion-ios-trash-outline icon" ng-click="deletePlayer($index)"></i>
     </a>
   </li>

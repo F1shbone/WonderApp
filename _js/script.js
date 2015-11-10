@@ -283,6 +283,11 @@
         $scope.newPlayerName = '';
       }
     };
+    $scope.rerollWonder = function(playerIndex) {
+      var wonder = $scope.$parent.players[playerIndex].wonder;
+      $scope.$parent.players[playerIndex].wonder = $scope.$parent.randomWonder();
+      $scope.$parent.activeWonders.remove(wonder);
+    };
     $scope.shufflePlayers = function() {
       $scope.$parent.players.shuffle();
     };
