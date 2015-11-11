@@ -46,7 +46,7 @@
         <i class="icon ion-trophy"></i>
       </a>
       <a class="bar-icon" href="#" ng-click="changeView('/players')" ng-class="{'active': activePath.substr(1) == 'players'}">
-        <i class="icon ion-person-stalker"></i>
+        <i class="icon ion-ios-people"></i>
       </a>
       <a class="bar-icon" href="#" ng-click="changeView('/statistics')" ng-class="{'active': activePath.substr(1) == 'statistics'}">
         <i class="icon ion-stats-bars"></i>
@@ -55,24 +55,7 @@
   </div>
 
 
-
-<!--
-  <div style="position: fixed; top: 0; bottom: 0; right: 0; left: 0; background-color: rgba(0,0,0,.4);"></div>
-  <div class="alert-container fade in">
-    <div class="alert">
-      <h3 class="alert-head">Bestätigen</h3>
-      <div class="alert-body">
-        Möchten Sie das wirklich tun?
-      </div>
-      <div class="alert-buttons">
-        <button id="alert-cancel" class="btn">Abbrechen</button>
-        <button id="alert-ok" class="btn">Ok</button>
-      </div>
-    </div>
-  </div>
--->
-
-
+  <alert-new-game open="newGameDialogIn" extension="extension"></alert-new-game>
 
 
 

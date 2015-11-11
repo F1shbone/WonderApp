@@ -61,7 +61,6 @@ a, button, :focus, a:focus, button:focus, a:active, a:hover {
 
 .fade {
   opacity: 0;
-  @include transition(all, .3s);
   &.in {
     opacity: 1;
   }

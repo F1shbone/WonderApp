@@ -1,0 +1,14 @@
+<div class="alert-container fade" ng-class="{'in': open}">
+  <div class="alert">
+    <h3 class="alert-head">Bestätigen</h3>
+    <div class="alert-body">
+      Möchten Sie das wirklich tun? <span>Test: {{open}}</span>
+    </div>
+    <div class="alert-block-buttons">
+      <button id="alert-basic" class="btn btn-block" ng-click="open = false; extension = 'basic'">7 Wonders</button>
+      <button id="alert-leaders" class="btn btn-block" ng-click="open = false; extension = 'leaders'">7 Wonders Leaders</button>
+      <button id="alert-cities" class="btn btn-block" ng-click="open = false; extension = 'cities'">7 Wonders Cities</button>
+    </div>
+  </div>
+</div>
+<div class="backdrop" ng-click="open = false"></div>

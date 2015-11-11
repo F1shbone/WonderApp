@@ -1,26 +1,6 @@
 /*jshint asi: false, browser: true, eqeqeq: true, eqnull: true, jquery: true, strict: false, laxcomma: true, nonbsp: true, undef: true, unused: true*/
 /*global angular*/
 
-
-//  /** Controllers **/
-//  wonderApp.controller('wonderMenuCtrl', ['$scope', '$timeout', function ($scope, $timeout) {
-//    //Setup-Function
-//
-//    //
-//    $scope.newGame = function () {
-//      $scope.$parent.players = [];
-//      $('.table-score tr').each(function () {
-//        $('td, th', this).not(':first-child').remove();
-//      });
-//      $scope.close();
-//    };
-//  }]);
-//
-//
-//  /** Directives **/
-//})();
-
-
 (function() {
   'use strict';
 
@@ -40,6 +20,10 @@
       templateUrl: 'html/views/statistics.html',
       controller: '' //TODO Add Controller
     });
+    $routeProvider.when('/profile', {
+      templateUrl: 'html/views/profile.html',
+      controller: '' //TODO Add Controller
+    });
   }]);
 
   /** Controller **/
@@ -48,6 +32,7 @@
     $scope.activeWonders = [];
     $scope.previousPath = ['/score'];
 
+    $scope.extension = 'cities',
     $scope.wonders = [
       'Abu Simbel',
       'Alexandria',
@@ -205,7 +190,9 @@
       $location.path($scope.activePath);
     };
 
+    $scope.newGameDialogIn = false;
     $scope.newGame = function() {
+      $scope.newGameDialogIn = true;
       $scope.players = [];
     };
 
@@ -221,7 +208,7 @@
 
       return total;
     };
-    $scope.controls = {
+    $scope.keyboard = {
       open: false,
       background: '',
       negative: false,
@@ -229,31 +216,37 @@
       player: '',
       category: '',
       switchSign: function() {
-        $scope.controls.negative = ($scope.controls.negative) ? false : true;
+        $scope.keyboard.negative = ($scope.keyboard.negative) ? false : true;
       }
     };
 
     $scope.editScore = function (category, sender) {
-      $scope.controls.background = category;
-      $scope.controls.value = sender[category].toString();
-      $scope.controls.open = true;
-      $scope.controls.player = sender;
-      $scope.controls.category = category;
+      if($scope.keyboard.player !== '') {
+        $scope.keyboard.player[$scope.keyboard.category] = (($scope.keyboard.negative && $scope.keyboard.value !== '0') ? '-' : '') + $scope.keyboard.value;
+        $scope.keyboard.negative = false;
+      }
+
+      $scope.keyboard.background = category;
+      $scope.keyboard.value = sender[category].toString();
+      $scope.keyboard.open = true;
+      $scope.keyboard.player = sender;
+      $scope.keyboard.category = category;
     };
     $scope.editValue = function (value) {
-      if ($scope.controls.value === '0') {
-        $scope.controls.value = value.toString();
+      if ($scope.keyboard.value === '0') {
+        $scope.keyboard.value = value.toString();
       } else {
-        $scope.controls.value += value.toString();
+        $scope.keyboard.value += value.toString();
       }
     };
     $scope.clearValue = function () {
-      $scope.controls.value = '0';
+      $scope.keyboard.value = '0';
     };
-    $scope.closeControls = function () {
-      $scope.controls.player[$scope.controls.category] = (($scope.controls.negative) ? '-' : '') + $scope.controls.value;
-      $scope.controls.negative = false;
-      $scope.controls.open = false;
+    $scope.closekeyboard = function () {
+      $scope.keyboard.player[$scope.keyboard.category] = (($scope.keyboard.negative && $scope.keyboard.value !== '0') ? '-' : '') + $scope.keyboard.value;
+      $scope.keyboard.negative = false;
+      $scope.keyboard.open = false;
+      $scope.keyboard.player = '';
     };
   }]);
   wonderApp.controller('playerCtrl', ['$scope', function($scope) {
@@ -292,6 +285,19 @@
       $scope.$parent.players.shuffle();
     };
   }]);
+
+  /** Directives **/
+  wonderApp.directive("alertNewGame", function() {
+    return {
+      restrict: 'E',
+      scope: {
+        open: '=',
+        extension: '='
+      },
+      templateUrl: 'html/templates/alert-new-game.html',
+      controller: 'wonderCtrl',
+    };
+  });
 })();
 
 
