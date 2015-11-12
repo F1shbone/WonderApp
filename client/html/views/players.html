@@ -1,6 +1,14 @@
 <h3>Mitspieler</h3>
 
 <ul class="list">
+  <li>
+    <a class="item btn btn-primary btn-block icon-left" ng-click="changeView('/profile')">
+      <i class="icon ion-ios-person"></i>
+      Profil
+    </a>
+  </li>
+</ul>
+ <ul class="list">
   <li ng-repeat="player in players" class="player">
     <a data-target="{{player.name | lowercase}}" class="item item-double icon-left icon-double-right">
       <i class="ion-drag icon"></i>
@@ -28,12 +36,6 @@
     <a class="item btn btn-primary btn-block icon-left" ng-click="shufflePlayers()">
       <i class="icon ion-ios-loop-strong"></i>
       Plätze verteilen
-    </a>
-  </li>
-  <li>
-    <a class="item btn btn-primary btn-block icon-left" ng-click="changeView('/profile')">
-      <i class="icon ion-ios-person"></i>
-      Profil
     </a>
   </li>
 </ul>
