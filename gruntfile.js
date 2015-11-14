@@ -27,6 +27,7 @@ module.exports = function (grunt) {
   // Project configuration.
   grunt.initConfig({
     pkg: pkg,
+    copyTarget: process.platform === 'win32' ? 'D:/xampp/htdocs/wonderApp/' : '/Applications/XAMPP/htdocs/wonderApp/',
 
     sass: {
       options: {
@@ -91,7 +92,7 @@ module.exports = function (grunt) {
             expand: true,
             cwd: './client',
             src: ['**/*'],
-            dest: 'D:/xampp/htdocs/wonderApp'
+            dest: '<%= copyTarget %>'
           }
         ]
       }
