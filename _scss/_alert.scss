@@ -34,6 +34,10 @@
 .alert-body {
   padding: 5px 15px 9px;
   border-bottom: 1px solid #b2b2b2;
+  small {
+    color: #777;
+    font-size: 75%;
+  }
 }
 
 .alert-buttons {

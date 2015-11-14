@@ -36,7 +36,7 @@
       Zurück
     </button>
     <h1 class="title app-title">7 Wonders</h1>
-    <button ng-click="newGame()" class="btn btn-clear icon ion-compose"></button>
+    <button ng-click="game.openDialog()" class="btn btn-clear icon ion-compose"></button>
   </div>
 
   <div class="container" ng-view>
@@ -60,7 +60,7 @@
   </div>
 
 
-  <alert-new-game open="newGameDialogIn" extension="extension"></alert-new-game>
+  <alert-new-game open="game.showDialog" extension="game.mode"></alert-new-game>
 
 
 

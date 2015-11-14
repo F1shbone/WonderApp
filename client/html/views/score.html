@@ -27,32 +27,32 @@
   Spiel werten
 </a>
 
-<div class="keyboard-spacer" ng-class="{'keyboard-open': keyboard.open}"></div>
-<div class="keyboard" ng-class="{'keyboard-open': keyboard.open}">
-  <div ng-class="keyboard.background">
+<div class="keyboard-spacer" ng-class="{'keyboard-open': keyboard.isOpen}"></div>
+<div class="keyboard" ng-class="{'keyboard-open': keyboard.isOpen}">
+  <div ng-class="keyboard.backgroundClass">
     <div class="input">
-      <i class="ion-minus switch-sign" ng-click="keyboard.switchSign()" ng-class="{'inactive': !keyboard.negative}" ng-show="['military', 'money'].indexOf(keyboard.category) !== -1"></i> {{keyboard.value}}
+      <i class="ion-minus switch-sign" ng-click="keyboard.switchSign()" ng-class="{'inactive': !keyboard.isNegative}" ng-show="['military', 'money'].indexOf(keyboard.activeCategory) !== -1"></i> {{keyboard.value}}
     </div>
     <table class="table">
       <tr>
-        <td ng-click="editValue(1)">1</td>
-        <td ng-click="editValue(2)">2</td>
-        <td ng-click="editValue(3)">3</td>
+        <td ng-click="keyboard.editValue(1)">1</td>
+        <td ng-click="keyboard.editValue(2)">2</td>
+        <td ng-click="keyboard.editValue(3)">3</td>
       </tr>
       <tr>
-        <td ng-click="editValue(4)">4</td>
-        <td ng-click="editValue(5)">5</td>
-        <td ng-click="editValue(6)">6</td>
+        <td ng-click="keyboard.editValue(4)">4</td>
+        <td ng-click="keyboard.editValue(5)">5</td>
+        <td ng-click="keyboard.editValue(6)">6</td>
       </tr>
       <tr>
-        <td ng-click="editValue(7)">7</td>
-        <td ng-click="editValue(8)">8</td>
-        <td ng-click="editValue(9)">9</td>
+        <td ng-click="keyboard.editValue(7)">7</td>
+        <td ng-click="keyboard.editValue(8)">8</td>
+        <td ng-click="keyboard.editValue(9)">9</td>
       </tr>
       <tr>
-        <td ng-click="closekeyboard()"><i class="ion-chevron-down"></i></td>
-        <td ng-click="editValue(0)">0</td>
-        <td ng-click="clearValue()"><i class="ion-backspace-outline"></i></td>
+        <td ng-click="keyboard.close()"><i class="ion-chevron-down"></i></td>
+        <td ng-click="keyboard.editValue(0)">0</td>
+        <td ng-click="keyboard.clear()"><i class="ion-backspace-outline"></i></td>
       </tr>
     </table>
   </div>
