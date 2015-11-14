@@ -125,15 +125,15 @@
     overflow: hidden;
     max-width: 150px;
     height: 40px;
-    color: inherit;
+    color: #777;
     text-align: center;
     text-decoration: none;
     text-overflow: ellipsis;
     white-space: nowrap;
     font-weight: 400;
-    border-top: 3px solid #b2b2b2;
+    border-top: 1px solid #b2b2b2;
     &.active {
-      border-color: $highlight-color;
+      color: $bg-primary;
     }
     &.icon-close .icon {
       color: $bg-error;

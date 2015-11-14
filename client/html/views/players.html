@@ -1,14 +1,4 @@
-<h3>Mitspieler</h3>
-
 <ul class="list">
-  <li>
-    <a class="item btn btn-primary btn-block icon-left" ng-click="changeView('/profile')">
-      <i class="icon ion-ios-person"></i>
-      Profil
-    </a>
-  </li>
-</ul>
- <ul class="list">
   <li ng-repeat="player in players" class="player">
     <a data-target="{{player.name | lowercase}}" class="item item-double icon-left icon-double-right">
       <i class="ion-drag icon"></i>
@@ -18,24 +8,24 @@
       <i class="ion-ios-trash-outline icon" ng-click="deletePlayer($index)"></i>
     </a>
   </li>
-</ul>
-<ul class="list">
   <li>
-    <label class="item item-input">
-      <span class="input-label">Name:</span>
-      <input type="text" ng-model="newPlayerName" ng-pattern="word">
+    <label class="item item-input icon-right" ng-class="{'disabled': players.length >= 8}">
+      <input type="text" ng-model="newPlayerName" ng-pattern="word" placeholder="Name" ng-readonly="players.length >= 8">
+      <i class="ion-ios-plus-empty icon btn-add" ng-click="addPlayer()"></i>
     </label>
   </li>
-  <li>
-    <a class="item btn btn-primary btn-block icon-left" ng-click="addPlayer()">
-      <i class="icon ion-ios-personadd"></i>
-      Mitspieler hinzufügen
-    </a>
-  </li>
+</ul>
+<ul class="list">
   <li>
     <a class="item btn btn-primary btn-block icon-left" ng-click="shufflePlayers()">
       <i class="icon ion-ios-loop-strong"></i>
       Plätze verteilen
+    </a>
+  </li>
+  <li>
+    <a class="item btn btn-primary btn-block icon-left" ng-class="{'disabled': players.length < 2}">
+      <i class="icon ion-ios-checkmark-outline"></i>
+      Spiel beginnen
     </a>
   </li>
 </ul>

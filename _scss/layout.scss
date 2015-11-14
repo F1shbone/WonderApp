@@ -65,3 +65,12 @@ a, button, :focus, a:focus, button:focus, a:active, a:hover {
     opacity: 1;
   }
 }
+
+.disabled,
+.disabled * {
+  cursor: not-allowed;
+  filter: alpha(opacity=65);
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  opacity: .65;
+}

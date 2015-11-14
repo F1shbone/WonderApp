@@ -7,6 +7,9 @@
     border-top: 1px solid #b2b2b2;
   }
   > li > .item:not(.btn) {
+    border-bottom: 1px solid #b2b2b2;
+  }
+  > li > .item {
     position: relative;
     display: block;
     padding: 10px 15px;
@@ -16,22 +19,7 @@
     text-overflow: ellipsis;
     white-space: nowrap;
 
-    &.icon-left {
-      padding-left: 54px;
-      > .icon:before { line-height: 1; }
-      > .icon:first-child { left: 0; }
-    }
-    &.icon-right {
-      padding-right: 54px;
-      > .icon:before { line-height: 1; }
-      > .icon:last-child { right: 0; }
-    }
-    &.icon-double-right {
-      padding-right: 108;
-      > .icon:before { line-height: 1; }
-      > .icon:nth-last-child(2) { right: 54px; }
-      > .icon:last-child { right: 0; }
-    }
+
     > .icon {
       position: absolute;
       -webkit-box-align: center;
@@ -59,21 +47,45 @@
     //Inputs
     &.item-input {
       padding: 0;
-      border-bottom: 0 none;
-      .input-label {
-        position: absolute;
-        top: 9px;
-        left: 15px;
-        z-index: 50;
+      cursor: pointer;
+      .btn-add {
+        color: #fff;
+        &:before {
+          background-color: $bg-success;
+          width: 24px;
+          border-radius: 50%;
+        }
       }
       input {
-        padding-left: 100px;
+        padding-left: 15px;
         padding-right: 15px;
-        padding-bottom: 6px;
-        padding-top: 6px;
+        padding-bottom: 4px;
+        padding-top: 8px;
         height: 42px;
+        border: 0 none;
         z-index: 100;
       }
+    }
+
+    //Helper
+    &.icon-left {
+      padding-left: 54px;
+      > .icon:before { line-height: 1; }
+      > .icon:first-child { left: 0; }
+      > input { padding-left: 0; }
+    }
+    &.icon-right {
+      padding-right: 54px;
+      > .icon:before { line-height: 1; }
+      > .icon:last-child { right: 0; }
+      > input { padding-right: 0; }
+    }
+    &.icon-double-right {
+      padding-right: 108;
+      > .icon:before { line-height: 1; }
+      > .icon:nth-last-child(2) { right: 54px; }
+      > .icon:last-child { right: 0; }
+      > input { padding-right: 0; }
     }
   }
 

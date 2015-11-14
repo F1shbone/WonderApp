@@ -23,6 +23,18 @@ td, th {
       vertical-align: top;
     }
   }
+
+  > tbody,
+  > tfood,
+  > thead {
+    >tr:last-child > td,
+    >tr:last-child > th {
+      border-bottom: 1px solid #b2b2b2;
+    }
+  }
+
+
+
   > tbody > tr > th {
     border-right: 1px solid #b2b2b2;
   }

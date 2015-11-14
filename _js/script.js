@@ -7,7 +7,7 @@
   var wonderApp = angular.module('wonderApp', ['ngTouch', 'ngRoute']);
 
   wonderApp.config(['$routeProvider', function($routeProvider) {
-    $routeProvider.otherwise({redirectTo: '/score'});
+    $routeProvider.otherwise({redirectTo: '/players'});
     $routeProvider.when('/score', {
       templateUrl: 'html/views/score.html',
       controller: 'scoreCtrl'
@@ -27,10 +27,10 @@
   }]);
 
   /** Controller **/
-  wonderApp.controller('wonderCtrl', ['$scope', '$location', function ($scope, $location) {
-    $scope.activePath = '/score';
+  wonderApp.controller('wonderCtrl', ['$scope', '$location', '$timeout', function ($scope, $location, $timeout) {
+    $scope.activePath = '/players';
     $scope.activeWonders = [];
-    $scope.previousPath = ['/score'];
+    $scope.previousPath = ['/players'];
 
     $scope.extension = 'cities',
     $scope.wonders = [
@@ -181,19 +181,30 @@
       $scope.previousPath.push($scope.activePath);
       $scope.activePath = path;
 
-      $location.path($scope.activePath);
+      $timeout(function(){
+        $location.path($scope.activePath);
+      });
 
       if($scope.previousPath.length > 6) $scope.previousPath.shift();
     };
     $scope.previousView = function() {
       $scope.activePath = $scope.previousPath.pop();
-      $location.path($scope.activePath);
+      $timeout(function(){
+        $location.path($scope.activePath);
+      });
     };
 
     $scope.newGameDialogIn = false;
     $scope.newGame = function() {
       $scope.newGameDialogIn = true;
       $scope.players = [];
+    };
+
+
+
+
+    $scope.test = function() {
+      console.log('Hallo Test!');
     };
 
     (function() { $location.path($scope.activePath); })();
@@ -257,7 +268,7 @@
       $scope.$parent.players.splice(playerIndex, 1);
     };
     $scope.addPlayer = function() {
-      if($scope.newPlayerName !== '') {
+      if($scope.newPlayerName !== '' && $scope.$parent.players.length < 8) {
         $scope.$parent.players.push({
           name: $scope.newPlayerName,
           wonder: $scope.$parent.randomWonder(),
