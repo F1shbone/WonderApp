@@ -38,7 +38,5 @@
   }
 }
 
-.keyboard-open {
-  &.keyboard-spacer { padding-bottom: 202px; }
-  &.keyboard { transform: translateY(0px); }
-}
+&.keyboard-spacer.open { padding-bottom: 202px; }
+&.keyboard.open { transform: translateY(0px); }

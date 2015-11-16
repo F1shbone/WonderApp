@@ -26,6 +26,7 @@
     });
   }]);
 
+  /** Services **/
   wonderApp.service('wonders', function() {
     var basic = [
         'Alexandria',
@@ -92,7 +93,7 @@
           return wonder;
         }
       }
-    }
+    };
   });
   wonderApp.service('players', ['wonders', function(wonders) {
     var players = [];
@@ -137,11 +138,20 @@
       shuffle: function() {
         players.shuffle();
       }
-    }
+    };
   }]);
+  wonderApp.service('scoreInput', function() {
+    return {
+      open: false,
+      negative: false,
+      category: '',
+      player: '',
+      backgroundClass: '',
+      value: '0'
+    };
+  });
 
-
-
+  /** Run **/
   wonderApp.run(['$location', '$timeout', 'players', function($location, $timeout, players) {
     $timeout(function(){
       $location.path('players');
@@ -180,13 +190,13 @@
         //$scope.players = [];
       },
       players: []
-    }
+    };
     //DEBUG - TODO remove this
     $scope.test = function() {
       console.log('Hallo Test!');
     };
   }]);
-  wonderApp.controller('scoreCtrl', ['$scope', 'players', function($scope, players) {
+  wonderApp.controller('scoreCtrl', ['$scope', 'players', 'scoreInput', function($scope, players, scoreInput) {
     $scope.categories = [
       {
         name: 'military',
@@ -225,55 +235,45 @@
         icon: 'ion-person'
       }
     ];
+    $scope.scoreInput = scoreInput;
+    $scope.players = players.get();
     $scope.calcTotal = function (player) {
       var total = 0;
-
       for (var key in player) {
         total += parseInt(player[key]);
       }
-
       return total;
     };
-    $scope.editScore = function (category, sender) {
-      if($scope.keyboard.activePlayer !== '') {
-        $scope.keyboard.activePlayer[$scope.keyboard.activeCategory] = (($scope.keyboard.isNegative && $scope.keyboard.value !== '0') ? '-' : '') + $scope.keyboard.value;
-        $scope.keyboard.negative = false;
-      }
+    //Keyboard
+    $scope.clear = function() {
+      scoreInput.value = '0';
+    };
+    $scope.close = function() {
+      scoreInput.negative = false;
+      scoreInput.open = false;
+    };
+    $scope.editScore = function (category, sender, senderName) {
+      scoreInput.open = true;
+      scoreInput.negative = false;
+      scoreInput.backgroundClass = category;
+      scoreInput.category = category;
+      scoreInput.player = senderName;
+      scoreInput.value = sender[category];
 
-      $scope.keyboard.backgroundClass = category;
-      $scope.keyboard.value = sender[category].toString();
-      $scope.keyboard.isOpen = true;
-      $scope.keyboard.activePlayer = sender;
-      $scope.keyboard.activeCategory = category;
+      sender[category] = parseInt(scoreInput.value);
+      if(scoreInput.negative) sender[category] *= -1;
     };
-    $scope.keyboard = {
-      isOpen: false,
-      isNegative: false,
-      activePlayer: '',
-      activeCategory: '',
-      backgroundClass: '',
-      value: '0',
-      close: function() {
-        $scope.keyboard.activePlayer[$scope.keyboard.activeCategory] = (($scope.keyboard.isNegative && $scope.keyboard.value !== '0') ? '-' : '') + $scope.keyboard.value;
-        $scope.keyboard.isNegative = false;
-        $scope.keyboard.isOpen = false;
-        $scope.keyboard.activePlayer = '';
-      },
-      clear: function() {
-        $scope.keyboard.value = '0';
-      },
-      editValue: function(value) {
-        if ($scope.keyboard.value === '0') {
-          $scope.keyboard.value = value.toString();
-        } else {
-          $scope.keyboard.value += value.toString();
-        }
-      },
-      switchSign: function() {
-        $scope.keyboard.isNegative = !$scope.keyboard.isNegative;
+    $scope.editValue = function(value) {
+      console.log(scoreInput.value);
+      if (scoreInput.value === '0') {
+        scoreInput.value = value.toString();
+      } else {
+        scoreInput.value += value.toString();
       }
     };
-    $scope.players = players.get();
+    $scope.switchSign = function() {
+      scoreInput.negative = !scoreInput.negative;
+    };
   }]);
   wonderApp.controller('playerCtrl', ['$scope', 'players', 'wonders', function($scope, players, wonders) {
     $scope.newPlayerName = '';
@@ -281,7 +281,7 @@
     $scope.wonders = wonders;
   }]);
 
-  /** Directives **/
+  /** Directive **/
   wonderApp.directive('alertNewGame', function() {
     return {
       restrict: 'E',
