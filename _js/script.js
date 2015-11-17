@@ -7,7 +7,7 @@
   var wonderApp = angular.module('wonderApp', ['ngTouch', 'ngRoute']);
 
   wonderApp.config(['$routeProvider', function($routeProvider) {
-    $routeProvider.otherwise({redirectTo: '/settings'});
+    $routeProvider.otherwise({redirectTo: '/players'});
     $routeProvider.when('/score', {
       templateUrl: 'html/views/score.html',
       controller: 'scoreCtrl'
@@ -154,7 +154,7 @@
   /** Run **/
   wonderApp.run(['$location', '$timeout', 'players', function($location, $timeout, players) {
     $timeout(function(){
-      $location.path('settings');
+      $location.path('players');
     });
     players.add(['Bernhard', 'Mina', 'Simon', 'Daniel', 'Christian']);
 
@@ -163,8 +163,8 @@
   /** Controller **/
   wonderApp.controller('wonderCtrl', ['$scope', '$location', '$timeout', function ($scope, $location, $timeout) {
     //Routing Functions
-    $scope.activePath = '/settings';
-    $scope.previousPath = ['/settings'];
+    $scope.activePath = '/players';
+    $scope.previousPath = ['/players'];
     $scope.changeView = function(path) {
       $scope.previousPath.push($scope.activePath);
       $scope.activePath = path;
@@ -255,7 +255,7 @@
     };
     $scope.close = function() {
       if(scoreInput.player !== null) {
-        scoreInput.player.score[scoreInput.category] = scoreInput.value;
+        scoreInput.player.score[scoreInput.category] = (scoreInput.negative) ? scoreInput.value * -1 : scoreInput.value;
       }
 
       scoreInput.negative = false;

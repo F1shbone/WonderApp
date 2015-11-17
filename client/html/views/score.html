@@ -35,9 +35,11 @@
 <div class="keyboard" ng-class="{'open': scoreInput.open}">
   <div ng-class="scoreInput.backgroundClass">
     <div class="input">
-      <i class="ion-minus switch-sign" ng-click="switchSign()" ng-class="{'inactive': !scoreInput.negative}" ng-show="['military', 'money'].indexOf(scoreInput.category) !== -1"></i> {{scoreInput.value}}
+      <i class="ion-minus switch-sign" ng-click="switchSign()" ng-class="{'inactive': !scoreInput.negative}" ng-show="['military', 'money'].indexOf(scoreInput.category) !== -1"></i>
+      {{scoreInput.value}}
+      <span class="next">nächte</span>
     </div>
-    <table class="table">
+    <table class="table" ng-show="scoreInput.category != 'research'">
       <tr>
         <td ng-click="editValue(1)">1</td>
         <td ng-click="editValue(2)">2</td>
@@ -57,6 +59,26 @@
         <td ng-click="close()"><i class="ion-chevron-down"></i></td>
         <td ng-click="editValue(0)">0</td>
         <td ng-click="clear()"><i class="ion-backspace-outline"></i></td>
+      </tr>
+    </table>
+    <table class="table keyboard-research" ng-show="scoreInput.category == 'research'">
+      <tr>
+        <td ng-click="editValue(1)"><i class="ion-ios-arrow-up"></i></td>
+        <td ng-click="editValue(2)"><i class="ion-ios-arrow-up"></i></td>
+        <td ng-click="editValue(3)"><i class="ion-ios-arrow-up"></i></td>
+      </tr>
+      <tr>
+        <td class="img-cell" ng-click="editValue(4)"><img src="img/steintafel.png" /></td>
+        <td class="img-cell" ng-click="editValue(5)"><img src="img/zahnrad.png" /></td>
+        <td class="img-cell" ng-click="editValue(6)"><img src="img/zirkel.png" /></td>
+      </tr>
+      <tr>
+        <td ng-click="editValue(7)"><i class="ion-ios-arrow-down"></i></td>
+        <td ng-click="editValue(8)"><i class="ion-ios-arrow-down"></i></td>
+        <td ng-click="editValue(9)"><i class="ion-ios-arrow-down"></i></td>
+      </tr>
+      <tr>
+        <td colspan="3" ng-click="close()"><i class="ion-chevron-down"></i></td>
       </tr>
     </table>
   </div>

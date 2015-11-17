@@ -23,18 +23,42 @@
     .switch-sign {
       position: absolute;
       display: inline-block;
-      top: 7px;
-      left: 10px;
-      padding: 10px;
+      top: 0;
+      left: 0;
+      height: 67px;
+      padding: 17px 18.5px;
       color: #000;
       @include transition(color, .3s);
       &.inactive { color: #999; }
+    }
+
+    .next {
+      position: absolute;
+      display: inline-block;
+      top: 0;
+      right: 0;
+      height: 67px;
+      padding: 27px 25px;
+      color: #777;
+      font-size: 14px;
     }
   }
 
   .table {
     margin-bottom: 0;
     font-size: 16px;
+  }
+}
+
+.keyboard-research {
+  td.img-cell {
+    padding: 0;
+  }
+  img {
+    width: 39px;
+    height: 39px;
+    padding: 0;
+    margin: 0;
   }
 }
 
