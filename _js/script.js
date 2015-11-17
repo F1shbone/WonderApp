@@ -145,9 +145,9 @@
       open: false,
       negative: false,
       category: '',
-      player: '',
+      player: null,
       backgroundClass: '',
-      value: '0'
+      value: 0
     };
   });
 
@@ -195,6 +195,11 @@
     $scope.test = function() {
       console.log('Hallo Test!');
     };
+  }]);
+  wonderApp.controller('playerCtrl', ['$scope', 'players', 'wonders', function($scope, players, wonders) {
+    $scope.newPlayerName = '';
+    $scope.players = players;
+    $scope.wonders = wonders;
   }]);
   wonderApp.controller('scoreCtrl', ['$scope', 'players', 'scoreInput', function($scope, players, scoreInput) {
     $scope.categories = [
@@ -249,23 +254,30 @@
       scoreInput.value = '0';
     };
     $scope.close = function() {
+      if(scoreInput.player !== null) {
+        scoreInput.player.score[scoreInput.category] = scoreInput.value;
+      }
+
       scoreInput.negative = false;
       scoreInput.open = false;
+      scoreInput.player = null;
+      scoreInput.category = '';
     };
-    $scope.editScore = function (category, sender, senderName) {
+    $scope.editScore = function (category, sender) {
+      if(scoreInput.player !== null) {
+        scoreInput.player.score[scoreInput.category] = (scoreInput.negative) ? scoreInput.value * -1 : scoreInput.value;
+      }
       scoreInput.open = true;
-      scoreInput.negative = false;
+      scoreInput.negative = (sender.score[category] < 0);
       scoreInput.backgroundClass = category;
       scoreInput.category = category;
-      scoreInput.player = senderName;
-      scoreInput.value = sender[category];
+      scoreInput.player = sender;
+      scoreInput.value = scoreInput.negative ? sender.score[category] * -1 : sender.score[category];
 
-      sender[category] = parseInt(scoreInput.value);
-      if(scoreInput.negative) sender[category] *= -1;
+      sender[category] = (scoreInput.negative) ? parseInt(scoreInput.value) * -1 : parseInt(scoreInput.value);
     };
     $scope.editValue = function(value) {
-      console.log(scoreInput.value);
-      if (scoreInput.value === '0') {
+      if (scoreInput.value === 0) {
         scoreInput.value = value.toString();
       } else {
         scoreInput.value += value.toString();
@@ -274,11 +286,6 @@
     $scope.switchSign = function() {
       scoreInput.negative = !scoreInput.negative;
     };
-  }]);
-  wonderApp.controller('playerCtrl', ['$scope', 'players', 'wonders', function($scope, players, wonders) {
-    $scope.newPlayerName = '';
-    $scope.players = players;
-    $scope.wonders = wonders;
   }]);
 
   /** Directive **/

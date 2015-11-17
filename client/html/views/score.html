@@ -12,7 +12,7 @@
     <tbody>
       <tr ng-repeat="category in categories" ng-class="category.name">
         <th><i class="{{category.icon}}"></i></th>
-        <td ng-repeat="player in players" ng-click="editScore(category.name, player.score, player.name)">{{player.score[category.name]}}</td>
+        <td ng-repeat="player in players" ng-click="editScore(category.name, player)" ng-class="{'open': player.name == scoreInput.player.name && category.name == scoreInput.category}">{{player.score[category.name]}}</td>
       </tr>
       <tr class="score">
         <th><i class="ion-ribbon-a"></i></th>
