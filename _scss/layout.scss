@@ -3,6 +3,7 @@
 
 @import "variables";
 @import "mixins";
+@import "clearfix";
 @import "btn";
 @import "input";
 @import "nav";
@@ -12,6 +13,7 @@
 @import "score";
 @import "keyboard";
 @import "alert";
+@import "profile";
 
 *,
 *:before,
@@ -64,6 +66,13 @@ a, button, :focus, a:focus, button:focus, a:active, a:hover {
   &.in {
     opacity: 1;
   }
+}
+
+.pull-right {
+  float: right !important;
+}
+.pull-left {
+  float: left !important;
 }
 
 .disabled,

@@ -7,7 +7,7 @@
   var wonderApp = angular.module('wonderApp', ['ngTouch', 'ngRoute']);
 
   wonderApp.config(['$routeProvider', function($routeProvider) {
-    $routeProvider.otherwise({redirectTo: '/players'});
+    $routeProvider.otherwise({redirectTo: '/settings'});
     $routeProvider.when('/score', {
       templateUrl: 'html/views/score.html',
       controller: 'scoreCtrl'
@@ -20,8 +20,8 @@
       templateUrl: 'html/views/statistics.html',
       controller: '' //TODO Add Controller
     });
-    $routeProvider.when('/profile', {
-      templateUrl: 'html/views/profile.html',
+    $routeProvider.when('/settings', {
+      templateUrl: 'html/views/settings.html',
       controller: '' //TODO Add Controller
     });
   }]);
@@ -154,7 +154,7 @@
   /** Run **/
   wonderApp.run(['$location', '$timeout', 'players', function($location, $timeout, players) {
     $timeout(function(){
-      $location.path('players');
+      $location.path('settings');
     });
     players.add(['Bernhard', 'Mina', 'Simon', 'Daniel', 'Christian']);
 
@@ -163,8 +163,8 @@
   /** Controller **/
   wonderApp.controller('wonderCtrl', ['$scope', '$location', '$timeout', function ($scope, $location, $timeout) {
     //Routing Functions
-    $scope.activePath = '/players';
-    $scope.previousPath = ['/players'];
+    $scope.activePath = '/settings';
+    $scope.previousPath = ['/settings'];
     $scope.changeView = function(path) {
       $scope.previousPath.push($scope.activePath);
       $scope.activePath = path;

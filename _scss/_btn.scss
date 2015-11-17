@@ -30,6 +30,7 @@
   vertical-align: top;
   text-align: center;
   text-overflow: ellipsis;
+  text-decoration: none;
   font-size: 16px;
   line-height: 42px;
   cursor: pointer;
@@ -48,17 +49,6 @@
     line-height: 41px;
     pointer-events: none;
   }
-
-//  &.icon-left:before {
-//    float: left;
-//    padding-right: 0.2em;
-//    padding-left: 0
-//  }
-//  &.icon-right:before {
-//    float: right;
-//    padding-left: 0.2em;
-//    padding-right: 0
-//  }
 
   .icon {
     position: absolute;
