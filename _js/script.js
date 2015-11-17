@@ -26,118 +26,182 @@
     });
   }]);
 
-  /** Controller **/
-  wonderApp.controller('wonderCtrl', ['$scope', '$location', '$timeout', function ($scope, $location, $timeout) {
-    $scope.activePath = '/players';
-    $scope.activeWonders = [];
-    $scope.previousPath = ['/players'];
+  /** Services **/
+  wonderApp.service('wonders', function() {
+    var basic = [
+        'Alexandria',
+        'Babylon',
+        'Ephesus',
+        'Gizeh',
+        'Helokanassos',
+        'Mannekin Pis',
+        'Olympia',
+        'Rhodos',
+        'Stonehenge'
+      ];
+    var leaders = [
+        'Abu Simbel',
+        'Alexandria',
+        'Babylon',
+        'Ephesus',
+        'Gizeh',
+        'Helokanassos',
+        'Mannekin Pis',
+        'Olympia',
+        'Rhodos',
+        'Rom',
+        'Stonehenge'
+      ];
+    var cities = [
+        'Abu Simbel',
+        'Alexandria',
+        'Babylon',
+        'Byzanz',
+        'Ephesus',
+        'Gizeh',
+        'Helokanassos',
+        'Mannekin Pis',
+        'Olympia',
+        'Petra',
+        'Rhodos',
+        'Rom',
+        'Stonehenge',
+        'The Great Wall'
+      ];
+    var active = [];
+    return {
+      basic: basic,
+      leaders: leaders,
+      cities: cities,
+      active: active,
+      random: function($mode, $player) {
+        var wonders;
+        if($mode === 'basic') wonders = basic;
+        if($mode === 'leaders') wonders = leaders;
+        if($mode === 'cities') wonders = cities;
+        var wonder = wonders[Math.floor(Math.random()*wonders.length)];
+        while(active.indexOf(wonder) > -1) {
+          wonder = wonders[Math.floor(Math.random()*wonders.length)];
+        }
+        active.push(wonder);
 
-    $scope.extension = 'cities',
-    $scope.wonders = [
-      'Abu Simbel',
-      'Alexandria',
-      'Babylon',
-      'Byzanz',
-      'Ephesus',
-      'Gizeh',
-      'Helikanassos',
-      'Manneken Pis',
-      'Olypmpia',
-      'Petra',
-      'Rhodos',
-      'Rom',
-      'Stonehenge',
-      'The Great Wall',
-    ];
-    $scope.randomWonder = function() {
-      var index = Math.floor(Math.random()*$scope.wonders.length);
-      var wonder = $scope.wonders[index];
-      while($scope.activeWonders.indexOf(wonder) > -1) {
-        index = Math.floor(Math.random()*$scope.wonders.length);
-        wonder = $scope.wonders[index];
+        if($player !== undefined) {
+          active.remove($player.wonder);
+          $player.wonder = wonder;
+        }
+        else {
+          return wonder;
+        }
       }
-      $scope.activeWonders.push(wonder);
-
-      return wonder;
+    };
+  });
+  wonderApp.service('players', ['wonders', function(wonders) {
+    var players = [];
+    var addName = function(name) {
+      players.push({
+        name: name,
+        wonder: wonders.random('cities'),
+        score: {
+          military: 0,
+          money: 0,
+          wonder: 0,
+          buildings: 0,
+          trading: 0,
+          research: 0,
+          guild: 0,
+          city: 0,
+          leader: 0,
+        }
+      });
+    };
+    var addNames = function(names) {
+      for (var i = 0; i < names.length; ++i) {
+        addName(names[i]);
+      }
     };
 
-    $scope.players = [
-      {
-        name: 'Bernhard',
-        wonder: $scope.randomWonder(),
-        score: {
-          military: 0,
-          money: 1,
-          wonder: 2,
-          buildings: 3,
-          trading: 4,
-          research: 5,
-          guild: 6,
-          city: 7,
-          leader: 8,
+    return {
+      get: function() {
+        return players;
+      },
+      add: function(names) {
+        if(typeof names === 'string') {
+          addName(names);
+        } else {
+          addNames(names);
         }
       },
-      {
-        name: 'Mina',
-        wonder: $scope.randomWonder(),
-        score: {
-          military: 0,
-          money: 0,
-          wonder: 0,
-          buildings: 0,
-          trading: 0,
-          research: 0,
-          guild: 0,
-          city: 0,
-          leader: 0,
-        }
+      remove: function(index) {
+        wonders.active.remove(players[index].wonder);
+        players.splice(index, 1);
       },
-      {
-        name: 'Simon',
-        wonder: $scope.randomWonder(),
-        score: {
-          military: 0,
-          money: 0,
-          wonder: 0,
-          buildings: 0,
-          trading: 0,
-          research: 0,
-          guild: 0,
-          city: 0,
-          leader: 0,
-        }
-      },
-      {
-        name: 'Christian',
-        wonder: $scope.randomWonder(),
-        score: {
-          military: 0,
-          money: 0,
-          wonder: 0,
-          buildings: 0,
-          trading: 0,
-          research: 0,
-          guild: 0,
-          city: 0,
-          leader: 0,
-        }
-      },
-      {
-        name: 'Daniel',
-        wonder: $scope.randomWonder(),
-        score: {
-          military: 0,
-          money: 0,
-          wonder: 0,
-          buildings: 0,
-          trading: 0,
-          research: 0,
-          guild: 0,
-          city: 0,
-          leader: 0,
-        }
+      shuffle: function() {
+        players.shuffle();
       }
-    ];
+    };
+  }]);
+  wonderApp.service('scoreInput', function() {
+    return {
+      open: false,
+      negative: false,
+      category: '',
+      player: null,
+      backgroundClass: '',
+      value: 0
+    };
+  });
+
+  /** Run **/
+  wonderApp.run(['$location', '$timeout', 'players', function($location, $timeout, players) {
+    $timeout(function(){
+      $location.path('players');
+    });
+    players.add(['Bernhard', 'Mina', 'Simon', 'Daniel', 'Christian']);
+
+  }]);
+
+  /** Controller **/
+  wonderApp.controller('wonderCtrl', ['$scope', '$location', '$timeout', function ($scope, $location, $timeout) {
+    //Routing Functions
+    $scope.activePath = '/players';
+    $scope.previousPath = ['/players'];
+    $scope.changeView = function(path) {
+      $scope.previousPath.push($scope.activePath);
+      $scope.activePath = path;
+
+      $timeout(function(){
+        $location.path($scope.activePath);
+      });
+
+      if($scope.previousPath.length > 6) $scope.previousPath.shift();
+    };
+    $scope.previousView = function() {
+      $scope.activePath = $scope.previousPath.pop();
+      $timeout(function(){
+        $location.path($scope.activePath);
+      });
+    };
+    //Header Functions -- TODO - new Game?
+    $scope.game = {
+      mode: 'cities',
+      showDialog: false,
+      openDialog: function() {
+        $scope.game.showDialog = true;
+        //$scope.players = [];
+      },
+      players: []
+    };
+    //DEBUG - TODO remove this
+    $scope.test = function() {
+      console.log('Hallo Test!');
+    };
+  }]);
+  wonderApp.controller('playerCtrl', ['$scope', 'players', 'wonders', function($scope, players, wonders) {
+    $scope.newPlayerName = '';
+    $scope.players = players;
+    $scope.wonders = wonders;
+  }]);
+  wonderApp.controller('scoreCtrl', ['$scope', 'players', 'scoreInput', function($scope, players, scoreInput) {
     $scope.categories = [
       {
         name: 'military',
@@ -176,129 +240,56 @@
         icon: 'ion-person'
       }
     ];
-
-    $scope.changeView = function(path) {
-      $scope.previousPath.push($scope.activePath);
-      $scope.activePath = path;
-
-      $timeout(function(){
-        $location.path($scope.activePath);
-      });
-
-      if($scope.previousPath.length > 6) $scope.previousPath.shift();
-    };
-    $scope.previousView = function() {
-      $scope.activePath = $scope.previousPath.pop();
-      $timeout(function(){
-        $location.path($scope.activePath);
-      });
-    };
-
-    $scope.newGameDialogIn = false;
-    $scope.newGame = function() {
-      $scope.newGameDialogIn = true;
-      $scope.players = [];
-    };
-
-
-
-
-    $scope.test = function() {
-      console.log('Hallo Test!');
-    };
-
-    (function() { $location.path($scope.activePath); })();
-  }]);
-  wonderApp.controller('scoreCtrl', ['$scope', function($scope) {
+    $scope.scoreInput = scoreInput;
+    $scope.players = players.get();
     $scope.calcTotal = function (player) {
       var total = 0;
-
       for (var key in player) {
         total += parseInt(player[key]);
       }
-
       return total;
     };
-    $scope.keyboard = {
-      open: false,
-      background: '',
-      negative: false,
-      value: '0',
-      player: '',
-      category: '',
-      switchSign: function() {
-        $scope.keyboard.negative = ($scope.keyboard.negative) ? false : true;
-      }
+    //Keyboard
+    $scope.clear = function() {
+      scoreInput.value = '0';
     };
+    $scope.close = function() {
+      if(scoreInput.player !== null) {
+        scoreInput.player.score[scoreInput.category] = scoreInput.value;
+      }
 
+      scoreInput.negative = false;
+      scoreInput.open = false;
+      scoreInput.player = null;
+      scoreInput.category = '';
+    };
     $scope.editScore = function (category, sender) {
-      if($scope.keyboard.player !== '') {
-        $scope.keyboard.player[$scope.keyboard.category] = (($scope.keyboard.negative && $scope.keyboard.value !== '0') ? '-' : '') + $scope.keyboard.value;
-        $scope.keyboard.negative = false;
+      if(scoreInput.player !== null) {
+        scoreInput.player.score[scoreInput.category] = (scoreInput.negative) ? scoreInput.value * -1 : scoreInput.value;
       }
+      scoreInput.open = true;
+      scoreInput.negative = (sender.score[category] < 0);
+      scoreInput.backgroundClass = category;
+      scoreInput.category = category;
+      scoreInput.player = sender;
+      scoreInput.value = scoreInput.negative ? sender.score[category] * -1 : sender.score[category];
 
-      $scope.keyboard.background = category;
-      $scope.keyboard.value = sender[category].toString();
-      $scope.keyboard.open = true;
-      $scope.keyboard.player = sender;
-      $scope.keyboard.category = category;
+      sender[category] = (scoreInput.negative) ? parseInt(scoreInput.value) * -1 : parseInt(scoreInput.value);
     };
-    $scope.editValue = function (value) {
-      if ($scope.keyboard.value === '0') {
-        $scope.keyboard.value = value.toString();
+    $scope.editValue = function(value) {
+      if (scoreInput.value === 0) {
+        scoreInput.value = value.toString();
       } else {
-        $scope.keyboard.value += value.toString();
+        scoreInput.value += value.toString();
       }
     };
-    $scope.clearValue = function () {
-      $scope.keyboard.value = '0';
-    };
-    $scope.closekeyboard = function () {
-      $scope.keyboard.player[$scope.keyboard.category] = (($scope.keyboard.negative && $scope.keyboard.value !== '0') ? '-' : '') + $scope.keyboard.value;
-      $scope.keyboard.negative = false;
-      $scope.keyboard.open = false;
-      $scope.keyboard.player = '';
-    };
-  }]);
-  wonderApp.controller('playerCtrl', ['$scope', function($scope) {
-    $scope.newPlayerName = '';
-
-    $scope.deletePlayer = function(playerIndex) {
-      $scope.$parent.activeWonders.remove($scope.$parent.players[playerIndex].wonder);
-      $scope.$parent.players.splice(playerIndex, 1);
-    };
-    $scope.addPlayer = function() {
-      if($scope.newPlayerName !== '' && $scope.$parent.players.length < 8) {
-        $scope.$parent.players.push({
-          name: $scope.newPlayerName,
-          wonder: $scope.$parent.randomWonder(),
-          score: {
-            military: 0,
-            money: 0,
-            wonder: 0,
-            buildings: 0,
-            trading: 0,
-            research: 0,
-            guild: 0,
-            city: 0,
-            leader: 0,
-          }
-        });
-        $scope.newPlayerName = '';
-      }
-    };
-    $scope.rerollWonder = function(playerIndex) {
-      var wonder = $scope.$parent.players[playerIndex].wonder;
-      $scope.$parent.players[playerIndex].wonder = $scope.$parent.randomWonder();
-      $scope.$parent.activeWonders.remove(wonder);
-    };
-    $scope.shufflePlayers = function() {
-      $scope.$parent.players.shuffle();
+    $scope.switchSign = function() {
+      scoreInput.negative = !scoreInput.negative;
     };
   }]);
 
-  /** Directives **/
-  wonderApp.directive("alertNewGame", function() {
+  /** Directive **/
+  wonderApp.directive('alertNewGame', function() {
     return {
       restrict: 'E',
       scope: {
