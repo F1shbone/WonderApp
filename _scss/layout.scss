@@ -49,6 +49,15 @@ a, button, :focus, a:focus, button:focus, a:active, a:hover {
   }
 }
 
+body > * {
+  transition: all .3s;
+}
+.open-dialog > *:not(alert-new-game) {
+  -webkit-filter: blur(2px);
+     -moz-filter: blur(2px);
+          filter: blur(2px);
+}
+
 
 
 

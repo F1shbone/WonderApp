@@ -154,17 +154,16 @@
   /** Run **/
   wonderApp.run(['$location', '$timeout', 'players', function($location, $timeout, players) {
     $timeout(function(){
-      $location.path('players');
+      if($location.path() === '') $location.path('players');
     });
     players.add(['Bernhard', 'Mina', 'Simon', 'Daniel', 'Christian']);
-
   }]);
 
   /** Controller **/
   wonderApp.controller('wonderCtrl', ['$scope', '$location', '$timeout', function ($scope, $location, $timeout) {
     //Routing Functions
-    $scope.activePath = '/players';
-    $scope.previousPath = ['/players'];
+    $scope.activePath = $location.path();
+    $scope.previousPath = [$location.path()];
     $scope.changeView = function(path) {
       $scope.previousPath.push($scope.activePath);
       $scope.activePath = path;
@@ -195,6 +194,10 @@
     $scope.test = function() {
       console.log('Hallo Test!');
     };
+
+    if($location.path() !== '/players') {
+      $scope.previousPath.push('/players');
+    }
   }]);
   wonderApp.controller('playerCtrl', ['$scope', 'players', 'wonders', function($scope, players, wonders) {
     $scope.newPlayerName = '';
