@@ -32,7 +32,7 @@
 
 <body ng-controller="wonderCtrl" ng-class="{'open-dialog': game.showDialog}">
   <div class="bar bar-header">
-    <button class="btn icon ion-ios-arrow-back btn-clear" ng-click="previousView()" ng-class="{'hide': previousPath.length <= 1}">
+    <button class="btn icon ion-ios-arrow-back btn-clear" ng-click="previousView()" ng-class="{'hide': previousPath.length == 0}">
       Zurück
     </button>
     <h1 class="title app-title">7 Wonders</h1>

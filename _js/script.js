@@ -153,31 +153,37 @@
 
   /** Run **/
   wonderApp.run(['$location', '$timeout', 'players', function($location, $timeout, players) {
-    $timeout(function(){
-      if($location.path() === '') $location.path('players');
-    });
     players.add(['Bernhard', 'Mina', 'Simon', 'Daniel', 'Christian']);
   }]);
 
   /** Controller **/
-  wonderApp.controller('wonderCtrl', ['$scope', '$location', '$timeout', function ($scope, $location, $timeout) {
+  wonderApp.controller('wonderCtrl', ['$scope', '$location', '$timeout', '$rootScope', function ($scope, $location, $timeout, $rootScope) {
     //Routing Functions
-    $scope.activePath = $location.path();
-    $scope.previousPath = [$location.path()];
+    $scope.activePath = '';
+    $scope.previousPath = [];
+
+    $rootScope.$on('$locationChangeStart', function(event, next, current) {
+      var newPath = next.substr(next.indexOf('#') !== -1 ? next.indexOf('#') + 1 : next.length);
+      var oldPath = current.substr(current.indexOf('#') !== -1 ? current.indexOf('#') + 1 : current.length);
+
+      $scope.activePath = newPath;
+      if(newPath === $scope.previousPath[$scope.previousPath.length - 1]) {
+        $scope.previousPath.pop();
+      } else {
+        $scope.previousPath.push(oldPath);
+      }
+
+      if($scope.previousPath.length > 6 || $scope.previousPath[$scope.previousPath.length - 1] === '') $scope.previousPath.shift();
+    });
+
     $scope.changeView = function(path) {
-      $scope.previousPath.push($scope.activePath);
-      $scope.activePath = path;
-
       $timeout(function(){
-        $location.path($scope.activePath);
+        $location.path(path);
       });
-
-      if($scope.previousPath.length > 6) $scope.previousPath.shift();
     };
     $scope.previousView = function() {
-      $scope.activePath = $scope.previousPath.pop();
       $timeout(function(){
-        $location.path($scope.activePath);
+        $location.path($scope.previousPath[$scope.previousPath.length - 1]);
       });
     };
     //Header Functions -- TODO - new Game?
@@ -194,10 +200,6 @@
     $scope.test = function() {
       console.log('Hallo Test!');
     };
-
-    if($location.path() !== '/players') {
-      $scope.previousPath.push('/players');
-    }
   }]);
   wonderApp.controller('playerCtrl', ['$scope', 'players', 'wonders', function($scope, players, wonders) {
     $scope.newPlayerName = '';
@@ -300,7 +302,6 @@
         extension: '='
       },
       templateUrl: 'html/templates/alert-new-game.html',
-      controller: 'wonderCtrl',
     };
   });
 })();
