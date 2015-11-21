@@ -101,6 +101,7 @@
       players.push({
         name: name,
         wonder: wonders.random('cities'),
+        index: players.length,
         score: {
           military: 0,
           money: 0,
@@ -256,7 +257,7 @@
     };
     //Keyboard
     $scope.clear = function() {
-      scoreInput.value = '0';
+      scoreInput.value = 0;
     };
     $scope.close = function() {
       if(scoreInput.player !== null) {
@@ -290,6 +291,22 @@
     };
     $scope.switchSign = function() {
       scoreInput.negative = !scoreInput.negative;
+    };
+    $scope.next = function() {
+      if(scoreInput.player.index < players.get().length - 1) {
+        $scope.editScore(scoreInput.category, players.get()[scoreInput.player.index + 1]);
+      } else {
+        try {
+          $scope.editScore($scope.findNextCategory(scoreInput.category), players.get()[0]);
+        } catch(ex) {}
+      }
+    };
+
+    //Helper
+    $scope.findNextCategory = function(currCategory) {
+      for(var i = 0; i < $scope.categories.length; i++) {
+        if($scope.categories[i].name === currCategory) return $scope.categories[i + 1].name;
+      }
     };
   }]);
 

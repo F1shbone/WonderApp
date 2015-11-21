@@ -37,7 +37,7 @@
     <div class="input">
       <i class="ion-minus switch-sign" ng-click="switchSign()" ng-class="{'inactive': !scoreInput.negative}" ng-show="['military', 'money'].indexOf(scoreInput.category) !== -1"></i>
       {{scoreInput.value}}
-      <span class="next">nächte</span>
+      <span class="next" ng-click="next()">nächte</span>
     </div>
     <table class="table" ng-show="scoreInput.category != 'research'">
       <tr>
