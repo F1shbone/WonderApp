@@ -38,9 +38,8 @@
       top: 0;
       right: 0;
       height: 67px;
-      padding: 27px 25px;
+      padding: 17px 25px 21px;
       color: #777;
-      font-size: 14px;
     }
   }
 
@@ -55,12 +54,30 @@
     padding: 0;
   }
   img {
-    width: 39px;
+    width: auto;
     height: 39px;
     padding: 0;
     margin: 0;
+  }
+
+  .icon {
+    position: relative;
+    .badge {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+    }
   }
 }
 
 &.keyboard-spacer.open { padding-bottom: 202px; }
 &.keyboard.open { transform: translateY(0px); }
+
+
+.badge {
+  font-size: 14px;
+  color: #ccc;
+  background-color: #ff4545;
+  padding: 1px 7px;
+  border-radius: 50%;
+}

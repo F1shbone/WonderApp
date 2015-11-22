@@ -146,6 +146,7 @@
       open: false,
       negative: false,
       category: '',
+      categoryIndex: 0,
       player: null,
       backgroundClass: '',
       value: 0
@@ -275,10 +276,11 @@
       }
       scoreInput.open = true;
       scoreInput.negative = (sender.score[category] < 0);
-      scoreInput.backgroundClass = category;
-      scoreInput.category = category;
+      scoreInput.backgroundClass = $scope.categories[category].name;
+      scoreInput.categoryIndex = category;
+      scoreInput.category = $scope.categories[category].name;
       scoreInput.player = sender;
-      scoreInput.value = scoreInput.negative ? sender.score[category] * -1 : sender.score[category];
+      scoreInput.value = scoreInput.negative ? sender.score[scoreInput.category] * -1 : sender.score[scoreInput.category];
 
       sender[category] = (scoreInput.negative) ? parseInt(scoreInput.value) * -1 : parseInt(scoreInput.value);
     };
@@ -294,18 +296,11 @@
     };
     $scope.next = function() {
       if(scoreInput.player.index < players.get().length - 1) {
-        $scope.editScore(scoreInput.category, players.get()[scoreInput.player.index + 1]);
+        $scope.editScore(scoreInput.categoryIndex, players.get()[scoreInput.player.index + 1]);
       } else {
         try {
-          $scope.editScore($scope.findNextCategory(scoreInput.category), players.get()[0]);
+          $scope.editScore(scoreInput.categoryIndex + 1, players.get()[0]);
         } catch(ex) {}
-      }
-    };
-
-    //Helper
-    $scope.findNextCategory = function(currCategory) {
-      for(var i = 0; i < $scope.categories.length; i++) {
-        if($scope.categories[i].name === currCategory) return $scope.categories[i + 1].name;
       }
     };
   }]);
