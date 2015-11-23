@@ -112,6 +112,19 @@
           guild: 0,
           city: 0,
           leader: 0,
+        },
+        research: {
+          compass: 0, //Zirkel
+          plate: 0,   //Steintafel
+          gear: 0,    //Zahnrad
+          variant: 0,
+          spied: {
+            compass: false,
+            plate: false,
+            gear: false,
+            count: 0
+          },
+          aristotle: false
         }
       });
     };
@@ -270,6 +283,19 @@
       scoreInput.player = null;
       scoreInput.category = '';
     };
+    $scope.next = function() {
+      if(scoreInput.player.index < players.get().length - 1) {
+        $scope.editScore(scoreInput.categoryIndex, players.get()[scoreInput.player.index + 1]);
+      } else {
+        try {
+          $scope.editScore(scoreInput.categoryIndex + 1, players.get()[0]);
+        } catch(ex) {}
+      }
+    };
+    $scope.switchSign = function() {
+      scoreInput.negative = !scoreInput.negative;
+    };
+    //Keyboard - Default
     $scope.editScore = function (category, sender) {
       if(scoreInput.player !== null) {
         scoreInput.player.score[scoreInput.category] = (scoreInput.negative) ? scoreInput.value * -1 : scoreInput.value;
@@ -291,17 +317,28 @@
         scoreInput.value += value.toString();
       }
     };
-    $scope.switchSign = function() {
-      scoreInput.negative = !scoreInput.negative;
+    //Keyboard - Research
+    $scope.addSymbol = function(symbolType) {
+      try {
+        scoreInput.player.research[symbolType]++;
+      } catch(ex) {}
+      $scope.researchCalc();
     };
-    $scope.next = function() {
-      if(scoreInput.player.index < players.get().length - 1) {
-        $scope.editScore(scoreInput.categoryIndex, players.get()[scoreInput.player.index + 1]);
-      } else {
-        try {
-          $scope.editScore(scoreInput.categoryIndex + 1, players.get()[0]);
-        } catch(ex) {}
-      }
+    $scope.removeSymbol = function(symbolType) {
+      try {
+        if(scoreInput.player.research[symbolType] > 0)
+          scoreInput.player.research[symbolType]--;
+      } catch(ex) {}
+      $scope.researchCalc();
+    };
+    $scope.researchCalc = function() {
+      scoreInput.value =
+        Math.pow(scoreInput.player.research.compass, 2) +
+        Math.pow(scoreInput.player.research.plate, 2) +
+        Math.pow(scoreInput.player.research.gear, 2) +
+        Math.min(scoreInput.player.research.compass, scoreInput.player.research.plate, scoreInput.player.research.gear) *
+        (scoreInput.player.research.aristotle ? 10 : 7)
+      ;
     };
   }]);
 

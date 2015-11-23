@@ -63,39 +63,45 @@
     </table>
     <table class="table keyboard-research" ng-show="scoreInput.category == 'research'">
       <tr>
-        <td ng-click="editValue(1)"><i class="ion-ios-arrow-up"></i></td>
-        <td ng-click="editValue(2)"><i class="ion-ios-arrow-up"></i></td>
-        <td ng-click="editValue(3)"><i class="ion-ios-arrow-up"></i></td>
-        <td ng-click="editValue(3)"><i class="ion-ios-arrow-up"></i></td>
+        <td ng-click="addSymbol('plate')"><i class="ion-ios-arrow-up"></i></td>
+        <td ng-click="addSymbol('gear')"><i class="ion-ios-arrow-up"></i></td>
+        <td ng-click="addSymbol('compass')"><i class="ion-ios-arrow-up"></i></td>
+<!--        <td ng-click="addSymbol('variant')"><i class="ion-ios-arrow-up"></i></td>-->
       </tr>
       <tr>
-        <td class="img-cell icon" ng-click="editValue(4)">
-          <span class="badge">1</span>
+        <td class="img-cell icon">
+          <span class="badge">{{scoreInput.player.research.plate}}</span>
           <img src="img/steintafel.png" />
         </td>
-        <td class="img-cell icon" ng-click="editValue(5)">
-          <span class="badge">3</span>
+        <td class="img-cell icon">
+          <span class="badge">{{scoreInput.player.research.gear}}</span>
           <img src="img/zahnrad.png" />
         </td>
-        <td class="img-cell icon" ng-click="editValue(6)">
-          <span class="badge">2</span>
+        <td class="img-cell icon">
+          <span class="badge">{{scoreInput.player.research.compass}}</span>
           <img src="img/zirkel.png" />
         </td>
-        <td class="img-cell icon" ng-click="editValue(6)">
-          <span class="badge">1</span>
+<!--
+        <td class="img-cell icon" ng-click="">
+          <span class="badge">{{scoreInput.player.research.variant}}</span>
           <img src="img/variant.png" />
         </td>
+-->
       </tr>
       <tr>
-        <td ng-click="editValue(7)"><i class="ion-ios-arrow-down"></i></td>
-        <td ng-click="editValue(8)"><i class="ion-ios-arrow-down"></i></td>
-        <td ng-click="editValue(9)"><i class="ion-ios-arrow-down"></i></td>
-        <td ng-click="editValue(9)"><i class="ion-ios-arrow-down"></i></td>
+        <td ng-click="removeSymbol('plate')"><i class="ion-ios-arrow-down"></i></td>
+        <td ng-click="removeSymbol('gear')"><i class="ion-ios-arrow-down"></i></td>
+        <td ng-click="removeSymbol('compass')"><i class="ion-ios-arrow-down"></i></td>
+<!--        <td ng-click="removeSymbol('variant')"><i class="ion-ios-arrow-down"></i></td>-->
       </tr>
       <tr>
         <td ng-click="close()"><i class="ion-chevron-down"></i></td>
-        <td class="img-cell" ng-click="close()" ><img src="img/espionage.png" /></td>
-        <td class="img-cell" colspan="2"><img style="margin-top: 3px; margin-bottom: -3px;" src="img/aristotle.png"/></td>
+        <td class="img-cell" ng-click="">
+<!--          <img src="img/espionage.png" />-->
+        </td>
+        <td class="img-cell" ng-click="" colspan="2">
+<!--          <img style="margin-top: 3px; margin-bottom: -3px;" src="img/aristotle.png"/>-->
+        </td>
       </tr>
     </table>
   </div>
