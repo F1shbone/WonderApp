@@ -1,6 +1,6 @@
 .table-responsive { border: 0 none; }
 
-.table-score {
+.table {
   padding: 0;
 
   caption { padding: 0 15px; }
@@ -20,4 +20,29 @@
   }
 }
 
+.score-table-header {
+  position: fixed;
+  left: 0;
+  right: 0;
+  padding: 0 8px;
+  background-color: #fff;
+  top: 43px;
+  .table-placeholder {
+    font-size: 24px;
+    color: #fff;
+    padding: 6px 12px 5px;
+  }
+  + .table-responsive { margin-top: -4px; }
+}
+
+//.table-score > thead > tr > th {
+//
+//    height: 0;
+////    display: block;
+//    padding-top: 0;
+//    padding-bottom: 0;
+//    border: 0 none !important;
+//  line-height: 0;
+//  color: transparent;
+//}
 @include score-rows($score-map);

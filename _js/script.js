@@ -151,6 +151,9 @@
       },
       shuffle: function() {
         players.shuffle();
+        for(var i = 0; i < players.length; i++) {
+          players[i].index = i;
+        }
       }
     };
   }]);
@@ -340,6 +343,10 @@
         (scoreInput.player.research.aristotle ? 10 : 7)
       ;
     };
+    $scope.toggleAristotle = function() {
+      scoreInput.player.research.aristotle = !scoreInput.player.research.aristotle;
+      $scope.researchCalc();
+    }
   }]);
 
   /** Directive **/
@@ -351,6 +358,31 @@
         extension: '='
       },
       templateUrl: 'html/templates/alert-new-game.html',
+    };
+  });
+  wonderApp.directive('syncScrolls', function(){
+    var scrollLeft = 0;
+    function combine(elements){
+      elements.on('scroll', function(e){
+        if(e.isTrigger){
+          e.target.scrollLeft = scrollLeft;
+        } else {
+          scrollLeft = e.target.scrollLeft;
+          elements.each(function (element) {
+            if( !this.isSameNode(e.target) ){
+              $(this).trigger('scroll');
+            }
+          });
+        }
+      });
+    }
+
+    return {
+      restrict: 'A',
+      replace: false,
+      compile: function(element, attrs){
+        combine(element.find('.'+attrs.syncScrolls));
+      }
     };
   });
 })();
