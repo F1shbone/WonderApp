@@ -96,6 +96,16 @@ module.exports = function (grunt) {
             dest: '<%= copyTarget %>'
           }
         ]
+      },
+      rest: {
+        files: [
+          {
+            expand: true,
+            cwd: './server',
+            src: ['**/*'],
+            dest: '<%= copyTarget %>/server'
+          }
+        ]
       }
     },
 
@@ -132,7 +142,7 @@ module.exports = function (grunt) {
   grunt.registerTask('default', [
     'sass',
     'uglify',
-    //'copy:xampp'
+    'copy:xampp'
   ]);
   grunt.registerTask('full', [
     'clean',
@@ -145,5 +155,8 @@ module.exports = function (grunt) {
   grunt.registerTask('dev', [
     'default',
     'watch'
+  ]);
+  grunt.registerTask('rest', [
+    'copy:rest'
   ]);
 };

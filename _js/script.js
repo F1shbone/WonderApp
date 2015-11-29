@@ -6,6 +6,19 @@
 
   var wonderApp = angular.module('wonderApp', ['ngTouch', 'ngRoute']);
 
+  function fetchInit() {
+    var initInjector = angular.injector(['ng']);
+    var $http = initInjector.get('$http');
+
+
+    console.log('App Bootstrapped!');
+    angular.element(document).ready(function() {
+      angular.bootstrap(document, ['wonderApp']);
+    });
+  }
+
+  fetchInit();
+
   wonderApp.config(['$routeProvider', function($routeProvider) {
     $routeProvider.otherwise({redirectTo: '/players'});
     $routeProvider.when('/score', {
@@ -69,6 +82,7 @@
         'The Great Wall'
       ];
     var active = [];
+
     return {
       basic: basic,
       leaders: leaders,
@@ -346,7 +360,7 @@
     $scope.toggleAristotle = function() {
       scoreInput.player.research.aristotle = !scoreInput.player.research.aristotle;
       $scope.researchCalc();
-    }
+    };
   }]);
 
   /** Directive **/
@@ -368,7 +382,7 @@
           e.target.scrollLeft = scrollLeft;
         } else {
           scrollLeft = e.target.scrollLeft;
-          elements.each(function (element) {
+          elements.each(function () {
             if( !this.isSameNode(e.target) ){
               $(this).trigger('scroll');
             }
