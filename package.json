@@ -29,6 +29,6 @@
     "angular-sanitize": "^1.4.7",
     "angular-touch": "^1.4.7",
     "ionicons": "^2.0.1",
-    "jquery": "^2.1.4"
+    "jquery": "^3.0.0"
   }
 }
