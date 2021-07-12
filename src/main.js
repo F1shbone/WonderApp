@@ -1,7 +1,11 @@
 import { createApp } from 'vue';
-import App from './App.vue';
 import './registerServiceWorker';
 import router from './router';
 import store from './store';
 
-createApp(App).use(store).use(router).mount('#app');
+import ElementPlus from 'element-plus';
+import './theme/index.scss';
+
+import App from './App.vue';
+
+createApp(App).use(store).use(router).use(ElementPlus).mount('#app');
