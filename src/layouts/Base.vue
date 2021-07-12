@@ -8,7 +8,7 @@
     <el-main>
       <slot />
     </el-main>
-    <el-footer class="layout__footer">
+    <el-footer class="layout__footer" height="80">
       <el-menu default-active="1" mode="horizontal">
         <el-menu-item index="1">
           <i class="el-icon-user" />
@@ -56,8 +56,10 @@ export default {
   }
 
   &__footer {
+    margin-bottom: 20px;
     .el-menu {
       display: flex;
+      border: none !important;
       > li {
         display: flex;
         flex-direction: column;
@@ -69,7 +71,6 @@ export default {
 
         &.is-active {
           border-color: $--color-primary;
-          // border-top: 2px solid #409EFF;
         }
       }
 
