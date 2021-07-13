@@ -1,7 +1,7 @@
 <template>
   <el-container>
     <el-header class="layout__header">
-      <el-page-header @back="goBack" icon="el-icon-arrow-left" title="">
+      <el-page-header @back="goBack" icon="el-icon-magic-stick" title="">
         <template #content><img alt="Vue logo" src="../assets/logo.png" /></template>
       </el-page-header>
     </el-header>
@@ -15,7 +15,7 @@
           <span>Players</span>
         </el-menu-item>
         <el-menu-item index="2">
-          <i class="el-icon-notebook-1" />
+          <i class="el-icon-trophy" />
           <span>Score</span>
         </el-menu-item>
         <el-menu-item index="3">
@@ -23,7 +23,7 @@
           <span>Stats</span>
         </el-menu-item>
         <el-menu-item index="4">
-          <i class="el-icon-setting" />
+          <i class="el-icon-s-operation" />
           <span>Settings</span>
         </el-menu-item>
       </el-menu>
