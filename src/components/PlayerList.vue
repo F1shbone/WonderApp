@@ -8,7 +8,6 @@
         type: 'transition-group',
         name: !drag ? 'flip-list' : null,
       }"
-      handle=".playerList__drag"
       group="player"
       @start="drag = true"
       @end="drag = false"
@@ -19,10 +18,6 @@
     >
       <template #item="{ element }">
         <li>
-          <!-- <div>{{ element.name }}</div> -->
-          <div class="playerList__prepend">
-            <span class="playerList__drag" />
-          </div>
           <div class="playerList__entry">
             <div>{{ element.name }}</div>
             <div>{{ element.wonder }}</div>
@@ -102,40 +97,14 @@ export default {
     }
   }
 
-  &__prepend {
-    flex: 0 0 1.5rem;
-    padding: math.div($--card-padding, 2);
-    margin: 0 math.div($--card-padding, 2);
-  }
   &__entry {
     flex: 1 1 auto;
     margin: 0 math.div($--card-padding, 2);
-    //
+    user-select: none;
   }
   &__append {
     margin: 0 math.div($--card-padding, 2);
-  }
-
-  &__drag {
-    position: relative;
-    display: block;
-    height: 1.75rem;
-    cursor: move;
-    &::before,
-    &::after {
-      content: '';
-      position: absolute;
-      display: block;
-      height: 2px;
-      width: 100%;
-      background-color: $--color-primary;
-    }
-    &::before {
-      top: 33.33334%;
-    }
-    &::after {
-      top: 66.66667%;
-    }
+    user-select: none;
   }
 
   // Animation
