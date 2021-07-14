@@ -20,7 +20,7 @@
         <li>
           <div class="playerList__entry">
             <div>{{ element.name }}</div>
-            <div>{{ element.wonder }}</div>
+            <div class="text-secondary">{{ element.wonder }}</div>
           </div>
           <div class="playerList__append">
             <el-button circle icon="el-icon-refresh"></el-button>
@@ -45,23 +45,23 @@ export default {
       players: [
         {
           name: 'Simon',
-          wonder: 'Test',
+          wonder: 'Éphesos',
         },
         {
           name: 'Daniel',
-          wonder: 'Test',
+          wonder: 'Alexandria',
         },
         {
           name: 'Romina',
-          wonder: 'Test',
+          wonder: 'Babylon',
         },
         {
           name: 'Bernhard',
-          wonder: 'Test',
+          wonder: 'Gizeh',
         },
         {
           name: 'Christian',
-          wonder: 'Test',
+          wonder: 'Rhodos',
         },
       ],
     };

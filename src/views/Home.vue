@@ -8,7 +8,7 @@
       <el-button
         type="primary"
         style="display: block; width: calc(100% + 40px); margin: 10px -20px 0 -20px; border-radius: 0"
-        >Roll Places</el-button
+        >Shuffle Players</el-button
       >
       <el-button
         type="primary"

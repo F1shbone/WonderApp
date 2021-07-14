@@ -1,7 +1,8 @@
 <template>
   <el-container>
     <el-header class="layout__header">
-      <el-page-header @back="goBack" icon="el-icon-magic-stick" title="">
+      <el-page-header title="">
+        <template #icon><i class="el-icon-magic-stick" /></template>
         <template #content><img alt="Vue logo" src="../assets/logo.png" /></template>
       </el-page-header>
     </el-header>
@@ -9,23 +10,31 @@
       <slot />
     </el-main>
     <el-footer class="layout__footer" height="80">
-      <el-menu default-active="1" mode="horizontal">
-        <el-menu-item index="1">
-          <i class="el-icon-user" />
-          <span>Players</span>
-        </el-menu-item>
-        <el-menu-item index="2">
-          <i class="el-icon-trophy" />
-          <span>Score</span>
-        </el-menu-item>
-        <el-menu-item index="3">
-          <i class="el-icon-data-line" />
-          <span>Stats</span>
-        </el-menu-item>
-        <el-menu-item index="4">
-          <i class="el-icon-s-operation" />
-          <span>Settings</span>
-        </el-menu-item>
+      <el-menu default-active="1" mode="horizontal" :router="true">
+        <li>
+          <router-link class="el-menu-item" to="/">
+            <i class="el-icon-user" />
+            <span>Players</span>
+          </router-link>
+        </li>
+        <li>
+          <router-link class="el-menu-item" to="/score">
+            <i class="el-icon-trophy" />
+            <span>Score</span>
+          </router-link>
+        </li>
+        <li>
+          <router-link class="el-menu-item" to="/stats">
+            <i class="el-icon-data-line" />
+            <span>Stats</span>
+          </router-link>
+        </li>
+        <li>
+          <router-link class="el-menu-item" to="/settings">
+            <i class="el-icon-s-operation" />
+            <span>Settings</span>
+          </router-link>
+        </li>
       </el-menu>
     </el-footer>
   </el-container>
@@ -49,9 +58,12 @@ export default {
       display: flex;
       align-items: center;
     }
+    .el-page-header__left::after {
+      height: 100%;
+    }
 
     img {
-      max-height: 2rem;
+      max-height: 2.5rem;
     }
   }
 
@@ -60,16 +72,21 @@ export default {
     .el-menu {
       display: flex;
       border: none !important;
-      > li {
+
+      li {
+        flex: 1 1 100%;
+      }
+
+      &-item {
         display: flex;
         flex-direction: column;
         align-content: center;
-        flex: 1 1 100%;
         text-align: center;
         border-bottom: none !important;
         border-top: 2px solid transparent;
+        text-decoration: none;
 
-        &.is-active {
+        &.router-link-active {
           border-color: $--color-primary;
         }
       }
