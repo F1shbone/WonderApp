@@ -1,10 +1,18 @@
 import { defineStore } from 'pinia';
 
-export const useCounterStore = defineStore({
-  id: 'counter',
-  state() {
-    return { count: 0 };
+export const useStore = defineStore({
+  id: 'test',
+  state: () => ({
+    counter: 0,
+  }),
+  actions: {
+    increment() {
+      this.counter++;
+    },
+    randomizeCounter() {
+      this.counter = Math.round(100 * Math.random());
+    },
   },
-  // could also be defined as
-  // state: () => ({ count: 0 })
 });
+
+export default useStore;
