@@ -1,8 +1,7 @@
 <template>
   <el-container>
     <el-header class="layout__header">
-      <el-page-header title="">
-        <template #icon><i class="el-icon-magic-stick" /></template>
+      <el-page-header>
         <template #content><img alt="Vue logo" src="../assets/logo.png" /></template>
       </el-page-header>
     </el-header>
@@ -13,16 +12,22 @@
       <el-menu default-active="1" mode="horizontal" :router="true">
         <li>
           <router-link class="el-menu-item" to="/">
+            <i class="el-icon-notebook-2" />
+            <span>Game</span>
+          </router-link>
+        </li>
+        <!-- <li>
+          <router-link class="el-menu-item" to="/">
             <i class="el-icon-user" />
             <span>Players</span>
           </router-link>
-        </li>
-        <li>
+        </li> -->
+        <!-- <li>
           <router-link class="el-menu-item" to="/score">
             <i class="el-icon-trophy" />
             <span>Score</span>
           </router-link>
-        </li>
+        </li> -->
         <li>
           <router-link class="el-menu-item" to="/stats">
             <i class="el-icon-data-line" />
@@ -51,6 +56,7 @@ export default {
 .layout {
   &__header {
     display: flex;
+    justify-content: center;
     padding: $--header-padding !important;
 
     .el-page-header__left,
@@ -58,8 +64,8 @@ export default {
       display: flex;
       align-items: center;
     }
-    .el-page-header__left::after {
-      height: 100%;
+    .el-page-header__left {
+      display: none;
     }
 
     img {

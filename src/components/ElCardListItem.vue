@@ -48,6 +48,12 @@ export default {
   &Selected {
     margin-left: auto;
     color: $--color-primary;
+
+    > i {
+      border-radius: 50%;
+      padding: $--button-padding-vertical;
+      border: 1px solid $--button-default-border-color;
+    }
   }
 
   &--selectable {
