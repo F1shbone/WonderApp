@@ -1,20 +1,36 @@
 <template>
-  <layout>
-    <div class="game">
-      <el-empty description="No active game" />
+  <div class="game">
+    <el-empty description="No active game" />
 
-      <el-button type="primary">Start new Game</el-button>
-    </div>
-  </layout>
+    <el-button type="primary" @click="toggleVisible">Start new Game</el-button>
+  </div>
+
+  <bottom-sheet :visible="visible" @close="setVisible(false)" />
 </template>
 
 <script>
-import Layout from '@/layouts/Base.vue';
+import { ref } from 'vue';
+import BottomSheet from '@/components/BottomSheet.vue';
 
 export default {
   name: 'Game',
   components: {
-    Layout,
+    BottomSheet,
+  },
+  setup() {
+    const visible = ref(false);
+    function setVisible(val) {
+      visible.value = val;
+    }
+    function toggleVisible() {
+      visible.value = !visible.value;
+    }
+
+    return {
+      visible,
+      setVisible,
+      toggleVisible,
+    };
   },
 };
 </script>

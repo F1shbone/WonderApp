@@ -1,24 +1,17 @@
 <template>
-  <layout>
-    <div class="stats">
-      <h1>Stats</h1>
+  <div class="stats">
+    <h1>Stats</h1>
 
-      <p>Counter: {{ test }}</p>
-    </div>
-  </layout>
+    <p>Counter: {{ test }}</p>
+  </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import Layout from '@/layouts/Base.vue';
-
 import useStore from '@/store';
 
 export default {
   name: 'Stats',
-  components: {
-    Layout,
-  },
+  components: {},
   setup() {
     const store = useStore();
 
