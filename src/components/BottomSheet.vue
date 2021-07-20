@@ -1,9 +1,13 @@
 <template>
-  <div class="bottomSheet__mask" v-if="visible" />
-  <div class="bottomSheet" :class="{ 'bottomSheet--visible': visible }" ref="target">
-    <div class="bottomSheet__drag" v-drag="dragHandler" />
-    <p>Test</p>
-  </div>
+  <transition name="fade">
+    <div class="bottomSheet__mask" v-if="visible" />
+  </transition>
+  <transition name="slide">
+    <div class="bottomSheet" v-if="visible" ref="target">
+      <div class="bottomSheet__drag" v-drag="dragHandler" />
+      <p>Test</p>
+    </div>
+  </transition>
 </template>
 
 <script>
@@ -26,20 +30,24 @@ export default {
 
     let initialY = 0;
     let initialHeight = 0;
+    let removeStyle = true;
     function dragHandler(dragState) {
       if (dragState.first) {
         const { y, height } = target.value.getBoundingClientRect();
         initialY = y;
         initialHeight = height;
-        console.log(initialY, initialHeight);
+        removeStyle = true;
       } else if (dragState.last) {
-        target.value.removeAttribute('style');
+        // do nothing, remove style is not necessary as the element is removed anyway
+        if (removeStyle) {
+          target.value.removeAttribute('style');
+        }
       } else {
         const newY = initialY + dragState.movement[1];
         if (newY > initialY) {
-          target.value.setAttribute('style', `top: ${newY}px;bottom: unset;`);
-          if (initialHeight / 2 < newY) {
-            target.value.removeAttribute('style');
+          target.value.setAttribute('style', `height:${initialHeight - dragState.movement[1]}px;`);
+          if (initialHeight / 1.5 < newY) {
+            removeStyle = false;
             dragState.cancel();
             emit('close');
           }
@@ -55,47 +63,44 @@ export default {
 };
 </script>
 
+<style scoped>
+/* Transitions */
+.slide-enter-active,
+.slide-leave-active {
+  transition: transform 0.35s ease-in-out;
+}
+
+.slide-enter-from {
+  transform: translateY(85%);
+}
+.slide-leave-to {
+  transform: translateY(100%);
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.35s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>
+
 <style lang="scss">
 @import '../theme/variables';
 
 .bottomSheet {
-  $position: -85%;
-  $height: 85%;
-
   position: fixed;
   left: 0;
   right: 0;
-  bottom: $position;
-  height: $height;
+  bottom: 0;
+  height: 85%;
   background-color: #fff;
   border-top-left-radius: 2rem;
   border-top-right-radius: 2rem;
   z-index: 20;
-  animation: slideDown 0.45s;
-  animation-iteration-count: 1;
-  animation-timing-function: cubic-bezier(0.65, 0.05, 0.36, 1);
-
-  &--visible {
-    bottom: 0;
-    animation: slideUp 0.45s;
-  }
-
-  @keyframes slideUp {
-    from {
-      bottom: $position;
-    }
-    to {
-      bottom: 0;
-    }
-  }
-  @keyframes slideDown {
-    from {
-      bottom: 0;
-    }
-    to {
-      bottom: $position;
-    }
-  }
+  transform: translateY(0);
 
   &__drag {
     position: relative;
@@ -104,7 +109,6 @@ export default {
     border-top-left-radius: 1.5rem;
     border-top-right-radius: 1.5rem;
     cursor: drag;
-    // <div style="width: 200px; height: 20px; margin: 0.5rem auto; background: #000" />
     &::after {
       content: '';
       position: absolute;
@@ -112,7 +116,7 @@ export default {
       left: 50%;
       transform: translate(-50%, -50%);
       display: block;
-      height: 1rem;
+      height: 0.5rem;
       width: 8rem;
       border-radius: 0.35rem;
       background-color: #000;
@@ -125,19 +129,7 @@ export default {
     bottom: 0;
     left: 0;
     right: 0;
-    animation: backgroundColor 0.25s;
-    animation-iteration-count: 1;
-    animation-delay: 0.2s;
-    animation-fill-mode: forwards;
-
-    @keyframes backgroundColor {
-      from {
-        background-color: transparent;
-      }
-      to {
-        background-color: rgba(0, 0, 0, 0.5);
-      }
-    }
+    background-color: rgba(0, 0, 0, 0.5);
   }
 }
 </style>
