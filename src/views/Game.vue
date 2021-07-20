@@ -2,27 +2,25 @@
   <div class="game">
     <el-empty description="No active game" />
 
-    <el-button type="primary" @click="toggleVisible">Start new Game</el-button>
+    <el-button type="primary" @click="setVisible(true)">Start new Game</el-button>
   </div>
 
-  <bottom-sheet :visible="visible" @close="setVisible(false)">
+  <bottom-sheet :visible="visible" @close="close">
     <div class="game__container">
-      <div class="game__main">
+      <!-- step 1: -->
+      <div class="game__main" v-if="step === 'settings'">
         <player-selector />
         <expansion-selector />
-        <!--
-          players
-          extensions:
-            - WonderPack
-            - Leaders
-            - Cities
-            - Babel - Tower
-            - Babel - Great Projects
-            - Armada (not owned atm)
-        -->
+      </div>
+      <!-- step 2: -->
+      <div class="game__main" v-if="step === 'confirm'">
+        <player-list />
+        <!-- playerlist -->
+        <!--   - change order -->
+        <!--   - reroll wonder -->
       </div>
       <div class="game__footer">
-        <el-button type="primary" style="width: 100%">Start</el-button>
+        <el-button type="primary" @click="start" style="width: 100%">Start</el-button>
       </div>
     </div>
   </bottom-sheet>
@@ -30,9 +28,13 @@
 
 <script>
 import { ref } from 'vue';
+import { useStore as useExpansionsStore } from '@/store/expansions';
+import { useStore as usePlayersStore } from '@/store/players';
+
 import BottomSheet from '@/components/BottomSheet.vue';
 import ExpansionSelector from '@/components/ExpansionSelector.vue';
 import PlayerSelector from '@/components/PlayerSelector.vue';
+import PlayerList from '@/components/PlayerList.vue';
 
 export default {
   name: 'Game',
@@ -40,20 +42,40 @@ export default {
     BottomSheet,
     ExpansionSelector,
     PlayerSelector,
+    PlayerList,
   },
   setup() {
+    const playerStore = usePlayersStore();
+    const expansionStore = useExpansionsStore();
+
+    const step = ref('settings'); // possible values: 'settings', 'confirm'
+    function start() {
+      if (step.value === 'settings') {
+        step.value = 'confirm';
+        // Generate Game Store
+      } else {
+        console.log('Go');
+        close();
+      }
+    }
+
     const visible = ref(false);
     function setVisible(val) {
       visible.value = val;
     }
-    function toggleVisible() {
-      visible.value = !visible.value;
+    function close() {
+      setVisible(false);
+      playerStore.reset();
+      expansionStore.reset();
+      step.value = 'settings';
     }
 
     return {
       visible,
       setVisible,
-      toggleVisible,
+      close,
+      step,
+      start,
     };
   },
 };

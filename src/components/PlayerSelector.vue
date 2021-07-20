@@ -7,7 +7,7 @@
         :key="id"
         :label="id"
         :checked="player.active"
-        @input="toggleActive(player)"
+        @input="toggleActive(id)"
         >{{ player.name }}</el-checkbox-button
       >
     </div>
@@ -19,19 +19,9 @@ import { useStore as usePlayersStore } from '@/store/players';
 
 export default {
   setup() {
-    let { players } = usePlayersStore();
+    const { players, toggle } = usePlayersStore();
 
-    players = players.map((e) => {
-      return {
-        ...e,
-        active: false,
-      };
-    });
-
-    function toggleActive(player) {
-      player.active = !player.active;
-    }
-    return { players, toggleActive };
+    return { players, toggleActive: toggle };
   },
 };
 </script>

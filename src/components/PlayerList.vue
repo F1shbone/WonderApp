@@ -1,47 +1,49 @@
 <template>
-  <el-card class="playerList">
-    <draggable
-      v-model="players"
-      tag="transition-group"
-      :component-data="{
-        tag: 'ul',
-        type: 'transition-group',
-        name: !drag ? 'flip-list' : null,
-      }"
-      group="player"
-      @start="drag = true"
-      @end="drag = false"
-      item-key="name"
-      :animation="200"
-      :disabled="false"
-      ghostClass="ghost"
-    >
-      <template #item="{ element }">
-        <li>
-          <div class="playerList__entry">
-            <div>{{ element.name }}</div>
-            <div class="text-secondary">{{ element.wonder }}</div>
-          </div>
-          <div class="playerList__append">
-            <el-button circle icon="el-icon-refresh"></el-button>
-            <el-button circle icon="el-icon-delete"></el-button>
-          </div>
-        </li>
-      </template>
-    </draggable>
-  </el-card>
+  <div class="playerList">
+    <h2>Players</h2>
+
+    <el-card full>
+      <el-card-list flush>
+        <draggable
+          v-model="players"
+          tag="transition-group"
+          group="player"
+          item-key="name"
+          :animation="200"
+          ghostClass="ghost"
+        >
+          <template #item="{ element }">
+            <el-card-list-item>
+              <div class="playerList__entry">
+                <div>{{ element.name }}</div>
+                <div class="text-secondary">{{ element.wonder }}</div>
+              </div>
+              <div class="playerList__append">
+                <el-button circle icon="el-icon-refresh"></el-button>
+              </div>
+            </el-card-list-item>
+          </template>
+        </draggable>
+      </el-card-list>
+    </el-card>
+  </div>
 </template>
 
 <script>
 import draggable from 'vuedraggable';
+import ElCard from '@/components/ElCard.vue';
+import ElCardList from '@/components/ElCardList.vue';
+import ElCardListItem from '@/components/ElCardListItem.vue';
 
 export default {
   components: {
     draggable,
+    ElCard,
+    ElCardList,
+    ElCardListItem,
   },
   data() {
     return {
-      drag: false,
       players: [
         {
           name: 'Simon',
@@ -74,27 +76,14 @@ export default {
 @import '../theme/variables';
 
 .playerList {
-  margin-left: -$--main-padding;
-  margin-right: -$--main-padding;
-
-  .el-card__body {
-    padding: 0;
+  h2 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
   }
 
-  ul {
-    margin: 0;
-    padding: 0;
-    list-style-type: none;
-
-    li {
-      display: flex;
-      flex-direction: row;
-      padding: math.div($--card-padding, 2) 0;
-      user-select: none;
-      & + li {
-        border-top: 1px solid $--card-border-color;
-      }
-    }
+  .el-card__body {
+    padding-top: 0;
+    padding-bottom: 0;
   }
 
   &__entry {

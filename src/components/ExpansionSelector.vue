@@ -3,7 +3,7 @@
     <h2>
       Expansions
       <br />
-      <small>The base game is always included</small>
+      <small class="text-secondary">The base game is always included</small>
     </h2>
     <div>
       <el-checkbox-button
@@ -11,7 +11,7 @@
         :key="expansion.id"
         :label="expansion.id"
         :checked="expansion.active"
-        @input="toggleActive(expansion)"
+        @input="toggleActive(expansion.id)"
         >{{ expansion.label }}</el-checkbox-button
       >
     </div>
@@ -23,20 +23,9 @@ import { useStore as useExpansionsStore } from '@/store/expansions';
 
 export default {
   setup() {
-    const { ownedExpansions } = useExpansionsStore();
+    const { ownedExpansions, toggleActive } = useExpansionsStore();
+    const expansions = ownedExpansions.filter((e) => e.id !== 'base');
 
-    let expansions = ownedExpansions
-      .map((e) => {
-        return {
-          ...e,
-          active: false,
-        };
-      })
-      .filter((e) => e.id !== 'base');
-
-    function toggleActive(expansion) {
-      expansion.active = !expansion.active;
-    }
     return { expansions, toggleActive };
   },
 };
@@ -52,7 +41,6 @@ export default {
 
     small {
       font-size: 14px;
-      color: $--color-text-secondary;
     }
   }
   .el-checkbox-button {

@@ -51,14 +51,14 @@ export default {
     ElCardListItem,
   },
   setup() {
-    const { expansions, toggle } = useExpansionsStore();
+    const { expansions, toggleOwned } = useExpansionsStore();
     const ownedExpansions = computed(() => expansions.filter((e) => e.owned));
 
     const { players } = usePlayerStore();
 
     return {
       expansions: ownedExpansions,
-      toggleExpansion: toggle,
+      toggleExpansion: toggleOwned,
       players,
     };
   },
