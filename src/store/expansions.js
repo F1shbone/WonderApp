@@ -7,36 +7,43 @@ export const useStore = defineStore({
       id: 'base',
       label: 'Base Game',
       owned: true,
+      active: false,
     },
     leaders: {
       id: 'leaders',
       label: 'Leaders',
       owned: true,
+      active: false,
     },
     cities: {
       id: 'cities',
       label: 'Cities',
       owned: true,
+      active: false,
     },
     wonderPack: {
       id: 'wonderPack',
       label: 'Wonder Pack',
       owned: true,
+      active: false,
     },
     babelTower: {
       id: 'babelTower',
       label: 'Babel - Tower',
       owned: true,
+      active: false,
     },
     babelProject: {
       id: 'babelProject',
       label: 'Babel - Great Projects',
       owned: true,
+      active: false,
     },
     armada: {
       id: 'armada',
       label: 'Armada',
       owned: false,
+      active: false,
     },
   }),
   getters: {
@@ -49,32 +56,22 @@ export const useStore = defineStore({
       state.babelProject,
       state.armada,
     ],
+    activeExpansions() {
+      return this.expansions.filter((e) => e.active);
+    },
     ownedExpansions() {
       return this.expansions.filter((e) => e.owned);
     },
   },
   actions: {
-    toggle(key) {
-      console.log(key);
+    toggleOwned(key) {
       this[key].owned = !this[key].owned;
     },
-    toggleLeaders() {
-      this.leaders.owned = !this.leaders.owned;
+    toggleActive(key) {
+      this[key].active = !this[key].active;
     },
-    toggleCities() {
-      this.cities.owned = !this.cities.owned;
-    },
-    toggleWonderPack() {
-      this.wonderPack.owned = !this.wonderPack.owned;
-    },
-    toggleBabelTower() {
-      this.babelTower.owned = !this.babelTower.owned;
-    },
-    toggleBabelProject() {
-      this.babelProject.owned = !this.babelProject.owned;
-    },
-    toggleArmada() {
-      this.armada.owned = !this.armada.owned;
+    reset() {
+      this.expansions.forEach((p) => (p.active = false));
     },
   },
 });
