@@ -7,63 +7,74 @@ export const useStore = defineStore({
       id: 'base',
       label: 'Base Game',
       owned: true,
-      active: true,
     },
     leaders: {
       id: 'leaders',
       label: 'Leaders',
       owned: true,
-      active: false,
     },
     cities: {
       id: 'cities',
       label: 'Cities',
       owned: true,
-      active: false,
     },
     wonderPack: {
       id: 'wonderPack',
       label: 'Wonder Pack',
       owned: true,
-      active: false,
     },
-    babel: {
-      id: 'babel',
-      label: 'Babel',
+    babelTower: {
+      id: 'babelTower',
+      label: 'Babel - Tower',
       owned: true,
-      active: false,
+    },
+    babelProject: {
+      id: 'babelProject',
+      label: 'Babel - Great Projects',
+      owned: true,
     },
     armada: {
       id: 'armada',
       label: 'Armada',
       owned: false,
-      active: false,
     },
   }),
   getters: {
-    expansions: (state) => [state.base, state.leaders, state.cities, state.wonderPack, state.babel, state.armada],
-    activeExpansions() {
-      return this.expansions.filter((e) => e.active);
-    },
+    expansions: (state) => [
+      state.base,
+      state.wonderPack,
+      state.leaders,
+      state.cities,
+      state.babelTower,
+      state.babelProject,
+      state.armada,
+    ],
     ownedExpansions() {
       return this.expansions.filter((e) => e.owned);
     },
   },
   actions: {
+    toggle(key) {
+      console.log(key);
+      this[key].owned = !this[key].owned;
+    },
     toggleLeaders() {
-      this.leaders.active = !this.leaders.active;
+      this.leaders.owned = !this.leaders.owned;
     },
     toggleCities() {
-      this.cities.active = !this.cities.active;
+      this.cities.owned = !this.cities.owned;
     },
     toggleWonderPack() {
-      this.wonderPack.active = !this.wonderPack.active;
+      this.wonderPack.owned = !this.wonderPack.owned;
     },
-    toggleBabel() {
-      this.babel.active = !this.babel.active;
+    toggleBabelTower() {
+      this.babelTower.owned = !this.babelTower.owned;
+    },
+    toggleBabelProject() {
+      this.babelProject.owned = !this.babelProject.owned;
     },
     toggleArmada() {
-      this.armada.active = !this.armada.active;
+      this.armada.owned = !this.armada.owned;
     },
   },
 });

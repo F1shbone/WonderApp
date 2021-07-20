@@ -11,7 +11,7 @@
         <el-card-list-item class="listItem" v-for="expansion in expansions" :key="expansion.id">
           <div>{{ expansion.label }}</div>
           <div>
-            <el-button circle icon="el-icon-delete" />
+            <el-button circle icon="el-icon-delete" @click="toggleExpansion(expansion.id)" />
           </div>
         </el-card-list-item>
       </el-card-list>
@@ -39,7 +39,9 @@ import ElCard from '@/components/ElCard.vue';
 import ElCardList from '@/components/ElCardList.vue';
 import ElCardListItem from '@/components/ElCardListItem.vue';
 
+import { computed } from 'vue';
 import { useStore as useExpansionsStore } from '@/store/expansions';
+import { useStore as usePlayerStore } from '@/store/players';
 
 export default {
   name: 'Settings',
@@ -49,29 +51,15 @@ export default {
     ElCardListItem,
   },
   setup() {
-    const expansionsStore = useExpansionsStore();
-    const playersStore = {
-      players: [
-        {
-          name: 'Romina',
-        },
-        {
-          name: 'Bernhard',
-        },
-        {
-          name: 'Simon',
-        },
-        {
-          name: 'Daniel',
-        },
-        {
-          name: 'Christian',
-        },
-      ],
-    };
+    const { expansions, toggle } = useExpansionsStore();
+    const ownedExpansions = computed(() => expansions.filter((e) => e.owned));
+
+    const { players } = usePlayerStore();
+
     return {
-      expansions: expansionsStore.ownedExpansions,
-      players: playersStore.players,
+      expansions: ownedExpansions,
+      toggleExpansion: toggle,
+      players,
     };
   },
 };

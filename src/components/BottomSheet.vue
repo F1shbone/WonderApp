@@ -5,7 +5,9 @@
   <transition name="slide">
     <div class="bottomSheet" v-if="visible" ref="target">
       <div class="bottomSheet__drag" v-drag="dragHandler" />
-      <p>Test</p>
+      <div class="bottomSheet__content">
+        <slot />
+      </div>
     </div>
   </transition>
 </template>
@@ -45,7 +47,7 @@ export default {
       } else {
         const newY = initialY + dragState.movement[1];
         if (newY > initialY) {
-          target.value.setAttribute('style', `height:${initialHeight - dragState.movement[1]}px;`);
+          target.value.setAttribute('style', `transform:translateY(${dragState.movement[1]}px);`);
           if (initialHeight / 1.5 < newY) {
             removeStyle = false;
             dragState.cancel();
@@ -67,19 +69,19 @@ export default {
 /* Transitions */
 .slide-enter-active,
 .slide-leave-active {
-  transition: transform 0.35s ease-in-out;
+  transition: transform 0.25s ease-in-out;
 }
 
 .slide-enter-from {
-  transform: translateY(85%);
+  transform: translateY(85%) !important;
 }
 .slide-leave-to {
-  transform: translateY(100%);
+  transform: translateY(100%) !important;
 }
 
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.35s ease;
+  transition: opacity 0.25s ease;
 }
 .fade-enter-from,
 .fade-leave-to {
@@ -96,6 +98,8 @@ export default {
   right: 0;
   bottom: 0;
   height: 85%;
+  display: flex;
+  flex-direction: column;
   background-color: #fff;
   border-top-left-radius: 2rem;
   border-top-right-radius: 2rem;
@@ -130,6 +134,11 @@ export default {
     left: 0;
     right: 0;
     background-color: rgba(0, 0, 0, 0.5);
+  }
+
+  &__content {
+    flex: 1 1 100%;
+    margin-bottom: 20px;
   }
 }
 </style>

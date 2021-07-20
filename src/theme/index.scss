@@ -14,7 +14,7 @@ body {
 html,
 body,
 #app,
-.el-container {
+#app > .el-container {
   position: fixed;
   top: -0px;
   height: 100%;
