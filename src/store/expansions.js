@@ -1,47 +1,48 @@
 import { defineStore } from 'pinia';
+import { ARMADA, BABEL_PROJECT, BABEL_TOWER, BASE, CITIES, LEADERS, WONDER_PACK } from './gameInfo/expansions';
 
 export const useStore = defineStore({
   id: 'expansions',
   state: () => ({
     base: {
-      id: 'base',
-      label: 'Base Game',
+      id: BASE.id,
+      label: BASE.label,
       owned: true,
       active: false,
     },
     leaders: {
-      id: 'leaders',
-      label: 'Leaders',
+      id: LEADERS.id,
+      label: LEADERS.label,
       owned: true,
       active: false,
     },
     cities: {
-      id: 'cities',
-      label: 'Cities',
+      id: CITIES.id,
+      label: CITIES.label,
       owned: true,
       active: false,
     },
     wonderPack: {
-      id: 'wonderPack',
-      label: 'Wonder Pack',
+      id: WONDER_PACK.id,
+      label: WONDER_PACK.label,
       owned: true,
       active: false,
     },
     babelTower: {
-      id: 'babelTower',
-      label: 'Babel - Tower',
+      id: BABEL_TOWER.id,
+      label: BABEL_TOWER.label,
       owned: true,
       active: false,
     },
     babelProject: {
-      id: 'babelProject',
-      label: 'Babel - Great Projects',
+      id: BABEL_PROJECT.id,
+      label: BABEL_PROJECT.label,
       owned: true,
       active: false,
     },
     armada: {
-      id: 'armada',
-      label: 'Armada',
+      id: ARMADA.id,
+      label: ARMADA.label,
       owned: false,
       active: false,
     },
@@ -70,7 +71,7 @@ export const useStore = defineStore({
     toggleActive(key) {
       this[key].active = !this[key].active;
     },
-    reset() {
+    resetActive() {
       this.expansions.forEach((p) => (p.active = false));
     },
   },

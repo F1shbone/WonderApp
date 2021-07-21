@@ -65,8 +65,8 @@ export default {
     }
     function close() {
       setVisible(false);
-      playerStore.reset();
-      expansionStore.reset();
+      playerStore.resetActive();
+      expansionStore.resetActive();
       step.value = 'settings';
     }
 

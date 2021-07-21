@@ -105,7 +105,7 @@ export default {
   }
   .ghost {
     opacity: 0.5;
-    background: #c8ebfb;
+    background: rgba($--color-primary, 0.5);
   }
 }
 </style>

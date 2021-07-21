@@ -35,7 +35,7 @@ export const useStore = defineStore({
     toggle(id) {
       this.players[id].active = !this.players[id].active;
     },
-    reset() {
+    resetActive() {
       this.players.forEach((p) => (p.active = false));
     },
   },

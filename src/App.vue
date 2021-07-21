@@ -11,19 +11,19 @@
     <el-footer class="layout__footer" height="80">
       <el-menu default-active="1" mode="horizontal" :router="true">
         <li>
-          <router-link class="el-menu-item" to="/">
+          <router-link class="el-menu-item" to="/" @click="blur">
             <i class="el-icon-notebook-2" />
             <span>Game</span>
           </router-link>
         </li>
         <li>
-          <router-link class="el-menu-item" to="/stats">
+          <router-link class="el-menu-item" to="/stats" @click="blur">
             <i class="el-icon-data-line" />
             <span>Stats</span>
           </router-link>
         </li>
         <li>
-          <router-link class="el-menu-item" to="/settings">
+          <router-link class="el-menu-item" to="/settings" @click="blur">
             <i class="el-icon-s-operation" />
             <span>Settings</span>
           </router-link>
@@ -35,7 +35,17 @@
 
 <script>
 export default {
-  //
+  setup() {
+    function blur({ srcElement }) {
+      setTimeout(() => {
+        srcElement.blur();
+      }, 250);
+    }
+
+    return {
+      blur,
+    };
+  },
 };
 </script>
 
@@ -69,6 +79,10 @@ export default {
 
       li {
         flex: 1 1 100%;
+
+        &:focus {
+          outline: none;
+        }
       }
 
       &-item {
@@ -83,6 +97,15 @@ export default {
         &.router-link-active {
           border-color: $--color-primary;
         }
+
+        > * {
+          pointer-events: none;
+        }
+
+        &:focus-visible {
+          outline: unset;
+          outline-offset: unset;
+        }
       }
 
       // refactor
@@ -95,9 +118,15 @@ export default {
       span {
         font-size: 75%;
         line-height: 1.2;
-        margin: 0.5rem 0;
+        margin: 0.3125rem 0;
       }
     }
+  }
+}
+
+@media (hover: none) {
+  .el-menu-item:hover {
+    background-color: inherit;
   }
 }
 </style>
