@@ -4,43 +4,43 @@ import { ARMADA, BABEL_PROJECT, BABEL_TOWER, BASE, CITIES, LEADERS, WONDER_PACK 
 export const useStore = defineStore({
   id: 'expansions',
   state: () => ({
-    base: {
+    [BASE.id]: {
       id: BASE.id,
       label: BASE.label,
       owned: true,
-      active: false,
+      active: true,
     },
-    leaders: {
+    [LEADERS.id]: {
       id: LEADERS.id,
       label: LEADERS.label,
       owned: true,
       active: false,
     },
-    cities: {
+    [CITIES.id]: {
       id: CITIES.id,
       label: CITIES.label,
       owned: true,
       active: false,
     },
-    wonderPack: {
+    [WONDER_PACK.id]: {
       id: WONDER_PACK.id,
       label: WONDER_PACK.label,
       owned: true,
       active: false,
     },
-    babelTower: {
+    [BABEL_TOWER.id]: {
       id: BABEL_TOWER.id,
       label: BABEL_TOWER.label,
       owned: true,
       active: false,
     },
-    babelProject: {
+    [BABEL_PROJECT.id]: {
       id: BABEL_PROJECT.id,
       label: BABEL_PROJECT.label,
       owned: true,
       active: false,
     },
-    armada: {
+    [ARMADA.id]: {
       id: ARMADA.id,
       label: ARMADA.label,
       owned: false,
@@ -49,13 +49,13 @@ export const useStore = defineStore({
   }),
   getters: {
     expansions: (state) => [
-      state.base,
-      state.wonderPack,
-      state.leaders,
-      state.cities,
-      state.babelTower,
-      state.babelProject,
-      state.armada,
+      state[BASE.id],
+      state[WONDER_PACK.id],
+      state[LEADERS.id],
+      state[CITIES.id],
+      state[BABEL_TOWER.id],
+      state[BABEL_PROJECT.id],
+      state[ARMADA.id],
     ],
     activeExpansions() {
       return this.expansions.filter((e) => e.active);

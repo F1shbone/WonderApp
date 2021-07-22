@@ -20,11 +20,12 @@
 
 <script>
 import { useStore as useExpansionsStore } from '@/store/expansions';
+import { BASE } from '@/store/gameInfo/expansions';
 
 export default {
   setup() {
     const { ownedExpansions, toggleActive } = useExpansionsStore();
-    const expansions = ownedExpansions.filter((e) => e.id !== 'base');
+    const expansions = ownedExpansions.filter((e) => e.id !== BASE.id);
 
     return { expansions, toggleActive };
   },

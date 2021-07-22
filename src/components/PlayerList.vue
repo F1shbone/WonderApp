@@ -8,7 +8,7 @@
           v-model="players"
           tag="transition-group"
           group="player"
-          item-key="name"
+          item-key="id"
           :animation="200"
           ghostClass="ghost"
         >
@@ -16,7 +16,7 @@
             <el-card-list-item>
               <div class="playerList__entry">
                 <div>{{ element.name }}</div>
-                <div class="text-secondary">{{ element.wonder }}</div>
+                <div class="text-secondary">{{ element.wonder.label.short }}</div>
               </div>
               <div class="playerList__append">
                 <el-button circle icon="el-icon-refresh"></el-button>
@@ -30,6 +30,10 @@
 </template>
 
 <script>
+import { ref, watch } from 'vue';
+import { useStore as useMatchStore } from '@/store/match';
+import { ShuffleArray } from '@/utils/shuffleArray';
+
 import draggable from 'vuedraggable';
 import ElCard from '@/components/ElCard.vue';
 import ElCardList from '@/components/ElCardList.vue';
@@ -42,30 +46,24 @@ export default {
     ElCardList,
     ElCardListItem,
   },
-  data() {
+  setup() {
+    const matchStore = useMatchStore();
+
+    const players = ref(JSON.parse(JSON.stringify(matchStore.players)));
+    watch(
+      () => players,
+      (players) => {
+        players.value.map((player, i) => {
+          player.position = i;
+        });
+        matchStore.updatePosition(players.value);
+      },
+      { deep: true }
+    );
+    players.value = ShuffleArray(players.value);
+
     return {
-      players: [
-        {
-          name: 'Simon',
-          wonder: 'Éphesos',
-        },
-        {
-          name: 'Daniel',
-          wonder: 'Alexandria',
-        },
-        {
-          name: 'Romina',
-          wonder: 'Babylon',
-        },
-        {
-          name: 'Bernhard',
-          wonder: 'Gizeh',
-        },
-        {
-          name: 'Christian',
-          wonder: 'Rhodos',
-        },
-      ],
+      players,
     };
   },
 };

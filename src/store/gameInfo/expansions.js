@@ -16,40 +16,40 @@ import {
 } from './wonders';
 
 export const BASE = {
-  id: 'base',
+  id: 'BASE',
   label: 'Base Game',
   wonders: [RHODES, ALEXANDRIA, EPHESUS, BABYLON, OLYMPIA, HALICARNASSUS, GIZA],
 };
 
 export const LEADERS = {
-  id: 'leaders',
+  id: 'LEADERS',
   label: 'Leaders',
   wonders: [ROME],
 };
 
 export const CITIES = {
-  id: 'cities',
+  id: 'CITIES',
   label: 'Cities',
   wonders: [PETRA, BYZANTIUM],
 };
 
 export const WONDER_PACK = {
-  id: 'wonderPack',
+  id: 'WONDER_PACK',
   label: 'Wonder Pack',
   wonders: [GREAT_WALL, ABU_SIMBEL, STONEHENGE, MANNEKEN_PIS],
 };
 
 export const BABEL_TOWER = {
-  id: 'babelTower',
+  id: 'BABEL_TOWER',
   label: 'Babel - Tower',
 };
 
 export const BABEL_PROJECT = {
-  id: 'babelProject',
+  id: 'BABEL_PROJECT',
   label: 'Babel - Great Projects',
 };
 
 export const ARMADA = {
-  id: 'armada',
+  id: 'ARMADA',
   label: 'Armada',
 };

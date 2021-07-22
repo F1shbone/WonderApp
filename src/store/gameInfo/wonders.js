@@ -947,7 +947,7 @@ export const STONEHENGE = {
 export const MANNEKEN_PIS = {
   label: {
     long: 'Manneken Pis',
-    short: 'Manneken Pos',
+    short: 'Manneken Pis',
   },
   variants: {
     a: {

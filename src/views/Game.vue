@@ -30,6 +30,7 @@
 import { ref } from 'vue';
 import { useStore as useExpansionsStore } from '@/store/expansions';
 import { useStore as usePlayersStore } from '@/store/players';
+import { useStore as useMatchStore } from '@/store/match';
 
 import BottomSheet from '@/components/BottomSheet.vue';
 import ExpansionSelector from '@/components/ExpansionSelector.vue';
@@ -47,6 +48,7 @@ export default {
   setup() {
     const playerStore = usePlayersStore();
     const expansionStore = useExpansionsStore();
+    const matchStore = useMatchStore();
 
     const step = ref('settings'); // possible values: 'settings', 'confirm'
     function start() {
@@ -67,6 +69,7 @@ export default {
       setVisible(false);
       playerStore.resetActive();
       expansionStore.resetActive();
+      matchStore.$reset();
       step.value = 'settings';
     }
 
