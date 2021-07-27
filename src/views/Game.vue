@@ -6,7 +6,7 @@
 
     <h1>Score:</h1>
 
-    <el-table :data="score" :row-style="getRowBg" ref="tableRef">
+    <el-table :data="scoreTableView" :row-style="getRowBg" border ref="tableRef">
       <el-table-column fixed label="" :width="colIcon">
         <template #default="{ row }">
           <div class="game__rowIcon" v-html="row.category.icon" />
@@ -27,6 +27,7 @@
 import { computed, ref } from 'vue';
 import { useResizeObserver } from '@vueuse/core';
 import { useStore as useMatchStore } from '@/store/match';
+import { TOTAL } from '@/store/gameInfo/score';
 
 export default {
   name: 'Game',
@@ -34,21 +35,27 @@ export default {
   setup() {
     const matchStore = useMatchStore();
 
+    //#region Table
     const tableRef = ref(undefined);
     const colIcon = ref(50);
     const colWidth = ref(0);
     useResizeObserver(tableRef, (entries) => {
-      let { width } = entries[0].contentRect;
-      width -= colIcon.value;
+      const width = entries[0].contentRect.width - colIcon.value;
       colWidth.value = width / playerCount.value;
       if (colWidth.value < 90) colWidth.value = 90;
+      // Update table
       tableRef.value.doLayout();
     });
+    function getRowBg({ row }) {
+      return `background-color: ${row.category.bg};color: ${row.category.color}`;
+    }
+    //#endregion
 
+    //#region Score
     const players = computed(() => matchStore.players);
     const playerCount = computed(() => matchStore.playerCount);
-    const score = computed(() => {
-      return matchStore.activeScores.map((category) => {
+    const scoreTableView = computed(() => {
+      const score = matchStore.activeScores.map((category) => {
         const row = {
           category,
         };
@@ -57,20 +64,25 @@ export default {
         });
         return row;
       });
-    });
+      const total = {
+        category: TOTAL,
+      };
+      players.value.forEach((player) => {
+        total[`player-${player.id}`] = player.total;
+      });
 
-    function getRowBg({ row }) {
-      return `background-color: ${row.category.bg};color: ${row.category.color}`;
-    }
+      return [...score, total];
+    });
+    //#endregion
 
     return {
       tableRef,
       colIcon,
       colWidth,
-      score,
+      getRowBg,
+      scoreTableView,
       playerCount,
       players,
-      getRowBg,
     };
   },
 };

@@ -29,7 +29,7 @@ export const useStore = defineStore({
     initPlayers() {
       const players = ShuffleArray(
         this.activePlayers.map((player, i) => {
-          return {
+          const row = {
             id: i,
             name: player.name,
             wonder: {},
@@ -37,7 +37,12 @@ export const useStore = defineStore({
               acc[curr.id] = 0;
               return acc;
             }, {}),
+            get total() {
+              return Object.values(this.score).reduce((acc, val) => (acc += val), 0);
+            },
           };
+
+          return row;
         })
       );
       players.map((player) => {
