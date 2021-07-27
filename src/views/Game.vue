@@ -1,86 +1,24 @@
 <template>
   <div class="game">
-    <el-empty description="No active game" />
-
-    <el-button type="primary" @click="setVisible(true)">Start new Game</el-button>
-  </div>
-
-  <bottom-sheet :visible="visible" @close="close">
-    <div class="game__container">
-      <!-- step 1: -->
-      <div class="game__main" v-if="step === 'settings'">
-        <player-selector />
-        <expansion-selector />
-      </div>
-      <!-- step 2: -->
-      <div class="game__main" v-if="step === 'confirm'">
-        <player-list />
-        <!-- playerlist -->
-        <!--   - change order -->
-        <!--   - reroll wonder -->
-      </div>
-      <div class="game__footer">
-        <el-button type="primary" @click="start" style="width: 100%">Start</el-button>
-      </div>
+    <div class="game__empty" v-if="playerCount === 0">
+      <el-empty description="No active game" />
     </div>
-  </bottom-sheet>
+
+    <h1>Score:</h1>
+  </div>
 </template>
 
 <script>
-import { ref } from 'vue';
-import { useStore as useExpansionsStore } from '@/store/expansions';
-import { useStore as usePlayersStore } from '@/store/players';
+import { computed } from 'vue';
 import { useStore as useMatchStore } from '@/store/match';
-
-import BottomSheet from '@/components/BottomSheet.vue';
-import ExpansionSelector from '@/components/ExpansionSelector.vue';
-import PlayerSelector from '@/components/PlayerSelector.vue';
-import PlayerList from '@/components/PlayerList.vue';
 
 export default {
   name: 'Game',
-  components: {
-    BottomSheet,
-    ExpansionSelector,
-    PlayerSelector,
-    PlayerList,
-  },
+  components: {},
   setup() {
-    const playerStore = usePlayersStore();
-    const expansionStore = useExpansionsStore();
     const matchStore = useMatchStore();
 
-    const step = ref('settings'); // possible values: 'settings', 'confirm'
-    function start() {
-      if (step.value === 'settings') {
-        step.value = 'confirm';
-        // Generate Match Store
-        matchStore.initPlayers();
-      } else {
-        console.log('Go');
-        close();
-      }
-    }
-
-    const visible = ref(false);
-    function setVisible(val) {
-      visible.value = val;
-    }
-    function close() {
-      setVisible(false);
-      playerStore.resetActive();
-      expansionStore.resetActive();
-      matchStore.$reset();
-      step.value = 'settings';
-    }
-
-    return {
-      visible,
-      setVisible,
-      close,
-      step,
-      start,
-    };
+    return { playerCount: computed(() => matchStore.playerCount) };
   },
 };
 </script>
@@ -89,37 +27,22 @@ export default {
 @import '../theme/variables';
 
 .game {
+  position: relative;
   height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  .el-empty {
-    padding-top: 0;
-  }
 
-  &__container {
-    position: relative;
-    height: 100%;
-    padding: $--main-padding;
-    padding-bottom: $--main-padding + 40px;
-    box-sizing: border-box;
-  }
-  &__footer {
+  &__empty {
     position: absolute;
+    top: 0;
     bottom: 0;
-    left: $--main-padding;
-    right: $--main-padding;
-    border: none;
-  }
-
-  &__main {
-    height: 100%;
+    left: 0;
+    right: 0;
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: $--body-bg;
 
-    > div {
-      flex: 1 1 auto;
+    .el-empty {
+      padding-top: 0;
     }
   }
 }

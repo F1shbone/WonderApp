@@ -1,12 +1,16 @@
 <template>
   <el-container>
     <el-header class="layout__header">
-      <el-page-header>
-        <template #content><img alt="Vue logo" src="./assets/logo.png" /></template>
-      </el-page-header>
+      <img alt="Vue logo" src="./assets/logo.png" />
+
+      <el-button icon="el-icon-edit-outline" @click="showNewGame"
+        ><span class="visually-hidden">New Game</span></el-button
+      >
     </el-header>
     <el-main>
       <router-view />
+
+      <new-game v-model="newGame" />
     </el-main>
     <el-footer class="layout__footer" height="80">
       <el-menu default-active="1" mode="horizontal" :router="true">
@@ -34,7 +38,14 @@
 </template>
 
 <script>
+import { ref } from 'vue';
+
+import NewGame from '@/components/NewGame.vue';
+
 export default {
+  components: {
+    NewGame,
+  },
   setup() {
     function blur({ srcElement }) {
       setTimeout(() => {
@@ -42,8 +53,15 @@ export default {
       }, 250);
     }
 
+    const newGame = ref(false);
+    function showNewGame() {
+      newGame.value = true;
+    }
+
     return {
       blur,
+      newGame,
+      showNewGame,
     };
   },
 };
@@ -53,17 +71,26 @@ export default {
 @import './theme/variables';
 .layout {
   &__header {
+    position: relative;
     display: flex;
     justify-content: center;
+    align-items: center;
     padding: $--header-padding !important;
 
-    .el-page-header__left,
-    .el-page-header__content {
-      display: flex;
-      align-items: center;
-    }
-    .el-page-header__left {
-      display: none;
+    .el-button {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3.75rem;
+      border-radius: 0;
+      border-width: 0 1px 0 0;
+      i {
+        font-size: 150%;
+      }
+      span {
+        margin: 0;
+      }
     }
 
     img {

@@ -42,14 +42,17 @@ export const WONDER_PACK = {
 export const BABEL_TOWER = {
   id: 'BABEL_TOWER',
   label: 'Babel - Tower',
+  wonders: [],
 };
 
 export const BABEL_PROJECT = {
   id: 'BABEL_PROJECT',
   label: 'Babel - Great Projects',
+  wonders: [],
 };
 
 export const ARMADA = {
   id: 'ARMADA',
   label: 'Armada',
+  wonders: [],
 };

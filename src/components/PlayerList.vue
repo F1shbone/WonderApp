@@ -46,16 +46,20 @@ export default {
     ElCardList,
     ElCardListItem,
   },
+  props: {
+    players: {
+      type: Array,
+      required: true,
+    },
+  },
   setup() {
-    const { players, getRandomWonder } = useMatchStore();
+    const { getRandomWonder } = useMatchStore();
 
     function rerollWonder(player) {
-      console.log(player);
       player.wonder = getRandomWonder();
     }
 
     return {
-      players,
       rerollWonder,
     };
   },

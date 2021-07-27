@@ -21,6 +21,7 @@ body,
   width: 100%;
   overflow: hidden;
   overscroll-behavior-y: none;
+  background-color: $--body-bg;
 }
 
 .el-header {

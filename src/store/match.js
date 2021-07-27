@@ -12,31 +12,37 @@ export const useStore = defineStore({
     };
   },
   getters: {
+    activePlayers() {
+      return usePlayerStore().activePlayers;
+    },
     activeWonders() {
       return useExpansionStore().activeWonders;
     },
     usedWonders(state) {
       return new Set(state.players.map((e) => e.wonder.id));
     },
-    activePlayers() {
-      return usePlayerStore().activePlayers;
+    playerCount(state) {
+      return state.players.length;
     },
   },
   actions: {
     initPlayers() {
-      this.players = ShuffleArray(
+      const players = ShuffleArray(
         this.activePlayers.map((player, i) => {
           return {
             id: i,
             name: player.name,
             wonder: {},
+            points: {},
           };
         })
       );
-      this.players.map((player) => {
+      players.map((player) => {
         player.wonder = this.getRandomWonder();
         return player;
       });
+
+      return players;
     },
     updatePosition(players) {
       players.forEach((player, i) => {
@@ -46,8 +52,7 @@ export const useStore = defineStore({
     getRandomWonder() {
       let wonder = undefined;
       do {
-        let i = Math.floor(Math.random() * this.activeWonders.length);
-        wonder = this.activeWonders[i];
+        wonder = this.activeWonders[Math.floor(Math.random() * this.activeWonders.length)];
       } while (this.usedWonders.has(wonder.id));
 
       return wonder;
