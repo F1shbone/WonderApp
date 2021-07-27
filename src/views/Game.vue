@@ -6,18 +6,10 @@
 
     <h1>Score:</h1>
 
-    <!-- <p v-for="player in players" :key="player.id">{{ player.name }}</p> -->
-    <el-table :data="score" :row-style="getRowBg">
-      <!-- <el-table-column label="Date" width="180">
-        <template #default="scope">
-          <i class="el-icon-time"></i>
-          <span style="margin-left: 10px">{{ scope.row }}</span>
-        </template>
-      </el-table-column> -->
-      <el-table-column fixed label="" width="50">
+    <el-table :data="score" :row-style="getRowBg" ref="tableRef">
+      <el-table-column fixed label="" :width="colIcon">
         <template #default="{ row }">
           <div class="game__rowIcon" v-html="row.category.icon" />
-          <!-- <i :class="['game__rowIcon', row.category.icon]" /> -->
         </template>
       </el-table-column>
       <el-table-column
@@ -25,7 +17,7 @@
         :key="`player-${player.id}`"
         :prop="`player-${player.id}`"
         :label="player.name"
-        width="90"
+        :width="colWidth"
       />
     </el-table>
   </div>
@@ -33,6 +25,7 @@
 
 <script>
 import { computed, ref } from 'vue';
+import { useResizeObserver } from '@vueuse/core';
 import { useStore as useMatchStore } from '@/store/match';
 
 export default {
@@ -40,37 +33,43 @@ export default {
   components: {},
   setup() {
     const matchStore = useMatchStore();
-    // Wonder
-    // Coins
-    // Military
-    // Blue
-    // Yellow
-    // Green
-    // Purple
-    // Black
-    // Leader
-    // Babel Tower
-    // ---
-    // Total
-    const score = ref(
-      matchStore.activeScores.map((score) => ({
-        category: score,
-        'player-0': 0,
-        'player-1': 0,
-        'player-2': 0,
-        'player-3': 0,
-        'player-4': 0,
-      }))
-    );
+
+    const tableRef = ref(undefined);
+    const colIcon = ref(50);
+    const colWidth = ref(0);
+    useResizeObserver(tableRef, (entries) => {
+      let { width } = entries[0].contentRect;
+      width -= colIcon.value;
+      colWidth.value = width / playerCount.value;
+      if (colWidth.value < 90) colWidth.value = 90;
+      tableRef.value.doLayout();
+    });
+
+    const players = computed(() => matchStore.players);
+    const playerCount = computed(() => matchStore.playerCount);
+    const score = computed(() => {
+      return matchStore.activeScores.map((category) => {
+        const row = {
+          category,
+        };
+        players.value.forEach((player) => {
+          row[`player-${player.id}`] = player.score[category.id];
+        });
+        return row;
+      });
+    });
 
     function getRowBg({ row }) {
       return `background-color: ${row.category.bg};color: ${row.category.color}`;
     }
 
     return {
+      tableRef,
+      colIcon,
+      colWidth,
       score,
-      playerCount: computed(() => matchStore.playerCount),
-      players: computed(() => matchStore.players),
+      playerCount,
+      players,
       getRowBg,
     };
   },
