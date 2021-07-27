@@ -1,6 +1,7 @@
 import { CLAY, COIN, GLASSWORKS, LOOM, LUMBER, ORE, PRESS, STONE } from './resources';
 
 export const RHODES = {
+  id: 'RHODES',
   label: {
     long: 'The Colossus of Rhodes',
     short: 'Rhodes',
@@ -64,6 +65,7 @@ export const RHODES = {
 };
 
 export const ALEXANDRIA = {
+  id: 'ALEXANDRIA',
   label: {
     long: 'The Lighthouse of Alexandria',
     short: 'Alexandria',
@@ -133,6 +135,7 @@ export const ALEXANDRIA = {
 };
 
 export const EPHESUS = {
+  id: 'EPHESUS',
   label: {
     long: 'The Temple of Artemis in Ephesus',
     short: 'Ephesus',
@@ -205,6 +208,7 @@ export const EPHESUS = {
 };
 
 export const BABYLON = {
+  id: 'BABYLON',
   label: {
     long: 'The Hanging Gardens of Babylon',
     short: 'Babylon',
@@ -277,6 +281,7 @@ export const BABYLON = {
 };
 
 export const OLYMPIA = {
+  id: 'OLYMPIA',
   label: {
     long: 'The Statue of Zeus in Olympia',
     short: 'Olympia',
@@ -347,6 +352,7 @@ export const OLYMPIA = {
 };
 
 export const HALICARNASSUS = {
+  id: 'HALICARNASSUS',
   label: {
     long: 'The Mausoleum of Halicarnassus',
     short: 'Halicarnassus',
@@ -426,6 +432,7 @@ export const HALICARNASSUS = {
 };
 
 export const GIZA = {
+  id: 'GIZA',
   label: {
     long: 'The Pyramids of Giza',
     short: 'Giza',
@@ -502,6 +509,7 @@ export const GIZA = {
 };
 
 export const ROME = {
+  id: 'ROME',
   label: {
     long: 'Rome - Colosseum',
     short: 'Rome',
@@ -573,6 +581,7 @@ export const ROME = {
 };
 
 export const PETRA = {
+  id: 'PETRA',
   label: {
     long: 'The Al-Khazneh of Petra',
     short: 'Petra',
@@ -637,6 +646,7 @@ export const PETRA = {
 };
 
 export const BYZANTIUM = {
+  id: 'BYZANTIUM',
   label: {
     long: 'The Hagia Sophia of Byzantium',
     short: 'Byzantium',
@@ -708,6 +718,7 @@ export const BYZANTIUM = {
 };
 
 export const GREAT_WALL = {
+  id: 'GREAT_WALL',
   label: {
     long: 'The Great Wall',
     short: 'Great Wall',
@@ -805,6 +816,7 @@ export const GREAT_WALL = {
 };
 
 export const ABU_SIMBEL = {
+  id: 'ABU_SIMBEL',
   label: {
     long: 'Abu Simbel',
     short: 'Abu Simbel',
@@ -876,6 +888,7 @@ export const ABU_SIMBEL = {
 };
 
 export const STONEHENGE = {
+  id: 'STONEHENGE',
   label: {
     long: 'Stonehenge',
     short: 'Stonehenge',
@@ -945,6 +958,7 @@ export const STONEHENGE = {
 };
 
 export const MANNEKEN_PIS = {
+  id: 'MANNEKEN_PIS',
   label: {
     long: 'Manneken Pis',
     short: 'Manneken Pis',

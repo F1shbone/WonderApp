@@ -47,10 +47,11 @@ export default {
     ElCardListItem,
   },
   setup() {
-    const { players } = useMatchStore();
+    const { players, getRandomWonder } = useMatchStore();
 
     function rerollWonder(player) {
       console.log(player);
+      player.wonder = getRandomWonder();
     }
 
     return {

@@ -79,7 +79,9 @@ export const useStore = defineStore({
       this[key].active = !this[key].active;
     },
     resetActive() {
-      this.expansions.forEach((p) => (p.active = false));
+      this.expansions.forEach((p) => {
+        if (p.id !== BASE.id) p.active = false;
+      });
     },
   },
 });
