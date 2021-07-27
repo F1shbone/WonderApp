@@ -2,43 +2,51 @@ import { defineStore } from 'pinia';
 import { useStore as usePlayerStore } from './players';
 import { useStore as useExpansionStore } from './expansions';
 
-import * as expansions from './gameInfo/expansions';
 import { ShuffleArray } from '@/utils/shuffleArray';
 
 export const useStore = defineStore({
   id: 'match',
+  state() {
+    return {
+      players: [],
+    };
+  },
   getters: {
-    expansions() {
-      const expansions = useExpansionStore();
-
-      return expansions.activeExpansions;
+    activeWonders() {
+      return useExpansionStore().activeWonders;
     },
-    players() {
-      const playerStore = usePlayerStore();
-
-      return playerStore.activePlayers.map((player, i) => {
-        return {
-          name: player.name,
-          wonder: this.wonders[i],
-          id: +`${i}`,
-          position: +`${i}`,
-        };
-      });
-    },
-    wonders() {
-      const wonders = this.expansions.reduce((acc, curr) => {
-        const expansion = expansions[curr.id];
-        return [...acc, ...expansion.wonders];
-      }, []);
-
-      return ShuffleArray(wonders);
+    activePlayers() {
+      return usePlayerStore().activePlayers;
     },
   },
   actions: {
+    initPlayers() {
+      this.players = ShuffleArray(
+        this.activePlayers
+          .map((player, i) => {
+            return {
+              id: i,
+              name: player.name,
+              wonder: {},
+            };
+          })
+          .map((player) => {
+            player.wonder = this.getRandomWonder();
+            return player;
+          })
+      );
+    },
     updatePosition(players) {
       players.forEach((player, i) => {
         this.players.find((e) => e.id === player.id).position = i;
       });
+    },
+    getRandomWonder() {
+      return {
+        label: {
+          short: 'FooBar',
+        },
+      };
     },
   },
 });

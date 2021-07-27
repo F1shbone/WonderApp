@@ -5,7 +5,7 @@
     <el-card full>
       <el-card-list flush>
         <draggable
-          v-model="players"
+          :list="players"
           tag="transition-group"
           group="player"
           item-key="id"
@@ -19,7 +19,9 @@
                 <div class="text-secondary">{{ element.wonder.label.short }}</div>
               </div>
               <div class="playerList__append">
-                <el-button circle icon="el-icon-refresh"></el-button>
+                <el-button circle icon="el-icon-refresh" @click="rerollWonder(element)">
+                  <span class="visually-hidden">Re-roll Wonder</span>
+                </el-button>
               </div>
             </el-card-list-item>
           </template>
@@ -30,9 +32,7 @@
 </template>
 
 <script>
-import { ref, watch } from 'vue';
 import { useStore as useMatchStore } from '@/store/match';
-import { ShuffleArray } from '@/utils/shuffleArray';
 
 import draggable from 'vuedraggable';
 import ElCard from '@/components/ElCard.vue';
@@ -47,23 +47,15 @@ export default {
     ElCardListItem,
   },
   setup() {
-    const matchStore = useMatchStore();
+    const { players } = useMatchStore();
 
-    const players = ref(JSON.parse(JSON.stringify(matchStore.players)));
-    watch(
-      () => players,
-      (players) => {
-        players.value.map((player, i) => {
-          player.position = i;
-        });
-        matchStore.updatePosition(players.value);
-      },
-      { deep: true }
-    );
-    players.value = ShuffleArray(players.value);
+    function rerollWonder(player) {
+      console.log(player);
+    }
 
     return {
       players,
+      rerollWonder,
     };
   },
 };
@@ -92,6 +84,9 @@ export default {
   &__append {
     margin: 0 math.div($--card-padding, 2);
     user-select: none;
+    span {
+      margin: 0 !important;
+    }
   }
 
   // Animation

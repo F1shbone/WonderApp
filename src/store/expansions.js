@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import * as expansions from './gameInfo/expansions';
 import { ARMADA, BABEL_PROJECT, BABEL_TOWER, BASE, CITIES, LEADERS, WONDER_PACK } from './gameInfo/expansions';
 
 export const useStore = defineStore({
@@ -57,11 +58,17 @@ export const useStore = defineStore({
       state[BABEL_PROJECT.id],
       state[ARMADA.id],
     ],
+    ownedExpansions() {
+      return this.expansions.filter((e) => e.owned);
+    },
     activeExpansions() {
       return this.expansions.filter((e) => e.active);
     },
-    ownedExpansions() {
-      return this.expansions.filter((e) => e.owned);
+    activeWonders() {
+      return this.activeExpansions.reduce((acc, curr) => {
+        const expansion = expansions[curr.id];
+        return [...acc, ...expansion.wonders];
+      }, []);
     },
   },
   actions: {

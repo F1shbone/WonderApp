@@ -54,7 +54,8 @@ export default {
     function start() {
       if (step.value === 'settings') {
         step.value = 'confirm';
-        // Generate Game Store
+        // Generate Match Store
+        matchStore.initPlayers();
       } else {
         console.log('Go');
         close();
