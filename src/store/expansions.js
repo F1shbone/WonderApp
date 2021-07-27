@@ -70,6 +70,12 @@ export const useStore = defineStore({
         return [...acc, ...expansion.wonders];
       }, []);
     },
+    activeScores() {
+      return this.activeExpansions.reduce((acc, curr) => {
+        const expansion = expansions[curr.id];
+        return [...acc, ...expansion.score];
+      }, []);
+    },
   },
   actions: {
     toggleOwned(key) {

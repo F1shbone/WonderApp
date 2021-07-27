@@ -103,7 +103,7 @@ export default {
   background-color: #fff;
   border-top-left-radius: 2rem;
   border-top-right-radius: 2rem;
-  z-index: 20;
+  z-index: $--z-index-bottom-sheet;
   transform: translateY(0);
 
   &__drag {
@@ -134,6 +134,7 @@ export default {
     left: 0;
     right: 0;
     background-color: rgba(0, 0, 0, 0.5);
+    z-index: $--z-index-bg-shadow;
   }
 
   &__content {

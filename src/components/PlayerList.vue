@@ -52,11 +52,11 @@ export default {
       required: true,
     },
   },
-  setup() {
+  setup(props) {
     const { getRandomWonder } = useMatchStore();
 
     function rerollWonder(player) {
-      player.wonder = getRandomWonder();
+      player.wonder = getRandomWonder(props.players);
     }
 
     return {

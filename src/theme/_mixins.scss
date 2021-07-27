@@ -1,0 +1,9 @@
+@import './variables';
+
+@mixin flushBody {
+  display: block;
+  margin-left: -$--main-padding;
+  margin-right: -$--main-padding;
+  width: calc(100% + #{$--main-padding * 2});
+  max-width: calc(100% + #{$--main-padding * 2});
+}
