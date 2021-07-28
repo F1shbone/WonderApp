@@ -10,7 +10,7 @@
         <el-card-list-item class="listItem" v-for="expansion in expansions" :key="expansion.id">
           <div>{{ expansion.label }}</div>
           <div>
-            <el-switch v-model="expansion.owned" />
+            <el-switch :model-value="expansion.owned" @change="toggleOwned(expansion)" />
           </div>
         </el-card-list-item>
       </el-card-list>
@@ -35,52 +35,42 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { computed } from 'vue';
-
 import { useStore } from 'vuex';
-import { useStore as useExpansionsStore } from '@/pinia/expansions';
 
 import ElCard from '@/components/ElCard.vue';
 import ElCardList from '@/components/ElCardList.vue';
 import ElCardListItem from '@/components/ElCardListItem.vue';
 import { ElMessageBox } from 'element-plus';
 
-export default {
-  name: 'Settings',
-  components: {
-    ElCard,
-    ElCardList,
-    ElCardListItem,
-  },
-  setup() {
-    const store = useStore();
-    const { expansions } = useExpansionsStore();
+const store = useStore();
 
-    function addPlayer() {
-      ElMessageBox.prompt("What's the name of the new player?", 'Add Player', {
-        confirmButtonText: 'OK',
-        cancelButtonText: 'Cancel',
-      })
-        .then(({ value }) => {
-          console.log(value);
-          store.dispatch('players/addPlayer', { name: value });
-        })
-        .catch(() => {});
-    }
+//#region Expansions
+const expansions = computed(() => store.getters['expansions/expansions']);
+function toggleOwned(expansion) {
+  store.commit('expansions/TOGGLE_OWNED', expansion.id);
+}
+//#endregion
 
-    function removePlayer(player) {
-      store.commit('players/REMOVE_PLAYER', player);
-    }
+//#region Player
+const players = computed(() => store.getters['players/formatted']);
+function addPlayer() {
+  ElMessageBox.prompt("What's the name of the new player?", 'Add Player', {
+    confirmButtonText: 'OK',
+    cancelButtonText: 'Cancel',
+  })
+    .then(({ value }) => {
+      console.log(value);
+      store.dispatch('players/addPlayer', { name: value });
+    })
+    .catch(() => {});
+}
 
-    return {
-      expansions: computed(() => expansions),
-      players: computed(() => store.getters['players/formatted']),
-      addPlayer,
-      removePlayer,
-    };
-  },
-};
+function removePlayer(player) {
+  store.commit('players/REMOVE_PLAYER', player);
+}
+//#endregion
 </script>
 
 <style lang="scss">
