@@ -1,31 +1,32 @@
 @import './variables';
 @import '~element-plus/packages/theme-chalk/src/index.scss';
 
-#app {
+body {
   font-family: Avenir, Helvetica, Arial, sans-serif;
+  margin: 0;
   color: $--body-color;
+  background-color: $--body-bg;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-body {
-  margin: 0;
-}
 html,
 body,
 #app,
 #app > .el-container {
+  // iOS scroll bounce fix ----
   position: fixed;
   top: -0px;
+  overscroll-behavior-y: none;
+  // --------------------------
   height: 100%;
   width: 100%;
   overflow: hidden;
-  overscroll-behavior-y: none;
-  background-color: $--body-bg;
 }
 
 .el-header {
   padding: 0;
+  border-top: $--border-base;
   border-bottom: $--border-base;
 }
 .el-main {

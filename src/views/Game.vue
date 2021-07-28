@@ -31,6 +31,11 @@
         >
       </el-table-column>
     </el-table>
+
+    <div class="game__btn">
+      <el-button type="primary" icon="el-icon-share">Submit Score</el-button>
+    </div>
+    <!-- <br />&nbsp; -->
   </div>
 </template>
 
@@ -163,6 +168,20 @@ export default {
 
     &--active {
       box-shadow: inset 0 0 5px rgb(0 0 0 / 75%);
+    }
+  }
+
+  &__btn {
+    margin-top: 1rem;
+    // iOS margin-bottom hack
+    // margin-bottom gets collapsed since it's the last margin on page
+    &::after {
+      content: '';
+      display: block;
+      height: 1rem;
+    }
+    .el-button {
+      @include flushBody();
     }
   }
 
