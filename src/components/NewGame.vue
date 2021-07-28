@@ -1,10 +1,10 @@
 <template>
-  <bottom-sheet :visible="modelValue" @close="abort">
+  <bottom-sheet :visible="props.modelValue" @close="abort">
     <div class="new-game__container">
       <div class="new-game__main">
         <!-- step 1: -->
         <template v-if="step === 'settings'">
-          <player-selector />
+          <player-selector v-model="players" />
           <expansion-selector />
         </template>
         <!-- step 2: -->
@@ -19,83 +19,72 @@
   </bottom-sheet>
 </template>
 
-<script>
-import { ref, watchEffect } from 'vue';
+<script setup>
+import { ref } from 'vue';
+import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
-import { useStore as useExpansionsStore } from '@/pinia/expansions';
-import { useStore as usePlayersStore } from '@/pinia/players';
-import { useStore as useMatchStore } from '@/pinia/match';
 
 import BottomSheet from '@/components/BottomSheet.vue';
 import ExpansionSelector from '@/components/ExpansionSelector.vue';
 import PlayerSelector from '@/components/PlayerSelector.vue';
 import PlayerList from '@/components/PlayerList.vue';
 
-export default {
-  name: 'NewGame',
-  components: {
-    BottomSheet,
-    ExpansionSelector,
-    PlayerSelector,
-    PlayerList,
+const store = useStore();
+
+//#region v-model
+const props = defineProps({
+  modelValue: {
+    type: Boolean,
   },
-  emits: ['update:modelValue'],
-  props: {
-    modelValue: {
-      type: Boolean,
-    },
-  },
-  setup(props, { emit }) {
-    const playerStore = usePlayersStore();
-    const expansionStore = useExpansionsStore();
-    const matchStore = useMatchStore();
+});
+const emit = defineEmits(['update:modelValue']);
+//#endregion
 
-    //#region players
-    const players = ref([]);
-    //#endregion
+//#region players
+const players = ref(
+  store.state.players.players.map((player) => ({
+    id: player.id,
+    label: player.name,
+    value: false,
+  }))
+);
+// const players = ref([]);
+//#endregion
 
-    //#region BottomSheet
-    const router = useRouter();
-    watchEffect(() => {
-      if (props.modelValue) {
-        playerStore.resetActive();
-        expansionStore.resetActive();
-      }
-    });
-    // possible values: 'settings', 'confirm'
-    const step = ref('settings');
-    function start() {
-      if (step.value === 'settings') {
-        matchStore.initStore();
-        players.value = matchStore.players;
-        step.value = 'confirm';
-      } else {
-        close();
-        matchStore.players = players.value;
-        matchStore.ready = true;
-        router.push({ name: 'Game' });
-      }
-    }
+//#region BottomSheet
+const router = useRouter();
+// watchEffect(() => {
+//   if (props.modelValue) {
+//     playerStore.resetActive();
+//     expansionStore.resetActive();
+//   }
+// });
+// TODO: replace with better mechanism
+// possible values: 'settings', 'confirm'
+const step = ref('settings');
+function start() {
+  if (step.value === 'settings') {
+    // matchStore.initStore();
+    // players.value = matchStore.players;
+    step.value = 'confirm';
+  } else {
+    close();
+    // matchStore.players = players.value;
+    // matchStore.ready = true;
+    router.push({ name: 'Game' });
+  }
+}
 
-    function close() {
-      emit('update:modelValue', false);
-      step.value = 'settings';
-    }
-    function abort() {
-      playerStore.resetActive();
-      expansionStore.resetActive();
-      close();
-    }
-    //#endregion
-
-    return {
-      abort,
-      step,
-      start,
-      players,
-    };
-  },
-};
+function close() {
+  emit('update:modelValue', false);
+  step.value = 'settings';
+}
+function abort() {
+  // playerStore.resetActive();
+  // expansionStore.resetActive();
+  close();
+}
+//#endregion
 </script>
 
 <style lang="scss" scoped>
