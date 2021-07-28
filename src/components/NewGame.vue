@@ -1,15 +1,15 @@
 <template>
-  <bottom-sheet :visible="props.modelValue" @close="abort">
+  <bottom-sheet :visible="props.modelValue" @close="close">
     <div class="new-game__container">
       <div class="new-game__main">
         <!-- step 1: -->
-        <template v-if="step === 'stage1'">
+        <template v-if="step === STEPS.ONE">
           <player-selector v-model="players" />
           <expansion-selector v-model="expansions" />
         </template>
         <!-- step 2: -->
-        <template v-if="step === 'stage2'">
-          <player-list v-model="players" />
+        <template v-if="step === STEPS.TWO">
+          <player-list v-model="players" @reroll="rerollWonder" />
         </template>
       </div>
       <div class="new-game__footer">
@@ -45,19 +45,21 @@ const emit = defineEmits(['update:modelValue']);
 //#endregion
 
 //#region expansions
-const expansions = ref(
-  store.getters['expansions/ownedExpansions'].map((expansion) => ({
+const expansions = ref(initExpansions());
+function initExpansions() {
+  return store.getters['expansions/ownedExpansions'].map((expansion) => ({
     id: expansion.id,
     label: expansion.label,
     value: expansion.id === BASE.id ? true : false,
-  }))
-);
+  }));
+}
 const activeExpansionIds = computed(() => expansions.value.filter((e) => e.value).map((e) => e.id));
 //#endregion
 
 //#region players
-const players = ref(
-  store.state.players.players.map((player) => ({
+const players = ref(initPlayers());
+function initPlayers() {
+  return store.state.players.players.map((player) => ({
     id: player.id,
     label: player.name,
     value: false,
@@ -66,53 +68,68 @@ const players = ref(
       return Object.values(this.score).reduce((acc, val) => (acc += val), 0);
     },
     wonder: undefined,
-  }))
-);
-// const wonders = ref([]);
-function initPlayers() {
-  // Shuffle player order
-  players.value = ShuffleArray(players.value);
-  // Init scores for selected expansion(s)
-  const scoreIds = store.getters['expansions/scores'](activeExpansionIds.value);
-  players.value.forEach((player) => {
-    scoreIds.forEach((score) => (player.score[score] = 0));
-  });
-  // Roll unique wonders for each player
+  }));
+}
+//#endregion
+
+//#region Wonders
+const wonders = new Set();
+function getRandomWonder() {
   const wonderIds = store.getters['expansions/wonders'](activeExpansionIds.value);
-  console.log(wonderIds);
+  let wonder = undefined;
+  do {
+    wonder = wonderIds[Math.floor(Math.random() * wonderIds.length)];
+  } while (wonders.has(wonder));
+
+  wonders.add(wonder);
+  return wonder;
+}
+function rerollWonder(player) {
+  const oldId = player.wonder;
+  player.wonder = getRandomWonder();
+  wonders.delete(oldId);
 }
 //#endregion
 
 //#region BottomSheet
-// possible values: 'stage1', 'stage2'
-const step = ref('stage1');
+const STEPS = {
+  ONE: 'step1',
+  TWO: 'step2',
+};
+const step = ref(STEPS.ONE);
+
+function initMatch() {
+  // Shuffle player order
+  players.value = ShuffleArray(players.value);
+  const scoreIds = store.getters['expansions/scores'](activeExpansionIds.value);
+  players.value.forEach((player) => {
+    // Init scores for selected expansion(s)
+    scoreIds.forEach((score) => (player.score[score] = 0));
+    // Roll unique wonders for each player
+    player.wonder = getRandomWonder();
+  });
+}
+
 function start() {
   switch (step.value) {
-    case 'stage1': {
-      initPlayers();
-      // matchStore.initStore();
-      // players.value = matchStore.players;
-      step.value = 'stage2';
+    case STEPS.ONE: {
+      initMatch();
+      step.value = STEPS.TWO;
       break;
     }
-    case 'stage2': {
-      // matchStore.players = players.value;
-      // matchStore.ready = true;
+    case STEPS.TWO: {
+      // TODO: init match store
       router.push({ name: 'Game' });
       close();
       break;
     }
   }
 }
-
 function close() {
   emit('update:modelValue', false);
-  step.value = 'settings';
-}
-function abort() {
-  // playerStore.resetActive();
-  // expansionStore.resetActive();
-  close();
+  step.value = STEPS.ONE;
+  expansions.value = initExpansions();
+  players.value = initPlayers();
 }
 //#endregion
 </script>

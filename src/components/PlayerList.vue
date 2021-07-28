@@ -16,7 +16,7 @@
             <el-card-list-item>
               <div class="playerList__entry">
                 <div>{{ element.label }}</div>
-                <div class="text-secondary">{{ element.wonder }}</div>
+                <div class="text-secondary">{{ getWonderName(element.wonder) }}</div>
               </div>
               <div class="playerList__append">
                 <el-button circle icon="el-icon-refresh" @click="rerollWonder(element)">
@@ -33,6 +33,8 @@
 
 <script setup>
 import { computed } from 'vue';
+
+import * as wonders from '@/store/gameInfo/wonders';
 
 import draggable from 'vuedraggable';
 import ElCard from '@/components/ElCard.vue';
@@ -53,16 +55,18 @@ const props = defineProps({
     type: Array,
   },
 });
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits(['update:modelValue', 'reroll']);
 
 const players = computed({
   get: () => props.modelValue,
   set: (val) => emit('update:modelValue', val),
 });
 
-function rerollWonder() {
-  // function rerollWonder(player) {
-  // player.wonder = getRandomWonder(props.players);
+function getWonderName(wonderId) {
+  return wonders[wonderId].label.short;
+}
+function rerollWonder(player) {
+  emit('reroll', player);
 }
 //#endregion
 </script>
