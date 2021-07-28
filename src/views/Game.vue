@@ -3,39 +3,39 @@
     <div class="game__empty" v-if="!ready">
       <el-empty description="No active game" />
     </div>
+    <template v-else>
+      <h1>Score:</h1>
 
-    <h1>Score:</h1>
-
-    <el-table border :data="scoreTableRows" :row-style="getRowBg" @cell-click="cellClick" ref="tableRef">
-      <el-table-column fixed label="" :width="colIcon">
-        <template #default="{ row }">
-          <div class="game__rowIcon" v-html="row.category.icon" />
-        </template>
-      </el-table-column>
-      <el-table-column
-        v-for="player in players"
-        :key="`player-${player.id}`"
-        :prop="`player-${player.id}`"
-        :label="player.name"
-        :width="colWidth"
-      >
-        <template #default="{ row, column }"
-          ><div
-            :class="{
-              game__cell: true,
-              'game__cell--active': row.no === activeCell.row && column.no === activeCell.col,
-            }"
-          >
-            {{ row[`player-${player.id}`] }}
-          </div></template
+      <el-table border :data="scoreTableRows" :row-style="getRowBg" @cell-click="cellClick" ref="tableRef">
+        <el-table-column fixed label="" :width="colIcon">
+          <template #default="{ row }">
+            <div class="game__rowIcon" v-html="row.category.icon" />
+          </template>
+        </el-table-column>
+        <el-table-column
+          v-for="player in players"
+          :key="`player-${player.id}`"
+          :prop="`player-${player.id}`"
+          :label="player.name"
+          :width="colWidth"
         >
-      </el-table-column>
-    </el-table>
+          <template #default="{ row, column }"
+            ><div
+              :class="{
+                game__cell: true,
+                'game__cell--active': row.no === activeCell.row && column.no === activeCell.col,
+              }"
+            >
+              {{ row[`player-${player.id}`] }}
+            </div></template
+          >
+        </el-table-column>
+      </el-table>
 
-    <div class="game__btn">
-      <el-button type="primary" icon="el-icon-share">Submit Score</el-button>
-    </div>
-    <!-- <br />&nbsp; -->
+      <div class="game__btn">
+        <el-button type="primary" icon="el-icon-share">Submit Score</el-button>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -132,11 +132,7 @@ export default {
   height: 100%;
 
   &__empty {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: -$--main-padding;
-    right: -$--main-padding;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
