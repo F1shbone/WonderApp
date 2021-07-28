@@ -5,7 +5,7 @@
         <!-- step 1: -->
         <template v-if="step === 'settings'">
           <player-selector v-model="players" />
-          <expansion-selector />
+          <expansion-selector v-model="expansions" />
         </template>
         <!-- step 2: -->
         <template v-if="step === 'confirm'">
@@ -23,6 +23,8 @@
 import { ref } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
+
+import { BASE } from '@/store/gameInfo/expansions';
 
 import BottomSheet from '@/components/BottomSheet.vue';
 import ExpansionSelector from '@/components/ExpansionSelector.vue';
@@ -48,7 +50,16 @@ const players = ref(
     value: false,
   }))
 );
-// const players = ref([]);
+//#endregion
+
+//#region expansions
+const expansions = ref(
+  store.getters['expansions/ownedExpansions'].map((expansion) => ({
+    id: expansion.id,
+    label: expansion.label,
+    value: expansion.id === BASE.id ? true : false,
+  }))
+);
 //#endregion
 
 //#region BottomSheet

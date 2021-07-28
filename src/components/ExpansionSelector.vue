@@ -7,29 +7,64 @@
     </h2>
     <div>
       <el-checkbox-button
-        v-for="expansion in expansions"
-        :key="expansion.id"
-        :label="expansion.id"
-        :checked="expansion.active"
-        @input="toggleActive(expansion.id)"
+        v-for="(expansion, i) in expansions"
+        :key="i"
+        :label="expansion.label"
+        :checked="expansion.value"
+        @input="toggle(expansion)"
         >{{ expansion.label }}</el-checkbox-button
       >
     </div>
   </div>
 </template>
 
-<script>
-import { useStore as useExpansionsStore } from '@/pinia/expansions';
-import { BASE } from '@/pinia/gameInfo/expansions';
+<script setup>
+// import { useStore as useExpansionsStore } from '@/pinia/expansions';
+import { computed } from 'vue';
+import { BASE } from '@/store/gameInfo/expansions';
 
-export default {
-  setup() {
-    const { ownedExpansions, toggleActive } = useExpansionsStore();
-    const expansions = ownedExpansions.filter((e) => e.id !== BASE.id);
+// export default {
+//   setup() {
+//     const { ownedExpansions, toggleActive } = useExpansionsStore();
+//     const expansions = ownedExpansions.filter((e) => e.id !== BASE.id);
 
-    return { expansions, toggleActive };
+//     return { expansions, toggleActive };
+//   },
+// };
+
+//#region v-model
+/**
+ * modelValue: {
+ *   id: number,
+ *   label: string;
+ *   value: boolean;
+ * }[]
+ */
+const props = defineProps({
+  modelValue: {
+    type: Array,
   },
-};
+});
+const emit = defineEmits(['update:modelValue']);
+
+const expansions = computed(() => props.modelValue.filter((e) => e.id !== BASE.id));
+function toggle(expansion) {
+  emit(
+    'update:modelValue',
+    props.modelValue.map((e) => {
+      if (e.id === expansion.id) {
+        return {
+          id: e.id,
+          label: e.label,
+          value: !e.value,
+        };
+      } else {
+        return e;
+      }
+    })
+  );
+}
+//#endregion
 </script>
 
 <style lang="scss">
