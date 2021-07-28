@@ -23,9 +23,11 @@
       </template>
       <el-card-list flush>
         <el-card-list-item class="listItem" v-for="player in players" :key="player.name">
-          <div>{{ player.name }}</div>
           <div>
-            <el-button circle icon="el-icon-delete" />
+            {{ player.name }} <br /><small class="text-secondary">Added: {{ player.added }}</small>
+          </div>
+          <div>
+            <el-button circle icon="el-icon-delete" @click="removePlayer(player)" />
           </div>
         </el-card-list-item>
       </el-card-list>
@@ -36,8 +38,8 @@
 <script>
 import { computed } from 'vue';
 
+import { useStore } from 'vuex';
 import { useStore as useExpansionsStore } from '@/pinia/expansions';
-import { useStore as usePlayerStore } from '@/pinia/players';
 
 import ElCard from '@/components/ElCard.vue';
 import ElCardList from '@/components/ElCardList.vue';
@@ -52,8 +54,8 @@ export default {
     ElCardListItem,
   },
   setup() {
+    const store = useStore();
     const { expansions } = useExpansionsStore();
-    const { players } = usePlayerStore();
 
     function addPlayer() {
       ElMessageBox.prompt("What's the name of the new player?", 'Add Player', {
@@ -61,19 +63,21 @@ export default {
         cancelButtonText: 'Cancel',
       })
         .then(({ value }) => {
-          players.push({
-            name: value,
-            active: false,
-          });
+          console.log(value);
+          store.dispatch('players/addPlayer', { name: value });
         })
         .catch(() => {});
     }
 
+    function removePlayer(player) {
+      store.commit('players/REMOVE_PLAYER', player);
+    }
+
     return {
-      // expansions: ownedExpansions,
       expansions: computed(() => expansions),
-      players,
+      players: computed(() => store.getters['players/formatted']),
       addPlayer,
+      removePlayer,
     };
   },
 };
