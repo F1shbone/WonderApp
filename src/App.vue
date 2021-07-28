@@ -37,38 +37,22 @@
   </el-container>
 </template>
 
-<script>
+<script setup>
 import { ref } from 'vue';
-import { useStore as useMatchStore } from '@/pinia/match';
 
 import NewGame from '@/components/NewGame.vue';
 
-export default {
-  components: {
-    NewGame,
-  },
-  setup() {
-    const matchStore = useMatchStore();
+function blur({ srcElement }) {
+  setTimeout(() => {
+    srcElement.blur();
+  }, 250);
+}
 
-    function blur({ srcElement }) {
-      setTimeout(() => {
-        srcElement.blur();
-      }, 250);
-    }
-
-    const newGame = ref(false);
-    function showNewGame() {
-      newGame.value = true;
-      matchStore.$reset();
-    }
-
-    return {
-      blur,
-      newGame,
-      showNewGame,
-    };
-  },
-};
+const newGame = ref(false);
+function showNewGame() {
+  newGame.value = true;
+  // TODO: reset match
+}
 </script>
 
 <style lang="scss">

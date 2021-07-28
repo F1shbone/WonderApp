@@ -43,14 +43,9 @@ function toggle(expansion) {
     'update:modelValue',
     props.modelValue.map((e) => {
       if (e.id === expansion.id) {
-        return {
-          id: e.id,
-          label: e.label,
-          value: !e.value,
-        };
-      } else {
-        return e;
+        e.value = !e.value;
       }
+      return e;
     })
   );
 }

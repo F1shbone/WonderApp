@@ -68,14 +68,14 @@ export default {
     ownedExpansions(state, { expansions }) {
       return expansions.filter((e) => e.owned);
     },
-    wonders: () => (expansions) =>
-      expansions.reduce((wonders, expansion) => {
-        wonders.push(...expansion.wonders);
+    wonders: (state) => (expansionIds) =>
+      expansionIds.reduce((wonders, id) => {
+        wonders.push(...state[id].wonders);
         return wonders;
       }, []),
-    scores: () => (expansions) =>
-      expansions.reduce((scores, expansion) => {
-        scores.push(...expansion.scores);
+    scores: (state) => (expansionIds) =>
+      expansionIds.reduce((scores, id) => {
+        scores.push(...state[id].scores);
         return scores;
       }, []),
   },

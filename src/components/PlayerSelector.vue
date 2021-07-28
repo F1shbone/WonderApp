@@ -35,14 +35,9 @@ function toggle(player) {
     'update:modelValue',
     props.modelValue.map((e) => {
       if (e.id === player.id) {
-        return {
-          id: e.id,
-          label: e.label,
-          value: !e.value,
-        };
-      } else {
-        return e;
+        e.value = !e.value;
       }
+      return e;
     })
   );
 }

@@ -3,12 +3,12 @@
     <div class="new-game__container">
       <div class="new-game__main">
         <!-- step 1: -->
-        <template v-if="step === 'settings'">
+        <template v-if="step === 'stage1'">
           <player-selector v-model="players" />
           <expansion-selector v-model="expansions" />
         </template>
         <!-- step 2: -->
-        <template v-if="step === 'confirm'">
+        <template v-if="step === 'stage2'">
           <player-list v-model="players" />
         </template>
       </div>
@@ -20,11 +20,12 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 
 import { BASE } from '@/store/gameInfo/expansions';
+import { ShuffleArray } from '@/utils/shuffleArray';
 
 import BottomSheet from '@/components/BottomSheet.vue';
 import ExpansionSelector from '@/components/ExpansionSelector.vue';
@@ -43,18 +44,6 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue']);
 //#endregion
 
-//#region players
-const players = ref(
-  store.state.players.players.map((player) => ({
-    id: player.id,
-    label: player.name,
-    value: false,
-    score: undefined,
-    wonder: undefined,
-  }))
-);
-//#endregion
-
 //#region expansions
 const expansions = ref(
   store.getters['expansions/ownedExpansions'].map((expansion) => ({
@@ -63,27 +52,56 @@ const expansions = ref(
     value: expansion.id === BASE.id ? true : false,
   }))
 );
+const activeExpansionIds = computed(() => expansions.value.filter((e) => e.value).map((e) => e.id));
+//#endregion
+
+//#region players
+const players = ref(
+  store.state.players.players.map((player) => ({
+    id: player.id,
+    label: player.name,
+    value: false,
+    score: {},
+    get total() {
+      return Object.values(this.score).reduce((acc, val) => (acc += val), 0);
+    },
+    wonder: undefined,
+  }))
+);
+// const wonders = ref([]);
+function initPlayers() {
+  // Shuffle player order
+  players.value = ShuffleArray(players.value);
+  // Init scores for selected expansion(s)
+  const scoreIds = store.getters['expansions/scores'](activeExpansionIds.value);
+  players.value.forEach((player) => {
+    scoreIds.forEach((score) => (player.score[score] = 0));
+  });
+  // Roll unique wonders for each player
+  const wonderIds = store.getters['expansions/wonders'](activeExpansionIds.value);
+  console.log(wonderIds);
+}
 //#endregion
 
 //#region BottomSheet
-// watchEffect(() => {
-//   if (props.modelValue) {
-//     playerStore.resetActive();
-//     expansionStore.resetActive();
-//   }
-// });
-// possible values: 'settings', 'confirm'
-const step = ref('settings');
+// possible values: 'stage1', 'stage2'
+const step = ref('stage1');
 function start() {
-  if (step.value === 'settings') {
-    // matchStore.initStore();
-    // players.value = matchStore.players;
-    step.value = 'confirm';
-  } else {
-    close();
-    // matchStore.players = players.value;
-    // matchStore.ready = true;
-    router.push({ name: 'Game' });
+  switch (step.value) {
+    case 'stage1': {
+      initPlayers();
+      // matchStore.initStore();
+      // players.value = matchStore.players;
+      step.value = 'stage2';
+      break;
+    }
+    case 'stage2': {
+      // matchStore.players = players.value;
+      // matchStore.ready = true;
+      router.push({ name: 'Game' });
+      close();
+      break;
+    }
   }
 }
 
