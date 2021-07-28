@@ -1,12 +1,12 @@
 <template>
   <div class="game">
-    <div class="game__empty" v-if="playerCount === 0">
+    <div class="game__empty" v-if="!ready">
       <el-empty description="No active game" />
     </div>
 
     <h1>Score:</h1>
 
-    <el-table :data="scoreTableView" :row-style="getRowBg" border ref="tableRef">
+    <el-table border :data="scoreTableRows" :row-style="getRowBg" @cell-click="cellClick" ref="tableRef">
       <el-table-column fixed label="" :width="colIcon">
         <template #default="{ row }">
           <div class="game__rowIcon" v-html="row.category.icon" />
@@ -18,7 +18,18 @@
         :prop="`player-${player.id}`"
         :label="player.name"
         :width="colWidth"
-      />
+      >
+        <template #default="{ row, column }"
+          ><div
+            :class="{
+              game__cell: true,
+              'game__cell--active': row.no === activeCell.row && column.no === activeCell.col,
+            }"
+          >
+            {{ row[`player-${player.id}`] }}
+          </div></template
+        >
+      </el-table-column>
     </el-table>
   </div>
 </template>
@@ -41,7 +52,7 @@ export default {
     const colWidth = ref(0);
     useResizeObserver(tableRef, (entries) => {
       const width = entries[0].contentRect.width - colIcon.value;
-      colWidth.value = width / playerCount.value;
+      colWidth.value = width / players.value.length;
       if (colWidth.value < 90) colWidth.value = 90;
       // Update table
       tableRef.value.doLayout();
@@ -51,13 +62,30 @@ export default {
     }
     //#endregion
 
+    //#region Table Events
+    const activeCell = ref({
+      row: undefined,
+      col: undefined,
+    });
+    function cellClick(row, col) {
+      if (col.no === 0 || row.no === undefined) {
+        activeCell.value.row = undefined;
+        activeCell.value.col = undefined;
+      } else {
+        activeCell.value.row = row.no;
+        activeCell.value.col = col.no;
+      }
+    }
+    //#endregion
+
     //#region Score
+    const ready = computed(() => matchStore.ready);
     const players = computed(() => matchStore.players);
-    const playerCount = computed(() => matchStore.playerCount);
-    const scoreTableView = computed(() => {
-      const score = matchStore.activeScores.map((category) => {
+    const scoreTableRows = computed(() => {
+      const score = matchStore.scores.map((category, i) => {
         const row = {
           category,
+          no: i + 1,
         };
         players.value.forEach((player) => {
           row[`player-${player.id}`] = player.score[category.id];
@@ -80,9 +108,11 @@ export default {
       colIcon,
       colWidth,
       getRowBg,
-      scoreTableView,
-      playerCount,
+      activeCell,
+      cellClick,
+      scoreTableRows,
       players,
+      ready,
     };
   },
 };
@@ -117,6 +147,7 @@ export default {
     display: flex;
     align-content: center;
     justify-content: center;
+    flex: 1 1 100%;
 
     svg {
       flex: 1 1 100%;
@@ -125,15 +156,46 @@ export default {
     }
   }
 
+  &__cell {
+    display: flex;
+    justify-content: center;
+    padding: 0.75rem;
+
+    &--active {
+      box-shadow: inset 0 0 5px rgb(0 0 0 / 75%);
+    }
+  }
+
   .el-table {
     @include flushBody();
-    .cell {
+
+    &__body tr.hover-row > td,
+    &__body tr.hover-row.current-row > td {
+      background-color: initial;
+    }
+
+    &__body-wrapper,
+    &__fixed-body-wrapper {
+      tr:nth-last-child(2) td {
+        border-bottom: 2px solid $--color-primary;
+      }
+      tr:last-child td {
+        background-color: rgba($--color-primary, 0.5) !important;
+      }
+    }
+
+    th {
       text-align: center;
     }
 
+    td,
+    .cell {
+      padding: 0 !important;
+    }
+
     &__row td:first-child {
-      color: $--body-color;
-      background-color: $--body-bg;
+      color: $--body-color !important;
+      background-color: $--body-bg !important;
     }
   }
 }
