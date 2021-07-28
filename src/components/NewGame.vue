@@ -9,7 +9,7 @@
         </template>
         <!-- step 2: -->
         <template v-if="step === 'confirm'">
-          <player-list :players="players" />
+          <player-list v-model="players" />
         </template>
       </div>
       <div class="new-game__footer">
@@ -32,6 +32,7 @@ import PlayerSelector from '@/components/PlayerSelector.vue';
 import PlayerList from '@/components/PlayerList.vue';
 
 const store = useStore();
+const router = useRouter();
 
 //#region v-model
 const props = defineProps({
@@ -48,6 +49,8 @@ const players = ref(
     id: player.id,
     label: player.name,
     value: false,
+    score: undefined,
+    wonder: undefined,
   }))
 );
 //#endregion
@@ -63,14 +66,12 @@ const expansions = ref(
 //#endregion
 
 //#region BottomSheet
-const router = useRouter();
 // watchEffect(() => {
 //   if (props.modelValue) {
 //     playerStore.resetActive();
 //     expansionStore.resetActive();
 //   }
 // });
-// TODO: replace with better mechanism
 // possible values: 'settings', 'confirm'
 const step = ref('settings');
 function start() {

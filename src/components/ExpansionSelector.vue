@@ -19,18 +19,8 @@
 </template>
 
 <script setup>
-// import { useStore as useExpansionsStore } from '@/pinia/expansions';
 import { computed } from 'vue';
 import { BASE } from '@/store/gameInfo/expansions';
-
-// export default {
-//   setup() {
-//     const { ownedExpansions, toggleActive } = useExpansionsStore();
-//     const expansions = ownedExpansions.filter((e) => e.id !== BASE.id);
-
-//     return { expansions, toggleActive };
-//   },
-// };
 
 //#region v-model
 /**
