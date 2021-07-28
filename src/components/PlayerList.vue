@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { useStore as useMatchStore } from '@/store/match';
+import { useStore as useMatchStore } from '@/pinia/match';
 
 import draggable from 'vuedraggable';
 import ElCard from '@/components/ElCard.vue';

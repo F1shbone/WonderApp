@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { useStore as usePlayersStore } from '@/store/players';
+import { useStore as usePlayersStore } from '@/pinia/players';
 
 export default {
   setup() {

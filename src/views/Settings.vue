@@ -36,8 +36,8 @@
 <script>
 import { computed } from 'vue';
 
-import { useStore as useExpansionsStore } from '@/store/expansions';
-import { useStore as usePlayerStore } from '@/store/players';
+import { useStore as useExpansionsStore } from '@/pinia/expansions';
+import { useStore as usePlayerStore } from '@/pinia/players';
 
 import ElCard from '@/components/ElCard.vue';
 import ElCardList from '@/components/ElCardList.vue';

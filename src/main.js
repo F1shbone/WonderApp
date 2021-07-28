@@ -1,7 +1,7 @@
 import { createApp } from 'vue';
 import './registerServiceWorker';
 import router from './router';
-import pinia from './store';
+import pinia from './pinia';
 
 import { GesturePlugin } from '@vueuse/gesture';
 

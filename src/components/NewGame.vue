@@ -22,9 +22,9 @@
 <script>
 import { ref, watchEffect } from 'vue';
 import { useRouter } from 'vue-router';
-import { useStore as useExpansionsStore } from '@/store/expansions';
-import { useStore as usePlayersStore } from '@/store/players';
-import { useStore as useMatchStore } from '@/store/match';
+import { useStore as useExpansionsStore } from '@/pinia/expansions';
+import { useStore as usePlayersStore } from '@/pinia/players';
+import { useStore as useMatchStore } from '@/pinia/match';
 
 import BottomSheet from '@/components/BottomSheet.vue';
 import ExpansionSelector from '@/components/ExpansionSelector.vue';

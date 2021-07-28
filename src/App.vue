@@ -39,7 +39,7 @@
 
 <script>
 import { ref } from 'vue';
-import { useStore as useMatchStore } from '@/store/match';
+import { useStore as useMatchStore } from '@/pinia/match';
 
 import NewGame from '@/components/NewGame.vue';
 

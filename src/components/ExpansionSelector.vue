@@ -19,8 +19,8 @@
 </template>
 
 <script>
-import { useStore as useExpansionsStore } from '@/store/expansions';
-import { BASE } from '@/store/gameInfo/expansions';
+import { useStore as useExpansionsStore } from '@/pinia/expansions';
+import { BASE } from '@/pinia/gameInfo/expansions';
 
 export default {
   setup() {
