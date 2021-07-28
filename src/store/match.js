@@ -8,32 +8,30 @@ export const useStore = defineStore({
   id: 'match',
   state() {
     return {
+      ready: false,
       players: [],
+      scores: [],
     };
   },
   getters: {
     activePlayers() {
       return usePlayerStore().activePlayers;
     },
-    activeScores() {
-      return useExpansionStore().activeScores;
-    },
     activeWonders() {
       return useExpansionStore().activeWonders;
     },
-    playerCount(state) {
-      return state.players.length;
-    },
   },
   actions: {
-    initPlayers() {
+    initStore() {
+      this.scores = useExpansionStore().activeScores;
+
       const players = ShuffleArray(
         this.activePlayers.map((player, i) => {
           const row = {
             id: i,
             name: player.name,
             wonder: {},
-            score: this.activeScores.reduce((acc, curr) => {
+            score: this.scores.reduce((acc, curr) => {
               acc[curr.id] = 0;
               return acc;
             }, {}),
@@ -50,7 +48,7 @@ export const useStore = defineStore({
         return player;
       });
 
-      return players;
+      this.players = players;
     },
     getRandomWonder(players) {
       const wonderSet = new Set(players.map((e) => e.wonder.id));

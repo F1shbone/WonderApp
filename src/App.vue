@@ -39,6 +39,7 @@
 
 <script>
 import { ref } from 'vue';
+import { useStore as useMatchStore } from '@/store/match';
 
 import NewGame from '@/components/NewGame.vue';
 
@@ -47,6 +48,8 @@ export default {
     NewGame,
   },
   setup() {
+    const matchStore = useMatchStore();
+
     function blur({ srcElement }) {
       setTimeout(() => {
         srcElement.blur();
@@ -56,6 +59,7 @@ export default {
     const newGame = ref(false);
     function showNewGame() {
       newGame.value = true;
+      matchStore.$reset();
     }
 
     return {

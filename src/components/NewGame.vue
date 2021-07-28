@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+import { ref, watchEffect } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore as useExpansionsStore } from '@/store/expansions';
 import { useStore as usePlayersStore } from '@/store/players';
@@ -56,15 +56,23 @@ export default {
 
     //#region BottomSheet
     const router = useRouter();
+    watchEffect(() => {
+      if (props.modelValue) {
+        playerStore.resetActive();
+        expansionStore.resetActive();
+      }
+    });
     // possible values: 'settings', 'confirm'
     const step = ref('settings');
     function start() {
       if (step.value === 'settings') {
-        players.value = matchStore.initPlayers();
+        matchStore.initStore();
+        players.value = matchStore.players;
         step.value = 'confirm';
       } else {
         close();
         matchStore.players = players.value;
+        matchStore.ready = true;
         router.push({ name: 'Game' });
       }
     }
@@ -76,7 +84,6 @@ export default {
     function abort() {
       playerStore.resetActive();
       expansionStore.resetActive();
-      matchStore.$reset();
       close();
     }
     //#endregion
