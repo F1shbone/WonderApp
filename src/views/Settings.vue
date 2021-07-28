@@ -5,13 +5,12 @@
     <el-card full>
       <template #header>
         <h3>Expansions</h3>
-        <el-button class="button" type="text">Add Expansion</el-button>
       </template>
       <el-card-list flush>
         <el-card-list-item class="listItem" v-for="expansion in expansions" :key="expansion.id">
           <div>{{ expansion.label }}</div>
           <div>
-            <el-button circle icon="el-icon-delete" @click="toggleExpansion(expansion.id)" />
+            <el-switch v-model="expansion.owned" />
           </div>
         </el-card-list-item>
       </el-card-list>
@@ -20,7 +19,7 @@
     <el-card full>
       <template #header>
         <h3>Players</h3>
-        <el-button class="button" type="text">New Player</el-button>
+        <el-button type="text" @click="addPlayer">New Player</el-button>
       </template>
       <el-card-list flush>
         <el-card-list-item class="listItem" v-for="player in players" :key="player.name">
@@ -35,13 +34,15 @@
 </template>
 
 <script>
+import { computed } from 'vue';
+
+import { useStore as useExpansionsStore } from '@/store/expansions';
+import { useStore as usePlayerStore } from '@/store/players';
+
 import ElCard from '@/components/ElCard.vue';
 import ElCardList from '@/components/ElCardList.vue';
 import ElCardListItem from '@/components/ElCardListItem.vue';
-
-import { computed } from 'vue';
-import { useStore as useExpansionsStore } from '@/store/expansions';
-import { useStore as usePlayerStore } from '@/store/players';
+import { ElMessageBox } from 'element-plus';
 
 export default {
   name: 'Settings',
@@ -51,15 +52,28 @@ export default {
     ElCardListItem,
   },
   setup() {
-    const { expansions, toggleOwned } = useExpansionsStore();
-    const ownedExpansions = computed(() => expansions.filter((e) => e.owned));
-
+    const { expansions } = useExpansionsStore();
     const { players } = usePlayerStore();
 
+    function addPlayer() {
+      ElMessageBox.prompt("What's the name of the new player?", 'Add Player', {
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
+      })
+        .then(({ value }) => {
+          players.push({
+            name: value,
+            active: false,
+          });
+        })
+        .catch(() => {});
+    }
+
     return {
-      expansions: ownedExpansions,
-      toggleExpansion: toggleOwned,
+      // expansions: ownedExpansions,
+      expansions: computed(() => expansions),
       players,
+      addPlayer,
     };
   },
 };
@@ -89,6 +103,7 @@ export default {
   }
 
   .listItem {
+    height: 2.5rem;
     display: flex;
     align-items: center;
     div {
@@ -100,5 +115,8 @@ export default {
       margin-left: auto;
     }
   }
+}
+.el-message-box {
+  width: 90%;
 }
 </style>

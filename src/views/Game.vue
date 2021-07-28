@@ -4,7 +4,7 @@
       <el-empty description="No active game" />
     </div>
     <template v-else>
-      <h1>Score:</h1>
+      <h1>Score</h1>
 
       <el-table border :data="scoreTableRows" :row-style="getRowBg" @cell-click="cellClick" ref="tableRef">
         <el-table-column fixed label="" :width="colIcon">
@@ -79,6 +79,11 @@ export default {
       } else {
         activeCell.value.row = row.no;
         activeCell.value.col = col.no;
+
+        // TODO: remove test code:
+        const scoreId = scoreTableRows.value[activeCell.value.row - 1].category.id;
+        const newVal = Math.floor(Math.random() * (10 - 1) + 1);
+        matchStore.players[activeCell.value.col - 1].score[scoreId] = newVal;
       }
     }
     //#endregion
