@@ -43,7 +43,7 @@
 import { computed, ref } from 'vue';
 import { useResizeObserver } from '@vueuse/core';
 import { useStore as useMatchStore } from '@/pinia/match';
-import { TOTAL } from '@/pinia/gameInfo/score';
+import { TOTAL } from '@/store/gameInfo/score';
 
 export default {
   name: 'Game',

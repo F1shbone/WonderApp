@@ -118,7 +118,10 @@ function start() {
       break;
     }
     case STEPS.TWO: {
-      // TODO: init match store
+      store.dispatch('match/init', {
+        expansionIds: activeExpansionIds.value,
+        players: players.value,
+      });
       router.push({ name: 'Game' });
       close();
       break;
@@ -128,6 +131,7 @@ function start() {
 function close() {
   emit('update:modelValue', false);
   step.value = STEPS.ONE;
+  // Reset data
   expansions.value = initExpansions();
   players.value = initPlayers();
 }
