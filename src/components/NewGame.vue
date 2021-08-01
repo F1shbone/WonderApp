@@ -54,6 +54,7 @@ function initExpansions() {
   }));
 }
 const activeExpansionIds = computed(() => expansions.value.filter((e) => e.value).map((e) => e.id));
+const activeScoreIds = computed(() => store.getters['expansions/scores'](activeExpansionIds.value));
 //#endregion
 
 //#region players
@@ -100,11 +101,10 @@ const step = ref(STEPS.ONE);
 
 function initMatch() {
   // Shuffle player order
-  players.value = ShuffleArray(players.value);
-  const scoreIds = store.getters['expansions/scores'](activeExpansionIds.value);
+  players.value = ShuffleArray(players.value.filter((e) => e.value));
   players.value.forEach((player) => {
     // Init scores for selected expansion(s)
-    scoreIds.forEach((score) => (player.score[score] = 0));
+    activeScoreIds.value.forEach((score) => (player.score[score] = 0));
     // Roll unique wonders for each player
     player.wonder = getRandomWonder();
   });
@@ -120,6 +120,7 @@ function start() {
     case STEPS.TWO: {
       store.dispatch('match/init', {
         expansionIds: activeExpansionIds.value,
+        scoreIds: activeScoreIds.value,
         players: players.value,
       });
       router.push({ name: 'Game' });

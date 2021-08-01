@@ -16,7 +16,7 @@
           v-for="player in players"
           :key="`player-${player.id}`"
           :prop="`player-${player.id}`"
-          :label="player.name"
+          :label="getPlayerName(player.id)"
           :width="colWidth"
         >
           <template #default="{ row, column }"
@@ -39,93 +39,87 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { computed, ref } from 'vue';
-import { useResizeObserver } from '@vueuse/core';
-import { useStore as useMatchStore } from '@/pinia/match';
-import { TOTAL } from '@/store/gameInfo/score';
+import { useStore } from 'vuex';
 
-export default {
-  name: 'Game',
-  components: {},
-  setup() {
-    const matchStore = useMatchStore();
+// import { useResizeObserver } from '@vueuse/core';
 
-    //#region Table
-    const tableRef = ref(undefined);
-    const colIcon = ref(50);
-    const colWidth = ref(0);
-    useResizeObserver(tableRef, (entries) => {
-      const width = entries[0].contentRect.width - colIcon.value;
-      colWidth.value = width / players.value.length;
-      if (colWidth.value < 90) colWidth.value = 90;
-      // Update table
-      tableRef.value.doLayout();
-    });
-    function getRowBg({ row }) {
-      return `background-color: ${row.category.bg};color: ${row.category.color}`;
-    }
-    //#endregion
+import * as SCORES from '@/store/gameInfo/score';
 
-    //#region Table Events
-    const activeCell = ref({
-      row: undefined,
-      col: undefined,
-    });
-    function cellClick(row, col) {
-      if (col.no === 0 || row.no === undefined) {
-        activeCell.value.row = undefined;
-        activeCell.value.col = undefined;
-      } else {
-        activeCell.value.row = row.no;
-        activeCell.value.col = col.no;
+const store = useStore();
 
-        // TODO: remove test code:
-        const scoreId = scoreTableRows.value[activeCell.value.row - 1].category.id;
-        const newVal = Math.floor(Math.random() * (10 - 1) + 1);
-        matchStore.players[activeCell.value.col - 1].score[scoreId] = newVal;
-      }
-    }
-    //#endregion
+//#region Match
+const ready = computed(() => store.state.match.ready);
+const players = computed(() => store.state.match.players);
+const scoreIds = computed(() => store.state.match.scoreIds);
 
-    //#region Score
-    const ready = computed(() => matchStore.ready);
-    const players = computed(() => matchStore.players);
-    const scoreTableRows = computed(() => {
-      const score = matchStore.scores.map((category, i) => {
-        const row = {
-          category,
-          no: i + 1,
-        };
-        players.value.forEach((player) => {
-          row[`player-${player.id}`] = player.score[category.id];
-        });
-        return row;
-      });
-      const total = {
-        category: TOTAL,
-      };
-      players.value.forEach((player) => {
-        total[`player-${player.id}`] = player.total;
-      });
+function getPlayerName(id) {
+  return store.getters['match/playerFull'](id).name;
+}
+//#endregion
 
-      return [...score, total];
-    });
-    //#endregion
+//#region Table
+const tableRef = ref(undefined);
+const colIcon = ref(50);
+const colWidth = ref(0);
+// useResizeObserver(tableRef, (entries) => {
+//   const width = entries[0].contentRect.width - colIcon.value;
+//   colWidth.value = width / players.value.length;
+//   if (colWidth.value < 90) colWidth.value = 90;
+//   // Update table
+//   tableRef.value.doLayout();
+// });
+function getRowBg({ row }) {
+  return `background-color: ${row.category.bg};color: ${row.category.color}`;
+}
+//#endregion
 
-    return {
-      tableRef,
-      colIcon,
-      colWidth,
-      getRowBg,
-      activeCell,
-      cellClick,
-      scoreTableRows,
-      players,
-      ready,
+//#region Table Events
+const activeCell = ref({
+  row: undefined,
+  col: undefined,
+});
+function cellClick(row, col) {
+  if (col.no === 0 || row.no === undefined) {
+    activeCell.value.row = undefined;
+    activeCell.value.col = undefined;
+  } else {
+    activeCell.value.row = row.no;
+    activeCell.value.col = col.no;
+
+    // TODO: remove test code:
+    // const scoreId = scoreTableRows.value[activeCell.value.row - 1].category.id;
+    // const newVal = Math.floor(Math.random() * (10 - 1) + 1);
+    // matchStore.players[activeCell.value.col - 1].score[scoreId] = newVal;
+  }
+}
+//#endregion
+
+//#region Score
+const scoreTableRows = computed(() => {
+  const score = scoreIds.value.map((scoreId, i) => {
+    const row = {
+      category: SCORES[scoreId],
+      no: i + 1,
     };
-  },
-};
+    players.value.forEach((player) => {
+      // console.log(player.score[scoreId]);
+      row[`player-${player.id}`] = player.score[scoreId];
+    });
+
+    return row;
+  });
+  const total = {
+    category: SCORES.TOTAL,
+  };
+  players.value.forEach((player) => {
+    total[`player-${player.id}`] = player.total;
+  });
+
+  return [...score, total];
+});
+//#endregion
 </script>
 
 <style lang="scss">

@@ -40,6 +40,9 @@ export default {
         return max;
       }, 0);
     },
+    player: (state) => (id) => {
+      return state.players.find((e) => e.id === id);
+    },
     formatted(state) {
       return state.players.map(({ name, id, added }) => {
         return {
