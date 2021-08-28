@@ -4,12 +4,9 @@ export default {
   namespaced: true,
   state() {
     return {
-      ready: false,
-      date: undefined,
-      // Expansion Ids
-      expansionIds: [],
+      date: createDateAsUTC(new Date()),
       scoreIds: [],
-      // Player Objects
+      expansionIds: [],
       players: [],
     };
   },
@@ -18,9 +15,6 @@ export default {
       return state.players.find((e) => e.id === id);
     },
     playerFull: (state, getters, rootState, rootGetters) => (id) => {
-      // const wonderId = getters.player(id).wonder;
-      // console.log(rootState.players.players, wonderId);
-      // const wonder = '';
       return {
         name: rootGetters['players/player'](id).name,
       };
@@ -28,33 +22,19 @@ export default {
   },
   actions: {
     init({ commit }, { expansionIds, scoreIds, players }) {
-      commit('SET_DATE');
       commit('SET_EXPANSIONS', expansionIds);
       commit('SET_SCORES', scoreIds);
-      commit('DELETE_PLAYERS');
-      players.forEach((player) => {
-        delete player.label;
-        delete player.value;
-
-        commit('ADD_PLAYER', player);
+      players.forEach(({ id, wonderId, score, total }) => {
+        commit('ADD_PLAYER', {
+          id,
+          wonderId,
+          score,
+          total,
+        });
       });
-      commit('SET_READY', true);
-    },
-    reset({ commit }) {
-      commit('SET_READY', false);
-      commit('SET_DATE', undefined);
-      commit('SET_EXPANSIONS', []);
-      commit('SET_SCORES', []);
-      commit('DELETE_PLAYERS');
     },
   },
   mutations: {
-    SET_READY(state, status) {
-      state.ready = status;
-    },
-    SET_DATE(state, date = createDateAsUTC(new Date())) {
-      state.date = date;
-    },
     SET_EXPANSIONS(state, expansionIds) {
       state.expansionIds = [...expansionIds];
     },

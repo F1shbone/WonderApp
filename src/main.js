@@ -19,3 +19,5 @@ app.use(GesturePlugin);
 app.use(ElementPlus);
 
 app.mount('#app');
+
+// export { app };

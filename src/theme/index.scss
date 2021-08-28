@@ -55,3 +55,28 @@ body,
   white-space: nowrap !important;
   border: 0 !important;
 }
+
+.el-overlay {
+  display: flex;
+  align-items: center;
+}
+.el-message-box {
+  margin: 1rem;
+
+  &__btns {
+    display: flex;
+    flex-direction: column;
+    flex-flow: column-reverse;
+    padding: 0;
+    button.el-button {
+      flex: 1 1 100%;
+      margin-top: 10px;
+      margin-left: 0;
+      border-radius: 0;
+    }
+    .el-button:not(.el-button--primary) {
+      border: 0;
+      color: $--color-primary;
+    }
+  }
+}

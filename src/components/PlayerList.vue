@@ -16,7 +16,7 @@
             <el-card-list-item>
               <div class="playerList__entry">
                 <div>{{ element.label }}</div>
-                <div class="text-secondary">{{ getWonderName(element.wonder) }}</div>
+                <div class="text-secondary">{{ getWonderName(element.wonderId) }}</div>
               </div>
               <div class="playerList__append">
                 <el-button circle icon="el-icon-refresh" @click="rerollWonder(element)">

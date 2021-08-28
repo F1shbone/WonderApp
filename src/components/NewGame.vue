@@ -31,6 +31,7 @@ import BottomSheet from '@/components/BottomSheet.vue';
 import ExpansionSelector from '@/components/ExpansionSelector.vue';
 import PlayerSelector from '@/components/PlayerSelector.vue';
 import PlayerList from '@/components/PlayerList.vue';
+import match from '../store/modules/match';
 
 const store = useStore();
 const router = useRouter();
@@ -68,7 +69,7 @@ function initPlayers() {
     get total() {
       return Object.values(this.score).reduce((acc, val) => (acc += val), 0);
     },
-    wonder: undefined,
+    wonderId: undefined,
   }));
 }
 //#endregion
@@ -106,26 +107,27 @@ function initMatch() {
     // Init scores for selected expansion(s)
     activeScoreIds.value.forEach((score) => (player.score[score] = 0));
     // Roll unique wonders for each player
-    player.wonder = getRandomWonder();
+    player.wonderId = getRandomWonder();
   });
 }
 
-function start() {
+async function start() {
   switch (step.value) {
     case STEPS.ONE: {
       initMatch();
       step.value = STEPS.TWO;
-      break;
+      return;
     }
     case STEPS.TWO: {
+      store.registerModule('match', match);
       store.dispatch('match/init', {
         expansionIds: activeExpansionIds.value,
         scoreIds: activeScoreIds.value,
         players: players.value,
       });
-      router.push({ name: 'Game' });
+      router.push({ path: '/game/active' });
       close();
-      break;
+      return;
     }
   }
 }
