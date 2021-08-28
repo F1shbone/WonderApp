@@ -10,7 +10,7 @@
         <el-card-list-item class="listItem" v-for="expansion in expansions" :key="expansion.id">
           <div>{{ expansion.label }}</div>
           <div>
-            <el-switch v-model="expansion.owned" />
+            <el-switch :model-value="expansion.owned" @change="toggleOwned(expansion)" />
           </div>
         </el-card-list-item>
       </el-card-list>
@@ -23,9 +23,11 @@
       </template>
       <el-card-list flush>
         <el-card-list-item class="listItem" v-for="player in players" :key="player.name">
-          <div>{{ player.name }}</div>
           <div>
-            <el-button circle icon="el-icon-delete" />
+            {{ player.name }} <br /><small class="text-secondary">Added: {{ player.added }}</small>
+          </div>
+          <div>
+            <el-button circle icon="el-icon-delete" @click="removePlayer(player)" />
           </div>
         </el-card-list-item>
       </el-card-list>
@@ -33,50 +35,42 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { computed } from 'vue';
-
-import { useStore as useExpansionsStore } from '@/store/expansions';
-import { useStore as usePlayerStore } from '@/store/players';
+import { useStore } from 'vuex';
 
 import ElCard from '@/components/ElCard.vue';
 import ElCardList from '@/components/ElCardList.vue';
 import ElCardListItem from '@/components/ElCardListItem.vue';
 import { ElMessageBox } from 'element-plus';
 
-export default {
-  name: 'Settings',
-  components: {
-    ElCard,
-    ElCardList,
-    ElCardListItem,
-  },
-  setup() {
-    const { expansions } = useExpansionsStore();
-    const { players } = usePlayerStore();
+const store = useStore();
 
-    function addPlayer() {
-      ElMessageBox.prompt("What's the name of the new player?", 'Add Player', {
-        confirmButtonText: 'OK',
-        cancelButtonText: 'Cancel',
-      })
-        .then(({ value }) => {
-          players.push({
-            name: value,
-            active: false,
-          });
-        })
-        .catch(() => {});
-    }
+//#region Expansions
+const expansions = computed(() => store.getters['expansions/expansions']);
+function toggleOwned(expansion) {
+  store.commit('expansions/TOGGLE_OWNED', expansion.id);
+}
+//#endregion
 
-    return {
-      // expansions: ownedExpansions,
-      expansions: computed(() => expansions),
-      players,
-      addPlayer,
-    };
-  },
-};
+//#region Player
+const players = computed(() => store.getters['players/formatted']);
+function addPlayer() {
+  ElMessageBox.prompt("What's the name of the new player?", 'Add Player', {
+    confirmButtonText: 'OK',
+    cancelButtonText: 'Cancel',
+  })
+    .then(({ value }) => {
+      console.log(value);
+      store.dispatch('players/addPlayer', { name: value });
+    })
+    .catch(() => {});
+}
+
+function removePlayer(player) {
+  store.commit('players/REMOVE_PLAYER', player);
+}
+//#endregion
 </script>
 
 <style lang="scss">

@@ -3,27 +3,45 @@
     <h2>Players</h2>
     <div>
       <el-checkbox-button
-        v-for="(player, id) in players"
-        :key="id"
-        :label="id"
-        :checked="player.active"
-        @input="toggleActive(id)"
-        >{{ player.name }}</el-checkbox-button
+        v-for="(player, i) in props.modelValue"
+        :key="i"
+        :label="player.label"
+        :checked="player.value"
+        @input="toggle(player)"
+        >{{ player.label }}</el-checkbox-button
       >
     </div>
   </div>
 </template>
 
-<script>
-import { useStore as usePlayersStore } from '@/store/players';
-
-export default {
-  setup() {
-    const { players, toggle } = usePlayersStore();
-
-    return { players, toggleActive: toggle };
+<script setup>
+//#region v-model
+/**
+ * modelValue: {
+ *   id: number,
+ *   label: string;
+ *   value: boolean;
+ * }[]
+ */
+const props = defineProps({
+  modelValue: {
+    type: Array,
   },
-};
+});
+const emit = defineEmits(['update:modelValue']);
+
+function toggle(player) {
+  emit(
+    'update:modelValue',
+    props.modelValue.map((e) => {
+      if (e.id === player.id) {
+        e.value = !e.value;
+      }
+      return e;
+    })
+  );
+}
+//#endregion
 </script>
 
 <style lang="scss">

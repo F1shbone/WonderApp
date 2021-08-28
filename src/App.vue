@@ -10,12 +10,12 @@
     <el-main>
       <router-view />
 
-      <new-game v-model="newGame" />
+      <new-game v-model="isNewGameDialogVisible" />
     </el-main>
     <el-footer class="layout__footer" height="80">
       <el-menu default-active="1" mode="horizontal" :router="true">
         <li>
-          <router-link class="el-menu-item" to="/" @click="blur">
+          <router-link class="el-menu-item" to="/game" @click="blur">
             <i class="el-icon-notebook-2" />
             <span>Game</span>
           </router-link>
@@ -37,38 +37,17 @@
   </el-container>
 </template>
 
-<script>
-import { ref } from 'vue';
-import { useStore as useMatchStore } from '@/store/match';
-
+<script setup>
 import NewGame from '@/components/NewGame.vue';
+import useNewGame from '@/composables/newGame.js';
 
-export default {
-  components: {
-    NewGame,
-  },
-  setup() {
-    const matchStore = useMatchStore();
+const { isNewGameDialogVisible, showNewGame } = useNewGame();
 
-    function blur({ srcElement }) {
-      setTimeout(() => {
-        srcElement.blur();
-      }, 250);
-    }
-
-    const newGame = ref(false);
-    function showNewGame() {
-      newGame.value = true;
-      matchStore.$reset();
-    }
-
-    return {
-      blur,
-      newGame,
-      showNewGame,
-    };
-  },
-};
+function blur({ srcElement }) {
+  setTimeout(() => {
+    srcElement.blur();
+  }, 250);
+}
 </script>
 
 <style lang="scss">

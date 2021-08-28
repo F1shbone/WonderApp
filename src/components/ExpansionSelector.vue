@@ -7,29 +7,49 @@
     </h2>
     <div>
       <el-checkbox-button
-        v-for="expansion in expansions"
-        :key="expansion.id"
-        :label="expansion.id"
-        :checked="expansion.active"
-        @input="toggleActive(expansion.id)"
+        v-for="(expansion, i) in expansions"
+        :key="i"
+        :label="expansion.label"
+        :checked="expansion.value"
+        @input="toggle(expansion)"
         >{{ expansion.label }}</el-checkbox-button
       >
     </div>
   </div>
 </template>
 
-<script>
-import { useStore as useExpansionsStore } from '@/store/expansions';
+<script setup>
+import { computed } from 'vue';
 import { BASE } from '@/store/gameInfo/expansions';
 
-export default {
-  setup() {
-    const { ownedExpansions, toggleActive } = useExpansionsStore();
-    const expansions = ownedExpansions.filter((e) => e.id !== BASE.id);
-
-    return { expansions, toggleActive };
+//#region v-model
+/**
+ * modelValue: {
+ *   id: number,
+ *   label: string;
+ *   value: boolean;
+ * }[]
+ */
+const props = defineProps({
+  modelValue: {
+    type: Array,
   },
-};
+});
+const emit = defineEmits(['update:modelValue']);
+
+const expansions = computed(() => props.modelValue.filter((e) => e.id !== BASE.id));
+function toggle(expansion) {
+  emit(
+    'update:modelValue',
+    props.modelValue.map((e) => {
+      if (e.id === expansion.id) {
+        e.value = !e.value;
+      }
+      return e;
+    })
+  );
+}
+//#endregion
 </script>
 
 <style lang="scss">

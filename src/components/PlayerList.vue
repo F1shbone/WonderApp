@@ -5,7 +5,7 @@
     <el-card full>
       <el-card-list flush>
         <draggable
-          :list="players"
+          v-model="players"
           tag="transition-group"
           group="player"
           item-key="id"
@@ -15,8 +15,8 @@
           <template #item="{ element }">
             <el-card-list-item>
               <div class="playerList__entry">
-                <div>{{ element.name }}</div>
-                <div class="text-secondary">{{ element.wonder.label.short }}</div>
+                <div>{{ element.label }}</div>
+                <div class="text-secondary">{{ getWonderName(element.wonderId) }}</div>
               </div>
               <div class="playerList__append">
                 <el-button circle icon="el-icon-refresh" @click="rerollWonder(element)">
@@ -31,39 +31,44 @@
   </div>
 </template>
 
-<script>
-import { useStore as useMatchStore } from '@/store/match';
+<script setup>
+import { computed } from 'vue';
+
+import * as wonders from '@/store/gameInfo/wonders';
 
 import draggable from 'vuedraggable';
 import ElCard from '@/components/ElCard.vue';
 import ElCardList from '@/components/ElCardList.vue';
 import ElCardListItem from '@/components/ElCardListItem.vue';
 
-export default {
-  components: {
-    draggable,
-    ElCard,
-    ElCardList,
-    ElCardListItem,
+//#region v-model
+/**
+ * modelValue: {
+ *   id: number,
+ *   label: string;
+ *   wonder: string;
+ *   value: boolean;
+ * }[]
+ */
+const props = defineProps({
+  modelValue: {
+    type: Array,
   },
-  props: {
-    players: {
-      type: Array,
-      required: true,
-    },
-  },
-  setup(props) {
-    const { getRandomWonder } = useMatchStore();
+});
+const emit = defineEmits(['update:modelValue', 'reroll']);
 
-    function rerollWonder(player) {
-      player.wonder = getRandomWonder(props.players);
-    }
+const players = computed({
+  get: () => props.modelValue,
+  set: (val) => emit('update:modelValue', val),
+});
 
-    return {
-      rerollWonder,
-    };
-  },
-};
+function getWonderName(wonderId) {
+  return wonders[wonderId].label.short;
+}
+function rerollWonder(player) {
+  emit('reroll', player);
+}
+//#endregion
 </script>
 
 <style lang="scss">

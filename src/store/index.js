@@ -1,8 +1,14 @@
-import { createPinia } from 'pinia';
-import localstorage from './plugins/localstorage';
+import { createStore } from 'vuex';
 
-const pinia = createPinia();
+import expansions from './modules/expansions';
+import players from './modules/players';
 
-pinia.use(localstorage);
+// Create a new store instance.
+const store = createStore({
+  modules: {
+    expansions,
+    players,
+  },
+});
 
-export default pinia;
+export default store;

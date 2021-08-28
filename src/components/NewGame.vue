@@ -1,15 +1,15 @@
 <template>
-  <bottom-sheet :visible="modelValue" @close="abort">
+  <bottom-sheet :visible="props.modelValue" @close="close">
     <div class="new-game__container">
       <div class="new-game__main">
         <!-- step 1: -->
-        <template v-if="step === 'settings'">
-          <player-selector />
-          <expansion-selector />
+        <template v-if="step === STEPS.ONE">
+          <player-selector v-model="players" />
+          <expansion-selector v-model="expansions" />
         </template>
         <!-- step 2: -->
-        <template v-if="step === 'confirm'">
-          <player-list :players="players" />
+        <template v-if="step === STEPS.TWO">
+          <player-list v-model="players" @reroll="rerollWonder" />
         </template>
       </div>
       <div class="new-game__footer">
@@ -19,83 +19,126 @@
   </bottom-sheet>
 </template>
 
-<script>
-import { ref, watchEffect } from 'vue';
+<script setup>
+import { ref, computed } from 'vue';
+import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
-import { useStore as useExpansionsStore } from '@/store/expansions';
-import { useStore as usePlayersStore } from '@/store/players';
-import { useStore as useMatchStore } from '@/store/match';
+
+import { BASE } from '@/store/gameInfo/expansions';
+import { ShuffleArray } from '@/utils/shuffleArray';
 
 import BottomSheet from '@/components/BottomSheet.vue';
 import ExpansionSelector from '@/components/ExpansionSelector.vue';
 import PlayerSelector from '@/components/PlayerSelector.vue';
 import PlayerList from '@/components/PlayerList.vue';
+import match from '../store/modules/match';
 
-export default {
-  name: 'NewGame',
-  components: {
-    BottomSheet,
-    ExpansionSelector,
-    PlayerSelector,
-    PlayerList,
+const store = useStore();
+const router = useRouter();
+
+//#region v-model
+const props = defineProps({
+  modelValue: {
+    type: Boolean,
   },
-  emits: ['update:modelValue'],
-  props: {
-    modelValue: {
-      type: Boolean,
+});
+const emit = defineEmits(['update:modelValue']);
+//#endregion
+
+//#region expansions
+const expansions = ref(initExpansions());
+function initExpansions() {
+  return store.getters['expansions/ownedExpansions'].map((expansion) => ({
+    id: expansion.id,
+    label: expansion.label,
+    value: expansion.id === BASE.id ? true : false,
+  }));
+}
+const activeExpansionIds = computed(() => expansions.value.filter((e) => e.value).map((e) => e.id));
+const activeScoreIds = computed(() => store.getters['expansions/scores'](activeExpansionIds.value));
+//#endregion
+
+//#region players
+const players = ref(initPlayers());
+function initPlayers() {
+  return store.state.players.players.map((player) => ({
+    id: player.id,
+    label: player.name,
+    value: false,
+    score: {},
+    get total() {
+      return Object.values(this.score).reduce((acc, val) => (acc += val), 0);
     },
-  },
-  setup(props, { emit }) {
-    const playerStore = usePlayersStore();
-    const expansionStore = useExpansionsStore();
-    const matchStore = useMatchStore();
+    wonderId: undefined,
+  }));
+}
+//#endregion
 
-    //#region players
-    const players = ref([]);
-    //#endregion
+//#region Wonders
+const wonders = new Set();
+function getRandomWonder() {
+  const wonderIds = store.getters['expansions/wonders'](activeExpansionIds.value);
+  let wonder = undefined;
+  do {
+    wonder = wonderIds[Math.floor(Math.random() * wonderIds.length)];
+  } while (wonders.has(wonder));
 
-    //#region BottomSheet
-    const router = useRouter();
-    watchEffect(() => {
-      if (props.modelValue) {
-        playerStore.resetActive();
-        expansionStore.resetActive();
-      }
-    });
-    // possible values: 'settings', 'confirm'
-    const step = ref('settings');
-    function start() {
-      if (step.value === 'settings') {
-        matchStore.initStore();
-        players.value = matchStore.players;
-        step.value = 'confirm';
-      } else {
-        close();
-        matchStore.players = players.value;
-        matchStore.ready = true;
-        router.push({ name: 'Game' });
-      }
-    }
+  wonders.add(wonder);
+  return wonder;
+}
+function rerollWonder(player) {
+  const oldId = player.wonder;
+  player.wonder = getRandomWonder();
+  wonders.delete(oldId);
+}
+//#endregion
 
-    function close() {
-      emit('update:modelValue', false);
-      step.value = 'settings';
-    }
-    function abort() {
-      playerStore.resetActive();
-      expansionStore.resetActive();
-      close();
-    }
-    //#endregion
-
-    return {
-      abort,
-      step,
-      start,
-      players,
-    };
-  },
+//#region BottomSheet
+const STEPS = {
+  ONE: 'step1',
+  TWO: 'step2',
 };
+const step = ref(STEPS.ONE);
+
+function initMatch() {
+  // Shuffle player order
+  players.value = ShuffleArray(players.value.filter((e) => e.value));
+  players.value.forEach((player) => {
+    // Init scores for selected expansion(s)
+    activeScoreIds.value.forEach((score) => (player.score[score] = 0));
+    // Roll unique wonders for each player
+    player.wonderId = getRandomWonder();
+  });
+}
+
+async function start() {
+  switch (step.value) {
+    case STEPS.ONE: {
+      initMatch();
+      step.value = STEPS.TWO;
+      return;
+    }
+    case STEPS.TWO: {
+      store.registerModule('match', match);
+      store.dispatch('match/init', {
+        expansionIds: activeExpansionIds.value,
+        scoreIds: activeScoreIds.value,
+        players: players.value,
+      });
+      router.push({ path: '/game/active' });
+      close();
+      return;
+    }
+  }
+}
+function close() {
+  emit('update:modelValue', false);
+  step.value = STEPS.ONE;
+  // Reset data
+  expansions.value = initExpansions();
+  players.value = initPlayers();
+}
+//#endregion
 </script>
 
 <style lang="scss" scoped>
