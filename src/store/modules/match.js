@@ -24,14 +24,20 @@ export default {
     init({ commit }, { expansionIds, scoreIds, players }) {
       commit('SET_EXPANSIONS', expansionIds);
       commit('SET_SCORES', scoreIds);
-      players.forEach(({ id, wonderId, score, total }) => {
+      players.forEach(({ id, wonderId, score }) => {
         commit('ADD_PLAYER', {
           id,
           wonderId,
           score,
-          total,
+          get total() {
+            return Object.values(score).reduce((acc, val) => (acc += val), 0);
+          },
         });
       });
+    },
+    setPlayerScore({ commit, state }, { playerId, scoreId, score }) {
+      const playerIndex = state.players.findIndex((p) => p.id === playerId);
+      commit('SET_PLAYER_SCORE', { playerIndex, scoreId, score });
     },
   },
   mutations: {
@@ -46,6 +52,9 @@ export default {
     },
     DELETE_PLAYERS(state) {
       state.players = [];
+    },
+    SET_PLAYER_SCORE(state, { playerIndex, scoreId, score }) {
+      state.players[playerIndex].score[scoreId] = score;
     },
   },
 };

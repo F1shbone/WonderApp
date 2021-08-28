@@ -1,10 +1,10 @@
 <template>
   <transition name="fade">
-    <div class="bottomSheet__mask" v-if="visible" />
+    <div class="bottomSheet__mask" v-if="modelValue && !hideBackdrop" />
   </transition>
   <transition name="slide">
-    <div class="bottomSheet" v-if="visible" ref="target">
-      <div class="bottomSheet__drag" v-drag="dragHandler" />
+    <div class="bottomSheet" :style="`height: ${height};`" v-if="modelValue" ref="target">
+      <div class="bottomSheet__drag" v-drag="dragHandler" v-if="!hideDrag" />
       <div class="bottomSheet__content">
         <slot />
       </div>
@@ -12,57 +12,66 @@
   </transition>
 </template>
 
-<script>
+<script setup>
 import { ref } from 'vue';
 import { onClickOutside } from '@vueuse/core';
 
-export default {
-  props: {
-    visible: {
-      type: Boolean,
-      default: false,
-    },
+//#region v-model
+const props = defineProps({
+  modelValue: {
+    type: Boolean,
+    required: true,
   },
-  emits: ['close'],
-  setup(props, { emit }) {
-    const target = ref(null);
-    onClickOutside(target, () => {
-      emit('close');
-    });
+  height: {
+    type: String,
+    default: '85%',
+  },
+  hideBackdrop: {
+    type: Boolean,
+    default: false,
+  },
+  hideDrag: {
+    type: Boolean,
+    default: false,
+  },
+});
+const emit = defineEmits(['update:modelValue', 'close']);
+//#endregion
 
-    let initialY = 0;
-    let initialHeight = 0;
-    let removeStyle = true;
-    function dragHandler(dragState) {
-      if (dragState.first) {
-        const { y, height } = target.value.getBoundingClientRect();
-        initialY = y;
-        initialHeight = height;
-        removeStyle = true;
-      } else if (dragState.last) {
-        // do nothing, remove style is not necessary as the element is removed anyway
-        if (removeStyle) {
-          target.value.removeAttribute('style');
-        }
-      } else {
-        const newY = initialY + dragState.movement[1];
-        if (newY > initialY) {
-          target.value.setAttribute('style', `transform:translateY(${dragState.movement[1]}px);`);
-          if (initialHeight / 1.5 < newY) {
-            removeStyle = false;
-            dragState.cancel();
-            emit('close');
-          }
-        }
+const target = ref(null);
+onClickOutside(target, () => {
+  if (!props.hideBackdrop) {
+    emit('update:modelValue', false);
+    emit('close');
+  }
+});
+
+let initialY = 0;
+let initialHeight = 0;
+let removeStyle = true;
+function dragHandler(dragState) {
+  if (dragState.first) {
+    const { y, height } = target.value.getBoundingClientRect();
+    initialY = y;
+    initialHeight = height;
+    removeStyle = true;
+  } else if (dragState.last) {
+    // do nothing, remove style is not necessary as the element is removed anyway
+    if (removeStyle) {
+      target.value.removeAttribute('style');
+    }
+  } else {
+    const newY = initialY + dragState.movement[1];
+    if (newY > initialY) {
+      target.value.setAttribute('style', `transform:translateY(${dragState.movement[1]}px);`);
+      if (initialHeight / 1.5 < newY) {
+        removeStyle = false;
+        dragState.cancel();
+        emit('close');
       }
     }
-
-    return {
-      target,
-      dragHandler,
-    };
-  },
-};
+  }
+}
 </script>
 
 <style scoped>
@@ -97,7 +106,6 @@ export default {
   left: 0;
   right: 0;
   bottom: 0;
-  height: 85%;
   display: flex;
   flex-direction: column;
   background-color: #fff;

@@ -1,5 +1,5 @@
 <template>
-  <bottom-sheet :visible="props.modelValue" @close="close">
+  <bottom-sheet :modelValue="props.modelValue" @close="close">
     <div class="new-game__container">
       <div class="new-game__main">
         <!-- step 1: -->
@@ -66,9 +66,6 @@ function initPlayers() {
     label: player.name,
     value: false,
     score: {},
-    get total() {
-      return Object.values(this.score).reduce((acc, val) => (acc += val), 0);
-    },
     wonderId: undefined,
   }));
 }

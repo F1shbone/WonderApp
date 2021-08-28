@@ -1,7 +1,14 @@
 <template>
   <h1>Score</h1>
 
-  <el-table border :data="scoreTableRows" :row-style="getRowBg" @cell-click="cellClick" ref="tableRef">
+  <el-table
+    border
+    :data="scoreTableRows"
+    :row-style="getRowBg"
+    :class="{ 'game--scoresVisible': !scoresHidden }"
+    @cell-click="cellClick"
+    ref="tableRef"
+  >
     <el-table-column fixed label="" :width="colIcon">
       <template #default="{ row }">
         <div class="game__rowIcon" v-html="row.category.icon" />
@@ -14,27 +21,40 @@
       :label="getPlayerName(player.id)"
       :width="colWidth"
     >
-      <template #default="{ row, column }"
-        ><div
+      <template #default="{ row, column }">
+        <div
           :class="{
             game__cell: true,
-            'game__cell--active': row.no === activeCell.row && column.no === activeCell.col,
+            'game__cell--active': row.no === selectedCell.row && column.no === selectedCell.col,
           }"
+          :id="`game-table-cell-${row.no}-${column.no}`"
         >
           {{ row[`player-${player.id}`] }}
-        </div></template
-      >
+        </div>
+      </template>
     </el-table-column>
   </el-table>
 
   <div class="game__btn">
-    <el-button type="primary" icon="el-icon-share">Submit Score</el-button>
+    <el-button type="primary" icon="el-icon-magic-stick" @click="revealScore">Reveal Score</el-button>
+    <!-- <el-button type="primary" icon="el-icon-share">Submit Score</el-button> -->
   </div>
+
+  <keyboard
+    v-model:visible="showKeyboard"
+    v-model:value="currentValue"
+    :score="SCORES[selectedScoreId]"
+    @nextCell="nextCell"
+  >
+    <p>Keyboard</p>
+  </keyboard>
 </template>
 
 <script setup>
 import { computed, ref } from 'vue';
 import { useStore } from 'vuex';
+
+import Keyboard from '@/components/Keyboard.vue';
 
 import * as SCORES from '@/store/gameInfo/score';
 
@@ -50,43 +70,79 @@ function getPlayerName(id) {
 //#endregion
 
 //#region Table
+const showKeyboard = ref(false);
 const tableRef = ref(undefined);
 const colIcon = ref(50);
 const colWidth = ref(0);
-// useResizeObserver(tableRef, (entries) => {
-//   const width = entries[0].contentRect.width - colIcon.value;
-//   colWidth.value = width / players.value.length;
-//   if (colWidth.value < 90) colWidth.value = 90;
-//   // Update table
-//   tableRef.value.doLayout();
-// });
+
 function getRowBg({ row }) {
   return `background-color: ${row.category.bg};color: ${row.category.color}`;
 }
 //#endregion
 
 //#region Table Events
-const activeCell = ref({
+const selectedCell = ref({
   row: undefined,
   col: undefined,
 });
+const selectedPlayer = computed(() => store.state.match.players[selectedCell.value.col - 1]);
+const selectedScoreId = computed(() => scoreTableRows.value[selectedCell.value.row - 1]?.category.id);
+const currentValue = computed({
+  get: () => {
+    if (selectedPlayer.value) {
+      return selectedPlayer.value.score[selectedScoreId.value];
+    } else {
+      return 0;
+    }
+  },
+  set: (score) => {
+    store.dispatch('match/setPlayerScore', {
+      playerId: selectedPlayer.value.id,
+      scoreId: selectedScoreId.value,
+      score,
+    });
+  },
+});
+
 function cellClick(row, col) {
   if (col.no === 0 || row.no === undefined) {
-    activeCell.value.row = undefined;
-    activeCell.value.col = undefined;
+    selectedCell.value.row = undefined;
+    selectedCell.value.col = undefined;
   } else {
-    activeCell.value.row = row.no;
-    activeCell.value.col = col.no;
+    selectedCell.value.row = row.no;
+    selectedCell.value.col = col.no;
 
-    // TODO: remove test code:
-    // const scoreId = scoreTableRows.value[activeCell.value.row - 1].category.id;
-    // const newVal = Math.floor(Math.random() * (10 - 1) + 1);
-    // matchStore.players[activeCell.value.col - 1].score[scoreId] = newVal;
+    showKeyboard.value = true;
+  }
+}
+function nextCell() {
+  if (selectedCell.value.col === players.value.length) {
+    if (selectedCell.value.row === scoreIds.value.length) {
+      showKeyboard.value = false;
+      selectedCell.value.row = undefined;
+      selectedCell.value.col = undefined;
+    } else {
+      selectedCell.value.col = 1;
+      selectedCell.value.row++;
+    }
+    // Set scroll of table to left, otherwise 1st cell might not be scrolled into view
+    tableRef.value.$el.querySelector('.el-table__body-wrapper').scrollLeft = 0;
+  } else {
+    selectedCell.value.col++;
+  }
+  if (selectedCell.value.row && selectedCell.value.col) {
+    tableRef.value.$el
+      .querySelector(`#game-table-cell-${selectedCell.value.row}-${selectedCell.value.col}`)
+      .scrollIntoView();
   }
 }
 //#endregion
 
 //#region Score
+const scoresHidden = ref(true);
+function revealScore() {
+  scoresHidden.value = false;
+}
 const scoreTableRows = computed(() => {
   const score = scoreIds.value.map((scoreId, i) => {
     const row = {
@@ -107,7 +163,11 @@ const scoreTableRows = computed(() => {
     total[`player-${player.id}`] = player.total;
   });
 
-  return [...score, total];
+  if (scoresHidden.value) {
+    return score;
+  } else {
+    return [...score, total];
+  }
 });
 //#endregion
 </script>
@@ -162,16 +222,6 @@ const scoreTableRows = computed(() => {
       background-color: initial;
     }
 
-    &__body-wrapper,
-    &__fixed-body-wrapper {
-      tr:nth-last-child(2) td {
-        border-bottom: 2px solid $--color-primary;
-      }
-      tr:last-child td {
-        background-color: rgba($--color-primary, 0.5) !important;
-      }
-    }
-
     th {
       text-align: center;
     }
@@ -184,6 +234,19 @@ const scoreTableRows = computed(() => {
     &__row td:first-child {
       color: $--body-color !important;
       background-color: $--body-bg !important;
+    }
+  }
+  &--scoresVisible {
+    .el-table {
+      &__body-wrapper,
+      &__fixed-body-wrapper {
+        tr:nth-last-child(2) td {
+          border-bottom: 2px solid $--color-primary;
+        }
+        tr:last-child td {
+          background-color: rgba($--color-primary, 0.5) !important;
+        }
+      }
     }
   }
 }
