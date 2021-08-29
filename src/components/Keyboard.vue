@@ -33,7 +33,6 @@
         <button @click="close">
           <kbd><i class="el-icon-arrow-down" /></kbd>
         </button>
-        <!-- <el-checkbox-button v-model="aristotle" type="success"> -->
         <el-checkbox-button :checked="props.value.meta.aristotle" @input="toggleAristotle" type="success">
           <img alt="Aristotle" src="../assets/aristotle.png" />
         </el-checkbox-button>
@@ -53,7 +52,7 @@
           <kbd><i class="el-icon-arrow-down" /></kbd>
         </button>
         <button @click="add('0')">0</button>
-        <button @click="emit('update:value', 0)">
+        <button @click="emit('update:value', { score: 0 })">
           <kbd><i class="el-icon-close" /></kbd>
         </button>
       </div>
