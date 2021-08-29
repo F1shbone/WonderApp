@@ -45,6 +45,7 @@
     v-model:value="currentValue"
     :score="SCORES[selectedScoreId]"
     @nextCell="nextCell"
+    @update:meta="updateScoreMeta"
   >
     <p>Keyboard</p>
   </keyboard>
@@ -92,7 +93,7 @@ const currentValue = computed({
     if (selectedPlayer.value) {
       return selectedPlayer.value.score[selectedScoreId.value];
     } else {
-      return 0;
+      return { score: 0 };
     }
   },
   set: (score) => {
@@ -104,6 +105,13 @@ const currentValue = computed({
   },
 });
 
+function updateScoreMeta(meta) {
+  store.dispatch('match/setPlayerScoreMeta', {
+    playerId: selectedPlayer.value.id,
+    scoreId: selectedScoreId.value,
+    meta,
+  });
+}
 function cellClick(row, col) {
   if (col.no === 0 || row.no === undefined) {
     selectedCell.value.row = undefined;
@@ -150,8 +158,7 @@ const scoreTableRows = computed(() => {
       no: i + 1,
     };
     players.value.forEach((player) => {
-      // console.log(player.score[scoreId]);
-      row[`player-${player.id}`] = player.score[scoreId];
+      row[`player-${player.id}`] = player.score[scoreId].score;
     });
 
     return row;

@@ -30,7 +30,7 @@ export default {
           wonderId,
           score,
           get total() {
-            return Object.values(score).reduce((acc, val) => (acc += val), 0);
+            return Object.values(score).reduce((acc, val) => (acc += val.score), 0);
           },
         });
       });
@@ -38,6 +38,10 @@ export default {
     setPlayerScore({ commit, state }, { playerId, scoreId, score }) {
       const playerIndex = state.players.findIndex((p) => p.id === playerId);
       commit('SET_PLAYER_SCORE', { playerIndex, scoreId, score });
+    },
+    setPlayerScoreMeta({ commit, state }, { playerId, scoreId, meta }) {
+      const playerIndex = state.players.findIndex((p) => p.id === playerId);
+      commit('SET_PLAYER_SCORE_META', { playerIndex, scoreId, meta });
     },
   },
   mutations: {
@@ -55,6 +59,9 @@ export default {
     },
     SET_PLAYER_SCORE(state, { playerIndex, scoreId, score }) {
       state.players[playerIndex].score[scoreId] = score;
+    },
+    SET_PLAYER_SCORE_META(state, { playerIndex, scoreId, meta }) {
+      state.players[playerIndex].score[scoreId].meta = meta;
     },
   },
 };

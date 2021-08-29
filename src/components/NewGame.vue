@@ -25,6 +25,7 @@ import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 
 import { BASE } from '@/store/gameInfo/expansions';
+import * as SCORES from '@/store/gameInfo/score';
 import { ShuffleArray } from '@/utils/shuffleArray';
 
 import BottomSheet from '@/components/BottomSheet.vue';
@@ -102,7 +103,10 @@ function initMatch() {
   players.value = ShuffleArray(players.value.filter((e) => e.value));
   players.value.forEach((player) => {
     // Init scores for selected expansion(s)
-    activeScoreIds.value.forEach((score) => (player.score[score] = 0));
+    activeScoreIds.value.forEach((scoreId) => {
+      const score = SCORES[scoreId].getScore();
+      player.score[scoreId] = score;
+    });
     // Roll unique wonders for each player
     player.wonderId = getRandomWonder();
   });
