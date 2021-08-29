@@ -1,5 +1,5 @@
 <template>
-  <bottom-sheet :visible="props.modelValue" @close="close">
+  <bottom-sheet :modelValue="props.modelValue" @close="close">
     <div class="new-game__container">
       <div class="new-game__main">
         <!-- step 1: -->
@@ -25,6 +25,7 @@ import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 
 import { BASE } from '@/store/gameInfo/expansions';
+import * as SCORES from '@/store/gameInfo/score';
 import { ShuffleArray } from '@/utils/shuffleArray';
 
 import BottomSheet from '@/components/BottomSheet.vue';
@@ -66,9 +67,6 @@ function initPlayers() {
     label: player.name,
     value: false,
     score: {},
-    get total() {
-      return Object.values(this.score).reduce((acc, val) => (acc += val), 0);
-    },
     wonderId: undefined,
   }));
 }
@@ -87,8 +85,8 @@ function getRandomWonder() {
   return wonder;
 }
 function rerollWonder(player) {
-  const oldId = player.wonder;
-  player.wonder = getRandomWonder();
+  const oldId = player.wonderId;
+  player.wonderId = getRandomWonder();
   wonders.delete(oldId);
 }
 //#endregion
@@ -105,7 +103,10 @@ function initMatch() {
   players.value = ShuffleArray(players.value.filter((e) => e.value));
   players.value.forEach((player) => {
     // Init scores for selected expansion(s)
-    activeScoreIds.value.forEach((score) => (player.score[score] = 0));
+    activeScoreIds.value.forEach((scoreId) => {
+      const score = SCORES[scoreId].getScore();
+      player.score[scoreId] = score;
+    });
     // Roll unique wonders for each player
     player.wonderId = getRandomWonder();
   });

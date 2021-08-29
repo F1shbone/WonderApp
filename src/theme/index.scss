@@ -24,6 +24,14 @@ body,
   overflow: hidden;
 }
 
+kbd {
+  padding: 0.2rem 0.4rem;
+  font-size: 0.875em;
+  color: #fff;
+  background-color: #212529;
+  border-radius: 0.2rem;
+}
+
 .el-header {
   padding: 0;
   border-top: $--border-base;
