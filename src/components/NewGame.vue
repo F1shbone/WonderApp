@@ -85,8 +85,8 @@ function getRandomWonder() {
   return wonder;
 }
 function rerollWonder(player) {
-  const oldId = player.wonder;
-  player.wonder = getRandomWonder();
+  const oldId = player.wonderId;
+  player.wonderId = getRandomWonder();
   wonders.delete(oldId);
 }
 //#endregion
