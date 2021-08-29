@@ -1,7 +1,7 @@
 <template>
   <bottom-sheet :modelValue="props.modelValue" @close="close">
     <div class="new-game__container">
-      <div class="new-game__main">
+      <div :class="`new-game__main new-game__main--${step}`">
         <!-- step 1: -->
         <template v-if="step === STEPS.ONE">
           <player-selector v-model="players" />
@@ -169,9 +169,12 @@ function close() {
 
   &__main {
     height: 100%;
-    display: grid;
-    grid-template-rows: 50% 50%;
-    grid-gap: 1rem;
+
+    &--step1 {
+      display: grid;
+      grid-template-rows: 50% 50%;
+      grid-gap: 1rem;
+    }
 
     > div {
       flex: 1 1 auto;

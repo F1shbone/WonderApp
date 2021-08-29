@@ -48,23 +48,25 @@ onClickOutside(target, () => {
 
 let initialY = 0;
 let initialHeight = 0;
+let offset = 0;
 let removeStyle = true;
 function dragHandler(dragState) {
   if (dragState.first) {
     const { y, height } = target.value.getBoundingClientRect();
+    offset = y;
     initialY = y;
     initialHeight = height;
     removeStyle = true;
   } else if (dragState.last) {
     // do nothing, remove style is not necessary as the element is removed anyway
     if (removeStyle) {
-      target.value.removeAttribute('style');
+      target.value.setAttribute('style', `height: ${props.height}`);
     }
   } else {
     const newY = initialY + dragState.movement[1];
     if (newY > initialY) {
-      target.value.setAttribute('style', `transform:translateY(${dragState.movement[1]}px);`);
-      if (initialHeight / 1.5 < newY) {
+      target.value.setAttribute('style', `height: ${props.height};transform:translateY(${dragState.movement[1]}px);`);
+      if (initialHeight / 1.75 < newY - offset) {
         removeStyle = false;
         dragState.cancel();
         emit('close');
