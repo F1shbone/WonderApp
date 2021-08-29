@@ -20,7 +20,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, watchEffect } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 
@@ -44,10 +44,17 @@ const props = defineProps({
   },
 });
 const emit = defineEmits(['update:modelValue']);
+
+watchEffect(() => {
+  if (props.modelValue) {
+    players.value = initPlayers();
+    expansions.value = initExpansions();
+  }
+});
 //#endregion
 
 //#region expansions
-const expansions = ref(initExpansions());
+const expansions = ref([]);
 function initExpansions() {
   return store.getters['expansions/ownedExpansions'].map((expansion) => ({
     id: expansion.id,
@@ -60,8 +67,9 @@ const activeScoreIds = computed(() => store.getters['expansions/scores'](activeE
 //#endregion
 
 //#region players
-const players = ref(initPlayers());
+const players = ref([]);
 function initPlayers() {
+  console.log('init Players');
   return store.state.players.players.map((player) => ({
     id: player.id,
     label: player.name,
