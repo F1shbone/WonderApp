@@ -84,6 +84,12 @@ const emit = defineEmits(['update:visible', 'update:value', 'nextCell']);
 function close() {
   emit('update:visible', false);
 }
+function add(number) {
+  emit('update:value', {
+    ...props.value,
+    score: +(props.value.score + number),
+  });
+}
 
 //#region Scientific
 function incScienceSymbol(symbol) {
