@@ -1,6 +1,10 @@
 <template>
   <div class="playerSelector">
-    <h2>Players</h2>
+    <h2>
+      Players
+      <br />
+      <small class="text-secondary">Select at least 2 players to continue</small>
+    </h2>
     <div>
       <el-checkbox-button
         v-for="(player, i) in props.modelValue"

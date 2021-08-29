@@ -109,8 +109,8 @@ function dragHandler(dragState) {
   display: flex;
   flex-direction: column;
   background-color: #fff;
-  border-top-left-radius: 2rem;
-  border-top-right-radius: 2rem;
+  border-top-left-radius: 1.5rem;
+  border-top-right-radius: 1.5rem;
   z-index: $--z-index-bottom-sheet;
   transform: translateY(0);
 
@@ -120,7 +120,7 @@ function dragHandler(dragState) {
     background-color: $--border-color-base;
     border-top-left-radius: 1.5rem;
     border-top-right-radius: 1.5rem;
-    cursor: drag;
+    cursor: move;
     &::after {
       content: '';
       position: absolute;
@@ -132,6 +132,10 @@ function dragHandler(dragState) {
       width: 8rem;
       border-radius: 0.35rem;
       background-color: #000;
+    }
+
+    + .bottomSheet__content {
+      height: calc(100% - 2.5rem);
     }
   }
 
@@ -148,6 +152,7 @@ function dragHandler(dragState) {
   &__content {
     flex: 1 1 100%;
     margin-bottom: 20px;
+    height: 100%;
   }
 }
 </style>

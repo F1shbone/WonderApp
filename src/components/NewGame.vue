@@ -13,7 +13,7 @@
         </template>
       </div>
       <div class="new-game__footer">
-        <el-button type="primary" @click="start" style="width: 100%">Start</el-button>
+        <el-button type="primary" @click="start" :disabled="!isStartEnabled" style="width: 100%">Start</el-button>
       </div>
     </div>
   </bottom-sheet>
@@ -44,17 +44,21 @@ const props = defineProps({
   },
 });
 const emit = defineEmits(['update:modelValue']);
+//#endregion
 
+const players = ref([]);
+const expansions = ref([]);
 watchEffect(() => {
   if (props.modelValue) {
     players.value = initPlayers();
     expansions.value = initExpansions();
   }
 });
-//#endregion
 
-//#region expansions
-const expansions = ref([]);
+const activeExpansionIds = computed(() => expansions.value.filter((e) => e.value).map((e) => e.id));
+const activeScoreIds = computed(() => store.getters['expansions/scores'](activeExpansionIds.value));
+
+//#region Init state
 function initExpansions() {
   return store.getters['expansions/ownedExpansions'].map((expansion) => ({
     id: expansion.id,
@@ -62,14 +66,7 @@ function initExpansions() {
     value: expansion.id === BASE.id ? true : false,
   }));
 }
-const activeExpansionIds = computed(() => expansions.value.filter((e) => e.value).map((e) => e.id));
-const activeScoreIds = computed(() => store.getters['expansions/scores'](activeExpansionIds.value));
-//#endregion
-
-//#region players
-const players = ref([]);
 function initPlayers() {
-  console.log('init Players');
   return store.state.players.players.map((player) => ({
     id: player.id,
     label: player.name,
@@ -78,6 +75,20 @@ function initPlayers() {
     wonderId: undefined,
   }));
 }
+function initMatch() {
+  // Shuffle player order
+  players.value = ShuffleArray(players.value.filter((e) => e.value));
+  players.value.forEach((player) => {
+    // Init scores for selected expansion(s)
+    activeScoreIds.value.forEach((scoreId) => {
+      const score = SCORES[scoreId].getScore();
+      player.score[scoreId] = score;
+    });
+    // Roll unique wonders for each player
+    player.wonderId = getRandomWonder();
+  });
+}
+
 //#endregion
 
 //#region Wonders
@@ -106,20 +117,7 @@ const STEPS = {
 };
 const step = ref(STEPS.ONE);
 
-function initMatch() {
-  // Shuffle player order
-  players.value = ShuffleArray(players.value.filter((e) => e.value));
-  players.value.forEach((player) => {
-    // Init scores for selected expansion(s)
-    activeScoreIds.value.forEach((scoreId) => {
-      const score = SCORES[scoreId].getScore();
-      player.score[scoreId] = score;
-    });
-    // Roll unique wonders for each player
-    player.wonderId = getRandomWonder();
-  });
-}
-
+const isStartEnabled = computed(() => players.value.filter((e) => e.value).length >= 2);
 async function start() {
   switch (step.value) {
     case STEPS.ONE: {
@@ -150,7 +148,7 @@ function close() {
 //#endregion
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import '../theme/variables';
 
 .new-game {
@@ -171,11 +169,19 @@ function close() {
 
   &__main {
     height: 100%;
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-rows: 50% 50%;
+    grid-gap: 1rem;
 
     > div {
       flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+
+      > div {
+        overflow: auto;
+        flex: 1 1 auto;
+      }
     }
   }
 }
