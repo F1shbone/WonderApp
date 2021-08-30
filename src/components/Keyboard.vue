@@ -1,5 +1,4 @@
 <template>
-  <!-- <div :style="{ height: '20rem' }" /> -->
   <bottom-sheet height="20rem" :modelValue="visible" @update:modelValue="close" hideBackdrop @close="close">
     <div class="keyboard" :style="{ backgroundColor: props.score.bg, color: props.score.color }">
       <div class="keyboard__value">
@@ -51,9 +50,6 @@
         <button @click="negative()">
           <kbd><i class="el-icon-minus" /></kbd>
         </button>
-        <!-- <button @click="close">
-          <kbd><i class="el-icon-arrow-down" /></kbd>
-        </button> -->
         <button @click="add('0')">0</button>
         <button @click="emit('update:value', { score: 0 })">
           <kbd><i class="el-icon-close" /></kbd>

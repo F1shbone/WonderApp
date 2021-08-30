@@ -61,7 +61,6 @@ function addPlayer() {
     cancelButtonText: 'Cancel',
   })
     .then(({ value }) => {
-      console.log(value);
       store.dispatch('players/addPlayer', { name: value });
     })
     .catch(() => {});

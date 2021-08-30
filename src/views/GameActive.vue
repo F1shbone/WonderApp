@@ -5,7 +5,7 @@
     border
     :data="scoreTableRows"
     :row-style="getRowBg"
-    :class="{ 'game--scoresVisible': !scoresHidden }"
+    :class="{ 'game--scoresVisible': scoresVisible }"
     @cell-click="cellClick"
     ref="tableRef"
   >
@@ -36,7 +36,7 @@
   </el-table>
 
   <div class="game__btn">
-    <el-button type="primary" icon="el-icon-magic-stick" @click="revealScore">Reveal Score</el-button>
+    <game-result v-model="scoresVisible" />
     <!-- <el-button type="primary" icon="el-icon-share">Submit Score</el-button> -->
   </div>
 
@@ -46,9 +46,7 @@
     :score="SCORES[selectedScoreId]"
     @nextCell="nextCell"
     @update:meta="updateScoreMeta"
-  >
-    <p>Keyboard</p>
-  </keyboard>
+  />
 </template>
 
 <script setup>
@@ -56,6 +54,7 @@ import { computed, ref } from 'vue';
 import { useStore } from 'vuex';
 
 import Keyboard from '@/components/Keyboard.vue';
+import GameResult from '@/components/GameResult.vue';
 
 import * as SCORES from '@/store/gameInfo/score';
 
@@ -147,10 +146,10 @@ function nextCell() {
 //#endregion
 
 //#region Score
-const scoresHidden = ref(true);
-function revealScore() {
-  scoresHidden.value = false;
-}
+const scoresVisible = ref(false);
+// function revealScore() {
+//   scoresVisible.value = true;
+// }
 const scoreTableRows = computed(() => {
   const score = scoreIds.value.map((scoreId, i) => {
     const row = {
@@ -170,7 +169,7 @@ const scoreTableRows = computed(() => {
     total[`player-${player.id}`] = player.total;
   });
 
-  if (scoresHidden.value) {
+  if (!scoresVisible.value) {
     return score;
   } else {
     return [...score, total];
@@ -216,7 +215,7 @@ const scoreTableRows = computed(() => {
       display: block;
       height: 1rem;
     }
-    .el-button {
+    > .el-button {
       @include flushBody();
     }
   }

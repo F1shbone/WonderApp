@@ -3,9 +3,22 @@
     <div class="bottomSheet__mask" v-if="modelValue && !hideBackdrop" />
   </transition>
   <transition name="slide">
-    <div class="bottomSheet" :style="`height: ${height};`" v-if="modelValue" ref="target">
+    <div
+      v-if="modelValue"
+      :style="style"
+      :class="{ bottomSheet: true, 'bottomSheet--fullscreen': fullscreen }"
+      ref="target"
+    >
       <div class="bottomSheet__drag" v-drag="dragHandler" v-if="!hideDrag" />
       <div class="bottomSheet__content">
+        <el-button
+          v-if="fullscreen"
+          type="text"
+          class="bottomSheet__closeBtn"
+          @click="emit('update:modelValue', false)"
+        >
+          <i class="el-icon-close" />
+        </el-button>
         <slot />
       </div>
     </div>
@@ -13,7 +26,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { onClickOutside } from '@vueuse/core';
 
 //#region v-model
@@ -34,9 +47,17 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  fullscreen: {
+    type: Boolean,
+    default: false,
+  },
 });
 const emit = defineEmits(['update:modelValue', 'close']);
 //#endregion
+
+const style = computed(() => ({
+  height: props.fullscreen ? '100%' : props.height,
+}));
 
 const target = ref(null);
 onClickOutside(target, () => {
@@ -46,6 +67,7 @@ onClickOutside(target, () => {
   }
 });
 
+//#region Drag
 let initialY = 0;
 let initialHeight = 0;
 let offset = 0;
@@ -74,6 +96,7 @@ function dragHandler(dragState) {
     }
   }
 }
+//#endregion
 </script>
 
 <style scoped>
@@ -104,6 +127,11 @@ function dragHandler(dragState) {
 @import '../theme/variables';
 
 .bottomSheet {
+  --border-radius: 1.5rem;
+  &--fullscreen {
+    --border-radius: 0;
+  }
+
   position: fixed;
   left: 0;
   right: 0;
@@ -111,8 +139,8 @@ function dragHandler(dragState) {
   display: flex;
   flex-direction: column;
   background-color: #fff;
-  border-top-left-radius: 1.5rem;
-  border-top-right-radius: 1.5rem;
+  border-top-left-radius: var(--border-radius);
+  border-top-right-radius: var(--border-radius);
   z-index: $--z-index-bottom-sheet;
   transform: translateY(0);
 
@@ -120,8 +148,8 @@ function dragHandler(dragState) {
     position: relative;
     height: 2.5rem;
     background-color: $--border-color-base;
-    border-top-left-radius: 1.5rem;
-    border-top-right-radius: 1.5rem;
+    border-top-left-radius: var(--border-radius);
+    border-top-right-radius: var(--border-radius);
     cursor: move;
     &::after {
       content: '';
@@ -155,6 +183,15 @@ function dragHandler(dragState) {
     flex: 1 1 100%;
     margin-bottom: 20px;
     height: 100%;
+  }
+
+  &__closeBtn {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    display: inline-block;
+    padding: 0.75rem;
+    font-size: 1.5rem;
   }
 }
 </style>
