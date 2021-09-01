@@ -32,6 +32,10 @@ kbd {
   border-radius: 0.2rem;
 }
 
+hr {
+  border-top: 1px solid $--border-color-light;
+}
+
 .el-header {
   padding: 0;
   border-top: $--border-base;
