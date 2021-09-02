@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory } from 'vue-router';
 import store from '@/store';
 
 import Game from '../views/Game.vue';
+import Results from '../views/Results.vue';
 import GameEmpty from '../views/GameEmpty.vue';
 
 const routes = [
@@ -28,6 +29,21 @@ const routes = [
           return store.hasModule('match') ? true : { path: '/game/empty' };
         },
         component: () => import(/* webpackChunkName: "game" */ '../views/GameActive.vue'),
+      },
+    ],
+  },
+  {
+    path: '/results',
+    name: 'Results',
+    component: Results,
+    children: [
+      {
+        path: '',
+        component: () => import(/* webpackChunkName: "results" */ '../views/ResultsList.vue'),
+      },
+      {
+        path: ':id',
+        component: () => import(/* webpackChunkName: "results" */ '../views/ResultsDetail.vue'),
       },
     ],
   },

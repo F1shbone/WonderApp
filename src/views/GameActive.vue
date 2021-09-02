@@ -36,10 +36,11 @@
   </el-table>
 
   <div class="game__btn">
-    <game-result v-model="scoresVisible" />
+    <el-button type="primary" icon="el-icon-trophy" @click="scoreMatch">Submit Score</el-button>
     <!-- <el-button type="primary" icon="el-icon-share">Submit Score</el-button> -->
   </div>
 
+  <game-result v-model="scoresVisible" />
   <keyboard
     v-model:visible="showKeyboard"
     v-model:value="currentValue"
@@ -52,6 +53,8 @@
 <script setup>
 import { computed, ref } from 'vue';
 import { useStore } from 'vuex';
+import router from '@/router';
+import { ElMessageBox } from 'element-plus';
 
 import Keyboard from '@/components/Keyboard.vue';
 import GameResult from '@/components/GameResult.vue';
@@ -147,9 +150,6 @@ function nextCell() {
 
 //#region Score
 const scoresVisible = ref(false);
-// function revealScore() {
-//   scoresVisible.value = true;
-// }
 const scoreTableRows = computed(() => {
   const score = scoreIds.value.map((scoreId, i) => {
     const row = {
@@ -175,6 +175,24 @@ const scoreTableRows = computed(() => {
     return [...score, total];
   }
 });
+
+async function scoreMatch() {
+  if (store.hasModule('match')) {
+    try {
+      await ElMessageBox.confirm('If you score this match you can no longer make edits.', 'Are you sure?', {
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
+        type: 'warning',
+        buttonSize: 'large',
+      });
+      const id = await store.dispatch('results/addMatch');
+      await router.replace(`/results/${id}`);
+      store.unregisterModule('match');
+    } catch {
+      return;
+    }
+  }
+}
 //#endregion
 </script>
 
@@ -216,6 +234,7 @@ const scoreTableRows = computed(() => {
       height: 1rem;
     }
     > .el-button {
+      font-size: 1rem;
       @include flushBody();
     }
   }

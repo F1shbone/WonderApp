@@ -1,22 +1,16 @@
 <template>
-  <div class="stats">
-    <h1>Stats</h1>
+  <div class="results">
+    <router-view />
   </div>
 </template>
 
-<script>
-export default {
-  name: 'Stats',
-  components: {},
-  setup() {},
-};
-</script>
+<script setup></script>
 
 <style lang="scss">
 @import '../theme/variables';
 @import '../theme/mixins';
 
-.stats {
+.results {
   position: relative;
   height: 100%;
 }

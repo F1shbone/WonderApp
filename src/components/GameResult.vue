@@ -1,8 +1,4 @@
 <template>
-  <el-button type="primary" icon="el-icon-magic-stick" @click="emit('update:modelValue', true)" v-if="!modelValue"
-    >Reveal Score</el-button
-  >
-
   <bottom-sheet hideDrag fullscreen :modelValue="modelValue" @update:modelValue="close" @close="close">
     <div class="game-result">
       <div class="game-result__container">
