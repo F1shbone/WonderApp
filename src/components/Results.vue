@@ -57,7 +57,18 @@
 </template>
 
 <script setup>
-//
+import { onMounted, onBeforeUnmount } from 'vue';
+import createConfetti from 'canvas-confetti';
+
+let timerId;
+onMounted(() => {
+  timerId = setTimeout(createConfetti, 6000);
+});
+onBeforeUnmount(() => {
+  if (timerId) {
+    window.clearTimeout(timerId);
+  }
+});
 </script>
 
 <style lang="scss">
