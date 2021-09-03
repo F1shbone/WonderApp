@@ -10,7 +10,7 @@
 
     <!-- <pre><code>{{result}}</code></pre> -->
     <!-- <results /> -->
-    <top3-reveal v-if="view === 'Overview'" :players="result.players" />
+    <top3-reveal :class="{ 'resultsDetail--hide': view !== 'Overview' }" :players="result.players" />
     <match-scores
       :players="result.players"
       :scoreIds="result.scoreIds"
@@ -35,9 +35,6 @@ const { params } = useRoute();
 const result = computed(() => store.state.results.results[params.id]);
 
 const view = ref('Overview');
-// const goBack = () => {
-//   //
-// };
 </script>
 
 <style lang="scss">
@@ -50,6 +47,11 @@ const view = ref('Overview');
     .el-radio-button__inner {
       width: 5.25rem;
     }
+  }
+
+  &--hide {
+    height: 0;
+    overflow: hidden;
   }
 }
 </style>

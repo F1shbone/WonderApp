@@ -120,7 +120,7 @@ function getRowBg({ row }) {
     margin-bottom: 1rem;
     border: 1px solid $--card-border-color;
     border-radius: $--card-border-radius;
-    background: $--background-color-base;
+    background: $--color-white;
     box-shadow: $--box-shadow-base;
 
     h2 {

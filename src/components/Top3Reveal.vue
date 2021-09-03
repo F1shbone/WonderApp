@@ -122,7 +122,7 @@ const getPlayerName = (index) => {
     box-sizing: border-box;
     border: 1px solid $--card-border-color;
     border-radius: $--card-border-radius;
-    background: $--background-color-base;
+    background: $--color-white;
     box-shadow: $--box-shadow-base;
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
