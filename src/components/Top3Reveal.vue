@@ -6,9 +6,12 @@
       :class="`top3reveal__card top3reveal--${Number(i) + 1}`"
     >
       <div class="top3reveal__flip">
-        <img class="top3reveal__medal" :src="getMedal(Number(i) + 1)" />
-        <h4>{{ getPlayerName(player.id) }}</h4>
-        <p>{{ player.total }}<br />Points</p>
+        <div class="top3reveal__front">
+          <img class="top3reveal__medal" :src="getMedal(Number(i) + 1)" />
+          <h4>{{ getPlayerName(player.id) }}</h4>
+          <p>{{ player.total }}<br />Points</p>
+        </div>
+        <div class="top3reveal__back"></div>
       </div>
     </div>
   </div>
@@ -73,36 +76,32 @@ const getPlayerName = (index) => {
     display: flex;
     align-items: center;
   }
+
   &__card {
+    height: var(--height);
     flex: 1 1 33.3333334%;
     order: var(--order);
-    padding: $--card-padding;
-    border: 1px solid $--card-border-color;
-    border-radius: $--card-border-radius;
-    background: $--background-color-base;
-    box-shadow: $--box-shadow-base;
     margin-left: var(--margin-left);
     margin-right: var(--margin-right);
     z-index: var(--z-index);
     perspective: 1000px;
   }
+
   &__flip {
-    height: var(--height);
-    padding-top: var(--padding);
-    padding-bottom: var(--padding);
-    box-sizing: border-box;
+    position: relative;
+    width: 100%;
+    height: 100%;
     text-align: center;
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
     // flip animation
     transform: rotateY(180deg);
-    transform-style: preserve-3d;
     animation: flip;
     animation-timing-function: ease-in-out;
     animation-duration: 0.8s;
     animation-iteration-count: 1;
     animation-delay: var(--delay);
     animation-fill-mode: forwards;
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
 
     @keyframes flip {
       0% {
@@ -113,6 +112,26 @@ const getPlayerName = (index) => {
       }
     }
   }
+
+  &__front,
+  &__back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    padding: calc(#{$--card-padding} + var(--padding)) $--card-padding;
+    box-sizing: border-box;
+    border: 1px solid $--card-border-color;
+    border-radius: $--card-border-radius;
+    background: $--background-color-base;
+    box-shadow: $--box-shadow-base;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  &__back {
+    transform: rotateY(180deg);
+  }
+
   &__medal {
     height: 3.75rem;
   }
@@ -121,30 +140,28 @@ const getPlayerName = (index) => {
     --order: 2;
     --margin-left: 0;
     --margin-right: 0;
-    // --padding: calc(#{$--card-padding} + 1.75rem);
     --padding: 1.75rem;
     --z-index: 10;
-    --height: 14rem;
+    --height: 16.5rem;
     --delay: 5.5s;
   }
   &--2 {
     --order: 1;
     --margin-left: 0;
     --margin-right: -1rem;
-    --padding: 0;
+    --padding: 0px;
     --z-index: initial;
-    --height: 10.5rem;
+    --height: 13rem;
     --delay: 3s;
   }
   &--3 {
     --order: 3;
     --margin-left: -1rem;
     --margin-right: 0;
-    --padding: 0;
+    --padding: 0px;
     --z-index: initial;
-    --height: 10.5rem;
+    --height: 13rem;
     --delay: 0.5s;
   }
-  //
 }
 </style>
