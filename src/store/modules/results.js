@@ -7,6 +7,7 @@ export default {
           label: 'Match 2',
           date: 'Fri Sep 03 2021 01:19:28 GMT+0200 (Central European Summer Time)',
           expansionIds: ['BASE', 'WONDER_PACK', 'LEADERS', 'CITIES'],
+          scoreIds: ['WONDER', 'COINS', 'MILITARY', 'CIVIC', 'COMMERCIAL', 'SCIENTIFIC', 'GUILDS', 'LEADER', 'CITY'],
           players: [
             {
               id: 3,
@@ -78,6 +79,7 @@ export default {
           label: 'Match 1',
           date: 'Fri Sep 03 2021 01:09:28 GMT+0200 (Central European Summer Time)',
           expansionIds: ['BASE', 'WONDER_PACK', 'LEADERS', 'CITIES'],
+          scoreIds: ['WONDER', 'COINS', 'MILITARY', 'CIVIC', 'COMMERCIAL', 'SCIENTIFIC', 'GUILDS', 'LEADER', 'CITY'],
           players: [
             {
               id: 3,
@@ -155,6 +157,7 @@ export default {
       const result = {
         label: `Match ${state.results.length + 1}`,
         date: rootState.match.date,
+        scoreIds: rootState.match.scoreIds,
         expansionIds: rootState.match.expansionIds,
         players,
       };

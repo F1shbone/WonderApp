@@ -1,15 +1,8 @@
 <template>
   <h1>Score</h1>
 
-  <el-table
-    border
-    :data="scoreTableRows"
-    :row-style="getRowBg"
-    :class="{ 'game--scoresVisible': scoresVisible }"
-    @cell-click="cellClick"
-    ref="tableRef"
-  >
-    <el-table-column fixed label="" :width="colIcon">
+  <el-table border :data="scoreTableRows" :row-style="getRowBg" @cell-click="cellClick" ref="tableRef">
+    <el-table-column fixed label="" :width="50">
       <template #default="{ row }">
         <div class="game__rowIcon" v-html="row.category.icon" />
       </template>
@@ -37,10 +30,8 @@
 
   <div class="game__btn">
     <el-button type="primary" icon="el-icon-trophy" @click="scoreMatch">Submit Score</el-button>
-    <!-- <el-button type="primary" icon="el-icon-share">Submit Score</el-button> -->
   </div>
 
-  <game-result v-model="scoresVisible" />
   <keyboard
     v-model:visible="showKeyboard"
     v-model:value="currentValue"
@@ -57,7 +48,6 @@ import router from '@/router';
 import { ElMessageBox } from 'element-plus';
 
 import Keyboard from '@/components/Keyboard.vue';
-import GameResult from '@/components/GameResult.vue';
 
 import * as SCORES from '@/store/gameInfo/score';
 
@@ -75,7 +65,6 @@ function getPlayerName(id) {
 //#region Table
 const showKeyboard = ref(false);
 const tableRef = ref(undefined);
-const colIcon = ref(50);
 const colWidth = ref(0);
 
 function getRowBg({ row }) {
@@ -149,7 +138,6 @@ function nextCell() {
 //#endregion
 
 //#region Score
-const scoresVisible = ref(false);
 const scoreTableRows = computed(() => {
   const score = scoreIds.value.map((scoreId, i) => {
     const row = {
@@ -162,18 +150,8 @@ const scoreTableRows = computed(() => {
 
     return row;
   });
-  const total = {
-    category: SCORES.TOTAL,
-  };
-  players.value.forEach((player) => {
-    total[`player-${player.id}`] = player.total;
-  });
 
-  if (!scoresVisible.value) {
-    return score;
-  } else {
-    return [...score, total];
-  }
+  return score;
 });
 
 const scoreMatch = async () => {
@@ -261,19 +239,6 @@ const scoreMatch = async () => {
     &__row td:first-child {
       color: $--body-color !important;
       background-color: $--body-bg !important;
-    }
-  }
-  &--scoresVisible {
-    .el-table {
-      &__body-wrapper,
-      &__fixed-body-wrapper {
-        tr:nth-last-child(2) td {
-          border-bottom: 2px solid $--color-primary;
-        }
-        tr:last-child td {
-          background-color: rgba($--color-primary, 0.5) !important;
-        }
-      }
     }
   }
 }

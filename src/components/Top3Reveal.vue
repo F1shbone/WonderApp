@@ -49,7 +49,6 @@ const top3 = computed(() => {
     .slice(0)
     .sort((a, b) => b.total - a.total)
     .slice(0, 3);
-  //
 });
 const getMedal = (index) => {
   switch (index) {
