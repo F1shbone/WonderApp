@@ -29,9 +29,6 @@ export default {
           id,
           wonderId,
           score,
-          get total() {
-            return Object.values(score).reduce((acc, val) => (acc += val.score), 0);
-          },
         });
       });
     },

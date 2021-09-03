@@ -128,11 +128,19 @@ export default {
   },
   actions: {
     addMatch({ commit, state, rootState }) {
+      const players = rootState.match.players.map((player) => {
+        return JSON.parse(
+          JSON.stringify({
+            ...player,
+            total: Object.values(player.score).reduce((acc, val) => (acc += val.score), 0),
+          })
+        );
+      });
       const result = {
         label: `Match ${state.results.length + 1}`,
         date: rootState.match.date,
         expansionIds: rootState.match.expansionIds,
-        players: JSON.parse(JSON.stringify(rootState.match.players)),
+        players,
       };
       commit('ADD_RESULT', result);
 
