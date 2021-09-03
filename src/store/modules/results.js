@@ -41,6 +41,22 @@ export default {
               total: 2,
             },
             {
+              id: 4,
+              wonderId: 'OLYMPIA',
+              score: {
+                WONDER: { score: 2 },
+                COINS: { score: 10 },
+                MILITARY: { score: 0 },
+                CIVIC: { score: 0 },
+                COMMERCIAL: { score: 0 },
+                SCIENTIFIC: { score: 0, meta: { aristotle: false, tablet: 0, cog: 0, compass: 0 } },
+                GUILDS: { score: 0 },
+                LEADER: { score: 0 },
+                CITY: { score: 0 },
+              },
+              total: 12,
+            },
+            {
               id: 2,
               wonderId: 'MANNEKEN_PIS',
               score: {
