@@ -51,7 +51,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, ref, nextTick } from 'vue';
 import { useStore } from 'vuex';
 import router from '@/router';
 import { ElMessageBox } from 'element-plus';
@@ -176,7 +176,7 @@ const scoreTableRows = computed(() => {
   }
 });
 
-async function scoreMatch() {
+const scoreMatch = async () => {
   if (store.hasModule('match')) {
     try {
       await ElMessageBox.confirm('If you score this match you can no longer make edits.', 'Are you sure?', {
@@ -187,12 +187,14 @@ async function scoreMatch() {
       });
       const id = await store.dispatch('results/addMatch');
       await router.replace(`/results/${id}`);
+      await nextTick();
       store.unregisterModule('match');
-    } catch {
+    } catch (e) {
+      console.warn(e);
       return;
     }
   }
-}
+};
 //#endregion
 </script>
 

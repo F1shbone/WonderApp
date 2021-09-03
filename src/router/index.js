@@ -44,6 +44,13 @@ const routes = [
       {
         path: ':id',
         component: () => import(/* webpackChunkName: "results" */ '../views/ResultsDetail.vue'),
+        beforeEnter({ params }) {
+          if (+params.id < store.state.results.results.length) {
+            return true;
+          } else {
+            return '/results';
+          }
+        },
       },
     ],
   },
