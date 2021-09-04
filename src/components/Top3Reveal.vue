@@ -8,8 +8,12 @@
       <div class="top3reveal__flip">
         <div class="top3reveal__front">
           <img class="top3reveal__medal" :src="getMedal(Number(i) + 1)" />
-          <h4>{{ getPlayerName(player.id) }}</h4>
-          <p>{{ player.total }}<br />Points</p>
+          <h4 class="top3reveal__playerInfo">
+            {{ getPlayerName(player.id) }}
+            <br />
+            <small class="text-secondary">{{ getWonderName(player.wonderId) }}</small>
+          </h4>
+          <p class="top3reveal__playerScore">{{ player.total }}<br />Points</p>
         </div>
         <div class="top3reveal__back"></div>
       </div>
@@ -63,8 +67,11 @@ const getMedal = (index) => {
       return BronzeMedal;
   }
 };
-const getPlayerName = (index) => {
-  return store.getters['players/player'](index).name;
+const getPlayerName = (id) => {
+  return store.getters['players/player'](id).name;
+};
+const getWonderName = (id) => {
+  return store.getters['expansions/wonder'](id).label.short;
 };
 </script>
 
@@ -132,8 +139,23 @@ const getPlayerName = (index) => {
     transform: rotateY(180deg);
   }
 
+  &__front {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 100%;
+  }
+
   &__medal {
-    height: 3.75rem;
+    min-height: 3.75rem;
+    flex: 1 1 100%;
+  }
+
+  &__playerInfo,
+  &__playerScore {
+    flex: 1 1 auto;
+    margin: 0;
+    margin-top: 0.5rem;
+    white-space: nowrap;
   }
 
   &--1 {

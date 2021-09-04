@@ -1,4 +1,5 @@
 import { ARMADA, BABEL_PROJECT, BABEL_TOWER, BASE, CITIES, LEADERS, WONDER_PACK } from '../gameInfo/expansions';
+import * as WONDERS from '../gameInfo/wonders';
 
 export default {
   namespaced: true,
@@ -73,6 +74,9 @@ export default {
         wonders.push(...state[id].wonders);
         return wonders;
       }, []),
+    wonder: () => (wonderId) => {
+      return WONDERS[wonderId];
+    },
     scores: (state) => (expansionIds) =>
       expansionIds.reduce((scores, id) => {
         scores.push(...state[id].scores);

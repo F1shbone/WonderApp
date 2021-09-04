@@ -23,10 +23,19 @@
   </div>
   <ul v-else class="matchScores__list">
     <li v-for="(player, i) in playersFiltered" :key="`player-${String(i)}`" class="matchScores__card">
-      <h2>
-        {{ Number(i) + (hideTop3 ? 4 : 1) }} <small>{{ getPlayerName(player.id) }}</small>
-      </h2>
-      <p>{{ player.total }} Points</p>
+      <div class="matchScores__details">
+        <h1>{{ Number(i) + (hideTop3 ? 4 : 1) }}</h1>
+      </div>
+      <div class="matchScores__details">
+        <h4>
+          {{ getPlayerName(player.id) }}
+          <br />
+          <small class="text-secondary">{{ getWonderName(player.wonderId) }}</small>
+        </h4>
+      </div>
+      <div class="matchScores__details">
+        <p>{{ player.total }} Points</p>
+      </div>
     </li>
   </ul>
 </template>
@@ -68,6 +77,9 @@ const playersFiltered = computed(() =>
 );
 const getPlayerName = (index) => {
   return store.getters['players/player'](index).name;
+};
+const getWonderName = (id) => {
+  return store.getters['expansions/wonder'](id).label.short;
 };
 
 //#region Table
@@ -123,22 +135,41 @@ function getRowBg({ row }) {
     background: $--color-white;
     box-shadow: $--box-shadow-base;
 
-    h2 {
-      flex: 1 1 50%;
-      display: flex;
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
       margin: 0;
-      justify-content: flex-start;
-      align-items: center;
       > small {
-        margin-left: 1.5rem;
-        font-size: 1rem;
+        font-size: 75%;
       }
     }
     p {
-      flex: 1 1 50%;
-      display: flex;
-      justify-content: flex-end;
       margin: 0;
+      white-space: nowrap;
+    }
+  }
+
+  &__details {
+    display: flex;
+    flex: 1 1 100%;
+    flex-direction: column;
+    justify-items: center;
+    align-items: flex-start;
+
+    + .matchScores__details {
+      margin-left: 1rem;
+    }
+
+    &:first-child {
+      flex: 1 1 auto;
+      // justify-items: flex-start;
+    }
+    &:last-child {
+      flex: 1 1 auto;
+      align-items: flex-end;
     }
   }
 
