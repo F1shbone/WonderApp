@@ -1,6 +1,5 @@
 <template>
   <div class="resultsDetail">
-    <!-- <h1>Results Detail</h1> -->
     <div class="resultsDetail__selector">
       <el-radio-group v-model="view" size="small">
         <el-radio-button label="Overview" />
@@ -8,8 +7,6 @@
       </el-radio-group>
     </div>
 
-    <!-- <pre><code>{{result}}</code></pre> -->
-    <!-- <results /> -->
     <top3-reveal :class="{ 'resultsDetail--hide': view !== 'Overview' }" :players="result.players" />
     <match-scores
       :players="result.players"
@@ -19,6 +16,8 @@
     />
 
     <hr />
+
+    <match-stats :players="result.players" />
   </div>
 </template>
 
@@ -29,6 +28,7 @@ import { useRoute } from 'vue-router';
 
 import Top3Reveal from '@/components/Top3Reveal.vue';
 import MatchScores from '@/components/MatchScores.vue';
+import MatchStats from '@/components/MatchStats.vue';
 
 const store = useStore();
 const { params } = useRoute();

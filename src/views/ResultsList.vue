@@ -3,9 +3,9 @@
     <h1>Results List</h1>
 
     <ul class="results-list">
-      <li v-for="(result, i) in results" :key="`result-${i}`">
-        <router-link :to="`/results/${i}`">
-          <el-card full>
+      <li v-for="(result, i) in results" :key="`result-${String(i)}`">
+        <router-link :to="`/results/${String(i)}`">
+          <el-card>
             <template #header>
               <h4>
                 {{ result.label }}
@@ -35,7 +35,6 @@ import { computed } from 'vue';
 import { useStore } from 'vuex';
 import { convertUTCToDateTimeString } from '@/utils/date';
 
-import ElCard from '@/components/ElCard.vue';
 import ElCardList from '@/components/ElCardList.vue';
 import ElCardListItem from '@/components/ElCardListItem.vue';
 

@@ -112,7 +112,7 @@ const getWonderName = (id) => {
 
     @keyframes flip {
       0% {
-        transform: rotateY(180deg);
+        transform: rotateY(calc(180deg * var(--rotate-direction)));
       }
       100% {
         transform: rotateY(0);
@@ -137,6 +137,7 @@ const getWonderName = (id) => {
 
   &__back {
     transform: rotateY(180deg);
+    background-color: $--color-info-lighter;
   }
 
   &__front {
@@ -162,6 +163,7 @@ const getWonderName = (id) => {
     --order: 2;
     --margin-left: 0;
     --margin-right: 0;
+    --rotate-direction: 1;
     --padding: 1.75rem;
     --z-index: 10;
     --height: 16.5rem;
@@ -171,6 +173,7 @@ const getWonderName = (id) => {
     --order: 1;
     --margin-left: 0;
     --margin-right: -1rem;
+    --rotate-direction: 1;
     --padding: 0px;
     --z-index: initial;
     --height: 13rem;
@@ -180,6 +183,7 @@ const getWonderName = (id) => {
     --order: 3;
     --margin-left: -1rem;
     --margin-right: 0;
+    --rotate-direction: -1;
     --padding: 0px;
     --z-index: initial;
     --height: 13rem;
