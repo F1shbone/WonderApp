@@ -163,8 +163,8 @@ const scoreMatch = async () => {
         type: 'warning',
         buttonSize: 'large',
       });
-      const id = await store.dispatch('results/addMatch');
-      await router.replace(`/results/${id}`);
+      await store.dispatch('results/addMatch');
+      await router.replace('/results/0');
       await nextTick();
       store.unregisterModule('match');
     } catch (e) {
