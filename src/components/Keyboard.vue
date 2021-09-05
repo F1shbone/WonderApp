@@ -1,6 +1,6 @@
 <template>
   <bottom-sheet height="20rem" :modelValue="visible" @update:modelValue="close" hideBackdrop @close="close">
-    <div class="keyboard" :style="{ backgroundColor: props.score.bg, color: props.score.color }">
+    <div :class="`keyboard ${props.score.class}`">
       <div class="keyboard__value">
         {{ value.score }}
         <button @click="emit('nextCell')">

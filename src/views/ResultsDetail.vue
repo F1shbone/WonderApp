@@ -9,6 +9,7 @@
 
     <top3-reveal :class="{ 'resultsDetail--hide': view !== 'Overview' }" :players="result.players" />
     <match-scores
+      :playersSorted="playersSorted"
       :players="result.players"
       :scoreIds="result.scoreIds"
       :hideTop3="view === 'Overview'"
@@ -17,7 +18,7 @@
 
     <hr />
 
-    <match-stats :players="result.players" />
+    <match-stats :players="playersSorted" :scoreIds="result.scoreIds" />
   </div>
 </template>
 
@@ -33,6 +34,7 @@ import MatchStats from '@/components/MatchStats.vue';
 const store = useStore();
 const { params } = useRoute();
 const result = computed(() => store.state.results.results[params.id]);
+const playersSorted = computed(() => result.value.players.slice(0).sort((a, b) => b.total - a.total));
 
 const view = ref('Overview');
 </script>

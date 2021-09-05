@@ -1,7 +1,7 @@
 <template>
   <h1>Score</h1>
 
-  <el-table border :data="scoreTableRows" :row-style="getRowBg" @cell-click="cellClick" ref="tableRef">
+  <el-table border :data="scoreTableRows" :row-class-name="getRowClass" @cell-click="cellClick" ref="tableRef">
     <el-table-column fixed label="" :width="50">
       <template #default="{ row }">
         <div class="game__rowIcon" v-html="row.category.icon" />
@@ -67,8 +67,9 @@ const showKeyboard = ref(false);
 const tableRef = ref(undefined);
 const colWidth = ref(0);
 
-function getRowBg({ row }) {
-  return `background-color: ${row.category.bg};color: ${row.category.color}`;
+function getRowClass({ row }) {
+  console.log(row);
+  return row.category.class;
 }
 //#endregion
 

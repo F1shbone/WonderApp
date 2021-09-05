@@ -1,13 +1,13 @@
 <template>
   <div v-if="!hideDetail" class="matchScores__table">
-    <el-table border :data="scoreTableRows" :row-style="getRowBg" ref="tableRef">
+    <el-table border :data="scoreTableRows" :row-class-name="getRowClass" ref="tableRef">
       <el-table-column fixed label="" :width="50">
         <template #default="{ row }">
           <div class="matchScores__rowIcon" v-html="row.category.icon" />
         </template>
       </el-table-column>
       <el-table-column
-        v-for="player in playersFiltered"
+        v-for="player in props.players"
         :key="`player-${player.id}`"
         :prop="`player-${player.id}`"
         :label="getPlayerName(player.id)"
@@ -53,6 +53,10 @@ const props = defineProps({
     required: true,
     type: Array,
   },
+  playersSorted: {
+    required: true,
+    type: Array,
+  },
   scoreIds: {
     required: true,
     type: Array,
@@ -67,14 +71,13 @@ const props = defineProps({
   },
 });
 
-const playersFiltered = computed(() =>
-  props.hideTop3
-    ? props.players
-        .slice(0)
-        .sort((a, b) => b.total - a.total)
-        .slice(3)
-    : props.players
-);
+const playersFiltered = computed(() => {
+  if (props.hideTop3) {
+    return props.playersSorted.slice(3);
+  } else {
+    return props.playersSorted;
+  }
+});
 const getPlayerName = (index) => {
   return store.getters['players/player'](index).name;
 };
@@ -109,8 +112,8 @@ const scoreTableRows = computed(() => {
 
   return [...score, total];
 });
-function getRowBg({ row }) {
-  return `background-color: ${row.category.bg};color: ${row.category.color}`;
+function getRowClass({ row }) {
+  return row.category.class;
 }
 //#endregion
 </script>
