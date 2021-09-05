@@ -8,7 +8,7 @@
         <el-collapse-item name="player__bestCategory">
           <template #title>Best Category</template>
           <el-card-list-item class="matchStats__item" v-for="score in playerBestCategory" :key="score.playerId">
-            <div>{{ getPlayerName(score.playerId) }}</div>
+            <div>{{ getPlayerName(Number(score.playerId)) }}</div>
             <div :class="`matchStats__category ${SCORES[score.id].class}`">
               <span class="matchStats__points">{{ score.score }} Points</span>
               <span v-html="SCORES[score.id].icon" />
@@ -40,7 +40,7 @@
           <div class="matchStats__entry">
             <span class="text-primary">{{ categoryHighestScore.label }}</span> with
             <span class="text-primary">{{ categoryHighestScore.score }}</span> points scored by
-            <span class="text-primary">{{ getPlayerName(categoryHighestScore.playerId) }}</span
+            <span class="text-primary">{{ getPlayerName(Number(categoryHighestScore.playerId)) }}</span
             >!
           </div>
         </el-collapse-item>
@@ -76,10 +76,10 @@ function getPlayerName(id) {
 
 const playerBestCategory = computed(() => {
   return props.players.map((player) => {
-    let high = { score: 0 };
+    let acc = { score: 0 };
     Object.keys(player.score).forEach((scoreId) => {
-      if (player.score[scoreId].score > high.score) {
-        high = {
+      if (player.score[scoreId].score > acc.score || acc.id === undefined) {
+        acc = {
           id: scoreId,
           playerId: player.id,
           score: player.score[scoreId].score,
@@ -87,7 +87,7 @@ const playerBestCategory = computed(() => {
         };
       }
     });
-    return high;
+    return acc;
   });
 });
 
@@ -95,7 +95,7 @@ const categoryTopScorer = computed(() => {
   return props.scoreIds.map((scoreId) => {
     return props.players.reduce(
       (acc, player) => {
-        if (player.score[scoreId].score > acc?.score) {
+        if (player.score[scoreId].score > acc.score || acc.id === undefined) {
           return {
             id: scoreId,
             playerId: player.id,
@@ -116,7 +116,7 @@ const categoryHighestScore = computed(() => {
   const category = props.players.reduce(
     (acc, player) => {
       Object.keys(player.score).forEach((scoreId) => {
-        if (player.score[scoreId].score > acc.score) {
+        if (player.score[scoreId].score > acc.score || acc.id === undefined) {
           acc = {
             playerId: player.id,
             id: scoreId,
