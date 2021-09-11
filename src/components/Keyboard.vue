@@ -159,6 +159,7 @@ function toggleAristotle() {
     > * {
       margin: 0;
       background: transparent;
+      color: inherit;
       border-radius: 0;
       border: 0 none;
       border-top: $--table-border;

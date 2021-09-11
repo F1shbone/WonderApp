@@ -38,7 +38,7 @@
         <el-collapse-item name="categories_highestScore">
           <template #title>Highest score</template>
           <div class="matchStats__entry">
-            <span class="text-primary">{{ categoryHighestScore.label }}</span> with
+            <span class="text-primary">{{ SCORES[categoryHighestScore.id].label }}</span> with
             <span class="text-primary">{{ categoryHighestScore.score }}</span> points scored by
             <span class="text-primary">{{ getPlayerName(Number(categoryHighestScore.playerId)) }}</span
             >!
@@ -109,32 +109,16 @@ const categoryTopScorer = computed(() => {
       { score: 0 }
     );
   });
-  //
 });
 
 const categoryHighestScore = computed(() => {
-  const category = props.players.reduce(
-    (acc, player) => {
-      Object.keys(player.score).forEach((scoreId) => {
-        if (player.score[scoreId].score > acc.score || acc.id === undefined) {
-          acc = {
-            playerId: player.id,
-            id: scoreId,
-            score: player.score[scoreId].score,
-            meta: player.score[scoreId].meta,
-          };
-        }
-      });
+  return categoryTopScorer.value.reduce(
+    (acc, val) => {
+      if (val.score > acc.score) return val;
       return acc;
     },
     { score: 0 }
   );
-
-  category.label = SCORES[category.id].label;
-  category.icon = SCORES[category.id].icon;
-  category.class = SCORES[category.id].class;
-
-  return category;
 });
 </script>
 
