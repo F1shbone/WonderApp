@@ -33,8 +33,7 @@
 
 <script setup>
 import { computed } from 'vue';
-
-import * as wonders from '@/store/gameInfo/wonders';
+import { useWonder } from '@/composables/useWonder';
 
 import draggable from 'vuedraggable';
 import ElCard from '@/components/ElCard.vue';
@@ -62,9 +61,7 @@ const players = computed({
   set: (val) => emit('update:modelValue', val),
 });
 
-function getWonderName(wonderId) {
-  return wonders[wonderId].label.short;
-}
+const { getWonderName } = useWonder();
 function rerollWonder(player) {
   emit('reroll', player);
 }

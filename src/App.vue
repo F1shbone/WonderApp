@@ -45,7 +45,7 @@
 
 <script setup>
 import NewGame from '@/components/NewGame.vue';
-import useNewGame from '@/composables/newGame.js';
+import useNewGame from '@/composables/useNewGame.js';
 
 const { isNewGameDialogVisible, showNewGame } = useNewGame();
 

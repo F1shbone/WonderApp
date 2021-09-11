@@ -51,12 +51,12 @@
 
 <script setup>
 import { ref, computed } from 'vue';
-import { useStore } from 'vuex';
+import { usePlayer } from '@/composables/usePlayer';
 import * as SCORES from '@/store/gameInfo/score';
 
 import ElCardListItem from '@/components/ElCardListItem.vue';
 
-const store = useStore();
+const { getPlayerName } = usePlayer();
 
 const props = defineProps({
   players: {
@@ -69,10 +69,6 @@ const props = defineProps({
   },
 });
 const activeStat = ref(undefined);
-
-function getPlayerName(id) {
-  return store.getters['players/player'](id).name;
-}
 
 const playerBestCategory = computed(() => {
   return props.players.map((player) => {

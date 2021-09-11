@@ -23,14 +23,13 @@
 
 <script setup>
 import { computed, onMounted, onBeforeUnmount } from 'vue';
-import { useStore } from 'vuex';
+import { usePlayer } from '@/composables/usePlayer';
+import { useWonder } from '@/composables/useWonder';
 import createConfetti from 'canvas-confetti';
 
 import GoldMedal from '../assets/medal__gold.svg';
 import SilverMedal from '../assets/medal__silver.svg';
 import BronzeMedal from '../assets/medal__bronze.svg';
-
-const store = useStore();
 
 const props = defineProps({
   players: {
@@ -67,12 +66,8 @@ const getMedal = (index) => {
       return BronzeMedal;
   }
 };
-const getPlayerName = (id) => {
-  return store.getters['players/player'](id).name;
-};
-const getWonderName = (id) => {
-  return store.getters['expansions/wonder'](id).label.short;
-};
+const { getPlayerName } = usePlayer();
+const { getWonderName } = useWonder();
 </script>
 
 <style lang="scss">

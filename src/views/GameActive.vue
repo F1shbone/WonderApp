@@ -44,6 +44,7 @@
 <script setup>
 import { computed, ref, nextTick } from 'vue';
 import { useStore } from 'vuex';
+import { usePlayer } from '@/composables/usePlayer';
 import router from '@/router';
 import { ElMessageBox } from 'element-plus';
 
@@ -57,9 +58,7 @@ const store = useStore();
 const players = computed(() => store.state.match.players);
 const scoreIds = computed(() => store.state.match.scoreIds);
 
-function getPlayerName(id) {
-  return store.getters['match/playerFull'](id).name;
-}
+const { getPlayerName } = usePlayer();
 //#endregion
 
 //#region Table
@@ -68,7 +67,6 @@ const tableRef = ref(undefined);
 const colWidth = ref(0);
 
 function getRowClass({ row }) {
-  console.log(row);
   return row.category.class;
 }
 //#endregion

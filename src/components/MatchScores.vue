@@ -42,11 +42,13 @@
 
 <script setup>
 import { computed, ref } from 'vue';
-import { useStore } from 'vuex';
+import { usePlayer } from '@/composables/usePlayer';
+import { useWonder } from '@/composables/useWonder';
 
 import * as SCORES from '@/store/gameInfo/score';
 
-const store = useStore();
+const { getPlayerName } = usePlayer();
+const { getWonderName } = useWonder();
 
 const props = defineProps({
   players: {
@@ -78,12 +80,6 @@ const playersFiltered = computed(() => {
     return props.playersSorted;
   }
 });
-const getPlayerName = (index) => {
-  return store.getters['players/player'](index).name;
-};
-const getWonderName = (id) => {
-  return store.getters['expansions/wonder'](id).label.short;
-};
 
 //#region Table
 // TODO: can this be shared with GameActive.vue?
