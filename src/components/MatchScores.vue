@@ -1,26 +1,5 @@
 <template>
-  <div v-if="!hideDetail" class="matchScores__table">
-    <el-table border :data="scoreTableRows" :row-class-name="getRowClass" ref="tableRef">
-      <el-table-column fixed label="" :width="50">
-        <template #default="{ row }">
-          <div class="matchScores__rowIcon" v-html="row.category.icon" />
-        </template>
-      </el-table-column>
-      <el-table-column
-        v-for="player in props.players"
-        :key="`player-${player.id}`"
-        :prop="`player-${player.id}`"
-        :label="getPlayerName(player.id)"
-        :width="colWidth"
-      >
-        <template #default="{ row }">
-          <div class="matchScores__cell">
-            {{ row[`player-${player.id}`] }}
-          </div>
-        </template>
-      </el-table-column>
-    </el-table>
-  </div>
+  <score-table v-if="!hideDetail" flush total :tableData="scoreTableRows" :players="props.players" />
   <ul v-else class="matchScores__list">
     <li v-for="(player, i) in playersFiltered" :key="`player-${String(i)}`" class="matchScores__card">
       <div class="matchScores__details">
@@ -41,9 +20,11 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 import { usePlayer } from '@/composables/usePlayer';
 import { useWonder } from '@/composables/useWonder';
+
+import ScoreTable from '@/components/ScoreTable.vue';
 
 import * as SCORES from '@/store/gameInfo/score';
 
@@ -83,9 +64,6 @@ const playersFiltered = computed(() => {
 
 //#region Table
 // TODO: can this be shared with GameActive.vue?
-const tableRef = ref(undefined);
-const colWidth = ref(0);
-
 const scoreTableRows = computed(() => {
   const score = props.scoreIds.map((scoreId, i) => {
     const row = {
@@ -108,9 +86,6 @@ const scoreTableRows = computed(() => {
 
   return [...score, total];
 });
-function getRowClass({ row }) {
-  return row.category.class;
-}
 //#endregion
 </script>
 
