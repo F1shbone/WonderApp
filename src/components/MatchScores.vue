@@ -1,5 +1,5 @@
 <template>
-  <score-table v-if="!hideDetail" flush total :tableData="scoreTableRows" :players="props.players" />
+  <score-table v-if="!hideDetail" flush total :tableData="score" :players="props.players" />
   <ul v-else class="matchScores__list">
     <li v-for="(player, i) in playersFiltered" :key="`player-${String(i)}`" class="matchScores__card">
       <div class="matchScores__details">
@@ -23,10 +23,9 @@
 import { computed } from 'vue';
 import { usePlayer } from '@/composables/usePlayer';
 import { useWonder } from '@/composables/useWonder';
+import { useMatchScore } from '@/composables/useMatchScore';
 
 import ScoreTable from '@/components/ScoreTable.vue';
-
-import * as SCORES from '@/store/gameInfo/score';
 
 const { getPlayerName } = usePlayer();
 const { getWonderName } = useWonder();
@@ -63,28 +62,10 @@ const playersFiltered = computed(() => {
 });
 
 //#region Table
-// TODO: can this be shared with GameActive.vue?
-const scoreTableRows = computed(() => {
-  const score = props.scoreIds.map((scoreId, i) => {
-    const row = {
-      category: SCORES[scoreId],
-      no: i + 1,
-    };
-    playersFiltered.value.forEach((player) => {
-      row[`player-${player.id}`] = player.score[scoreId].score;
-    });
-
-    return row;
-  });
-
-  const total = {
-    category: SCORES.TOTAL,
-  };
-  playersFiltered.value.forEach((player) => {
-    total[`player-${player.id}`] = player.total;
-  });
-
-  return [...score, total];
+const { score } = useMatchScore({
+  players: playersFiltered,
+  scoreIds: props.scoreIds,
+  total: true,
 });
 //#endregion
 </script>
@@ -145,60 +126,6 @@ const scoreTableRows = computed(() => {
       flex: 1 1 auto;
       align-items: flex-end;
     }
-  }
-
-  &__table {
-    .el-table {
-      @include flushBody();
-
-      &__body tr.hover-row > td,
-      &__body tr.hover-row.current-row > td {
-        background-color: initial;
-      }
-
-      th {
-        text-align: center;
-      }
-
-      td,
-      .cell {
-        padding: 0 !important;
-      }
-
-      &__row td:first-child {
-        color: $--body-color !important;
-        background-color: $--body-bg !important;
-      }
-
-      &__body-wrapper,
-      &__fixed-body-wrapper {
-        tr:nth-last-child(2) td {
-          border-bottom: 2px solid $--color-primary;
-        }
-        tr:last-child td {
-          background-color: rgba($--color-primary, 0.5) !important;
-        }
-      }
-    }
-  }
-
-  &__rowIcon {
-    display: flex;
-    align-content: center;
-    justify-content: center;
-    flex: 1 1 100%;
-
-    svg {
-      flex: 1 1 100%;
-      max-width: 1.5rem;
-      max-height: 1.5rem;
-    }
-  }
-
-  &__cell {
-    display: flex;
-    justify-content: center;
-    padding: 0.75rem;
   }
 }
 </style>

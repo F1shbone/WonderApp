@@ -90,12 +90,12 @@ function onSelectCell(row, col) {
   if (!props.selectable) return;
 
   if (col.no === 0 || row.no === undefined) {
-    emit('update', {
+    emit('selected', {
       row: undefined,
       col: undefined,
     });
   } else {
-    emit('update', {
+    emit('selected', {
       row: row.no,
       col: col.no,
     });

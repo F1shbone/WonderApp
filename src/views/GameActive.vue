@@ -4,11 +4,11 @@
   <score-table
     flush
     selectable
-    :tableData="scoreTableRows"
+    :tableData="score"
     :players="players"
     :selectedRow="selectedRow"
     :selectedCol="selectedCol"
-    @update="onCellSelected"
+    @selected="onCellSelected"
     ref="scoreTableRef"
   />
 
@@ -28,6 +28,7 @@
 <script setup>
 import { computed, ref, nextTick, watchEffect } from 'vue';
 import { useStore } from 'vuex';
+import { useMatchScore } from '@/composables/useMatchScore';
 import router from '@/router';
 
 import { ElMessageBox } from 'element-plus';
@@ -49,7 +50,7 @@ const selectedRow = ref(undefined);
 const selectedCol = ref(undefined);
 
 const selectedPlayer = computed(() => store.state.match.players[selectedCol.value - 1]);
-const selectedScoreId = computed(() => scoreTableRows.value[selectedRow.value - 1]?.category.id);
+const selectedScoreId = computed(() => score.value[selectedRow.value - 1]?.category.id);
 const currentValue = computed({
   get: () => {
     if (selectedPlayer.value) {
@@ -104,20 +105,9 @@ watchEffect(() => {
     selectedCol.value = undefined;
   }
 });
-const scoreTableRows = computed(() => {
-  const score = scoreIds.value.map((scoreId, i) => {
-    const row = {
-      category: SCORES[scoreId],
-      no: i + 1,
-    };
-    players.value.forEach((player) => {
-      row[`player-${player.id}`] = player.score[scoreId].score;
-    });
-
-    return row;
-  });
-
-  return score;
+const { score } = useMatchScore({
+  players,
+  scoreIds,
 });
 
 async function scoreMatch() {
@@ -189,29 +179,6 @@ function updateScoreMeta(meta) {
     > .el-button {
       font-size: 1rem;
       @include flushBody();
-    }
-  }
-
-  .el-table {
-    @include flushBody();
-
-    &__body tr.hover-row > td,
-    &__body tr.hover-row.current-row > td {
-      background-color: initial;
-    }
-
-    th {
-      text-align: center;
-    }
-
-    td,
-    .cell {
-      padding: 0 !important;
-    }
-
-    &__row td:first-child {
-      color: $--body-color !important;
-      background-color: $--body-bg !important;
     }
   }
 }
