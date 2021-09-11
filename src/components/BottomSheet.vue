@@ -146,7 +146,7 @@ function dragHandler(dragState) {
 
   &__drag {
     position: relative;
-    height: 2.5rem;
+    height: 1.5rem;
     background-color: $--border-color-base;
     border-top-left-radius: var(--border-radius);
     border-top-right-radius: var(--border-radius);
@@ -158,7 +158,7 @@ function dragHandler(dragState) {
       left: 50%;
       transform: translate(-50%, -50%);
       display: block;
-      height: 0.5rem;
+      height: 0.3rem;
       width: 8rem;
       border-radius: 0.35rem;
       background-color: #000;

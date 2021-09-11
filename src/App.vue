@@ -21,6 +21,12 @@
           </router-link>
         </li>
         <li>
+          <router-link class="el-menu-item" to="/results" @click="blur">
+            <i class="el-icon-finished" />
+            <span>Results</span>
+          </router-link>
+        </li>
+        <li>
           <router-link class="el-menu-item" to="/stats" @click="blur">
             <i class="el-icon-data-line" />
             <span>Stats</span>
@@ -39,7 +45,7 @@
 
 <script setup>
 import NewGame from '@/components/NewGame.vue';
-import useNewGame from '@/composables/newGame.js';
+import useNewGame from '@/composables/useNewGame.js';
 
 const { isNewGameDialogVisible, showNewGame } = useNewGame();
 

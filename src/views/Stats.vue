@@ -3,11 +3,3 @@
     <h1>Stats</h1>
   </div>
 </template>
-
-<script>
-export default {
-  name: 'Stats',
-  components: {},
-  setup() {},
-};
-</script>

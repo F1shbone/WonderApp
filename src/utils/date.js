@@ -4,7 +4,7 @@ export function createDateAsUTC(date) {
   );
 }
 
-export function convertDateToUTC(date) {
+export function convertUTCToDate(date) {
   date = new Date(date);
   return new Date(
     date.getUTCFullYear(),
@@ -13,5 +13,11 @@ export function convertDateToUTC(date) {
     date.getUTCHours(),
     date.getUTCMinutes(),
     date.getUTCSeconds()
-  ).toLocaleDateString('de-DE');
+  );
+}
+export function convertUTCToDateString(date) {
+  return convertUTCToDate(date).toLocaleDateString('de-DE');
+}
+export function convertUTCToDateTimeString(date) {
+  return `${convertUTCToDateString(date)} - ${convertUTCToDate(date).toLocaleTimeString('de-DE')}`;
 }

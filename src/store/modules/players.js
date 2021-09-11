@@ -1,4 +1,4 @@
-import { convertDateToUTC, createDateAsUTC } from '@/utils/date';
+import { convertUTCToDateString, createDateAsUTC } from '@/utils/date';
 
 export default {
   namespaced: true,
@@ -48,7 +48,7 @@ export default {
         return {
           name,
           id,
-          added: convertDateToUTC(added),
+          added: convertUTCToDateString(added),
         };
       });
     },
