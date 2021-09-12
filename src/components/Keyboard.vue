@@ -7,33 +7,61 @@
           <kbd><i class="el-icon-right" /></kbd>
         </button>
       </div>
-      <div class="keyboard__btns keyboard__scientific" v-if="props.score.id === 'SCIENTIFIC'">
-        <button @click="incScienceSymbol('tablet')"><i class="el-icon-arrow-up" /></button>
-        <button @click="incScienceSymbol('cog')"><i class="el-icon-arrow-up" /></button>
-        <button @click="incScienceSymbol('compass')"><i class="el-icon-arrow-up" /></button>
-        <div class="keyboard__scientific--center">
+      <div class="keyboard__btns keyboard__stepper keyboard__stepper--3rows" v-if="props.score.id === SCORES.COINS.id">
+        <button @click="incMeta('+1')"><i class="el-icon-arrow-up" /></button>
+        <button @click="incMeta('+3')"><i class="el-icon-arrow-up" /></button>
+        <button @click="incMeta('+6')"><i class="el-icon-arrow-up" /></button>
+        <div class="keyboard__stepper--center">
+          <el-badge :value="props.value.meta['+1']" type="danger">
+            <img alt="Coins +1" src="../assets/coin__+1.png" />
+          </el-badge>
+        </div>
+        <div class="keyboard__stepper--center">
+          <el-badge :value="props.value.meta['+3']" type="danger">
+            <img alt="Coins +3" src="../assets/coin__+3.png" />
+          </el-badge>
+        </div>
+        <div class="keyboard__stepper--center">
+          <el-badge :value="props.value.meta['+6']" type="danger">
+            <img alt="Coins +6" src="../assets/coin__+6.png" />
+          </el-badge>
+        </div>
+        <button @click="decMeta('+1')"><i class="el-icon-arrow-down" /></button>
+        <button @click="decMeta('+3')"><i class="el-icon-arrow-down" /></button>
+        <button @click="decMeta('+6')"><i class="el-icon-arrow-down" /></button>
+      </div>
+      <div
+        class="keyboard__btns keyboard__stepper keyboard__stepper--4rows"
+        v-else-if="props.score.id === SCORES.SCIENTIFIC.id"
+      >
+        <button @click="incMeta('tablet')"><i class="el-icon-arrow-up" /></button>
+        <button @click="incMeta('cog')"><i class="el-icon-arrow-up" /></button>
+        <button @click="incMeta('compass')"><i class="el-icon-arrow-up" /></button>
+        <div class="keyboard__stepper--center">
           <el-badge :value="props.value.meta.tablet" type="danger">
             <img alt="Science Tablet" src="../assets/science__tablet.png" />
           </el-badge>
         </div>
-        <div class="keyboard__scientific--center">
+        <div class="keyboard__stepper--center">
           <el-badge :value="props.value.meta.cog" type="danger">
-            <img alt="Science Tablet" src="../assets/science__cog.png" />
+            <img alt="Science Cog" src="../assets/science__cog.png" />
           </el-badge>
         </div>
-        <div class="keyboard__scientific--center">
+        <div class="keyboard__stepper--center">
           <el-badge :value="props.value.meta.compass" type="danger">
-            <img alt="Science Tablet" src="../assets/science__compass.png" />
+            <img alt="Science Compass" src="../assets/science__compass.png" />
           </el-badge>
         </div>
-        <button @click="decScienceSymbol('tablet')"><i class="el-icon-arrow-down" /></button>
-        <button @click="decScienceSymbol('cog')"><i class="el-icon-arrow-down" /></button>
-        <button @click="decScienceSymbol('compass')"><i class="el-icon-arrow-down" /></button>
-        <button @click="close">
-          <kbd><i class="el-icon-arrow-down" /></kbd>
-        </button>
-        <el-checkbox-button :checked="props.value.meta.aristotle" @input="toggleAristotle" type="success">
-          <img alt="Aristotle" src="../assets/aristotle.png" />
+        <button @click="decMeta('tablet')"><i class="el-icon-arrow-down" /></button>
+        <button @click="decMeta('cog')"><i class="el-icon-arrow-down" /></button>
+        <button @click="decMeta('compass')"><i class="el-icon-arrow-down" /></button>
+        <el-checkbox-button
+          class="keyboard__stepper--fullRow"
+          :checked="props.value.meta.aristotle"
+          @input="toggleAristotle"
+          type="success"
+        >
+          <img alt="Aristotle" src="../assets/science__aristotle.png" />
         </el-checkbox-button>
         <span />
       </div>
@@ -60,6 +88,7 @@
 </template>
 
 <script setup>
+import * as SCORES from '@/store/gameInfo/score';
 import BottomSheet from '@/components/BottomSheet.vue';
 
 //#region v-model
@@ -95,19 +124,21 @@ function negative() {
   });
 }
 
+function incMeta(key) {
+  emit('update:meta', {
+    ...props.value.meta,
+    [key]: props.value.meta[key] + 1,
+  });
+}
+
+function decMeta(key) {
+  emit('update:meta', {
+    ...props.value.meta,
+    [key]: props.value.meta[key] === 0 ? 0 : props.value.meta[key] - 1,
+  });
+}
+
 //#region Scientific
-function incScienceSymbol(symbol) {
-  emit('update:meta', {
-    ...props.value.meta,
-    [symbol]: props.value.meta[symbol] + 1,
-  });
-}
-function decScienceSymbol(symbol) {
-  emit('update:meta', {
-    ...props.value.meta,
-    [symbol]: props.value.meta[symbol] === 0 ? 0 : props.value.meta[symbol] - 1,
-  });
-}
 function toggleAristotle() {
   emit('update:meta', {
     ...props.value.meta,
@@ -177,15 +208,27 @@ function toggleAristotle() {
       border-right: none;
     }
   }
-  &__scientific {
+  &__stepper {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr 1fr;
-    gap: 1px 1px;
+    gap: 0;
+
+    &--3rows {
+      grid-template-rows: 1fr 1fr 1fr;
+    }
+    &--4rows {
+      grid-template-rows: 1fr 1fr 1fr 1fr;
+    }
+
+    &--fullRow {
+      grid-column: 1 / 4;
+      border-right: none;
+      border-top: $--table-border !important;
+    }
 
     &--center {
       display: flex;
-      align-items: flex-end;
+      align-items: center;
       justify-content: center;
     }
 
