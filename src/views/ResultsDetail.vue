@@ -7,7 +7,7 @@
       </el-radio-group>
     </div>
 
-    <top3-reveal :class="{ 'resultsDetail--hide': view !== 'Overview' }" :players="result.players" />
+    <top3-reveal :class="{ 'resultsDetail--hide': view !== 'Overview' }" :players="playersSorted" />
     <match-scores
       :playersSorted="playersSorted"
       :players="result.players"
@@ -34,7 +34,15 @@ import MatchStats from '@/components/MatchStats.vue';
 const store = useStore();
 const { params } = useRoute();
 const result = computed(() => store.state.results.results[params.id]);
-const playersSorted = computed(() => result.value.players.slice(0).sort((a, b) => b.total - a.total));
+const playersSorted = computed(() =>
+  result.value.players.slice(0).sort((a, b) => {
+    const total = b.total - a.total;
+    // sort by total if total is not equal
+    if (total !== 0) return total;
+    // otherwise sort by coins
+    return b.score.COINS.score - a.score.COINS.score;
+  })
+);
 
 const view = ref('Overview');
 </script>

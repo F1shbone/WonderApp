@@ -51,10 +51,7 @@ onBeforeUnmount(() => {
 //#endregion
 
 const top3 = computed(() => {
-  return props.players
-    .slice(0)
-    .sort((a, b) => b.total - a.total)
-    .slice(0, 3);
+  return props.players.slice(0, 3);
 });
 const getMedal = (index) => {
   switch (index) {
