@@ -8,21 +8,20 @@
           <el-card>
             <template #header>
               <h4>
-                {{ result.label }}
-                <br />
-                <small class="text-secondary">{{ convertUTCToDateTimeString(result.date) }}</small>
+                {{ convertUTCToDateString(result.date) }}
+                <small class="text-secondary">{{ convertUTCToTimeString(result.date) }}</small>
               </h4>
+              <div class="results-list__detail">
+                <h4>
+                  Players
+                  <small class="text-secondary">{{ result.players.length }}</small>
+                </h4>
+                <h4>
+                  Extensions
+                  <small class="text-secondary">{{ result.expansionIds.length }}</small>
+                </h4>
+              </div>
             </template>
-            <el-card-list flush>
-              <el-card-list-item class="results-list__item">
-                <span class="results-list__label">Players:</span>
-                <span class="results-list__value">{{ result.players.length }}</span>
-              </el-card-list-item>
-              <el-card-list-item>
-                <span class="results-list__label">Expansions:</span>
-                <span class="results-list__value">{{ result.expansionIds.length }}</span>
-              </el-card-list-item>
-            </el-card-list>
           </el-card>
         </router-link>
       </li>
@@ -33,10 +32,7 @@
 <script setup>
 import { computed } from 'vue';
 import { useStore } from 'vuex';
-import { convertUTCToDateTimeString } from '@/utils/date';
-
-import ElCardList from '@/components/ElCardList.vue';
-import ElCardListItem from '@/components/ElCardListItem.vue';
+import { convertUTCToDateString, convertUTCToTimeString } from '@/utils/date';
 
 const store = useStore();
 const results = computed(() => store.state.results.results);
@@ -54,29 +50,40 @@ const results = computed(() => store.state.results.results);
     margin-top: 0.5rem;
   }
   h4 {
-    margin: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+  small {
+    display: block;
+    padding-top: 0.5rem;
   }
   a {
     text-decoration: none;
   }
 
-  .el-card__body {
-    padding-top: 0;
-    padding-bottom: 0;
-  }
-
-  &__item {
+  .el-card__header {
     display: flex;
+    align-items: center;
+
+    > * {
+      flex: 1 1 auto;
+      &:first-child {
+        flex-basis: 100%;
+      }
+    }
+  }
+  .el-card__body {
+    display: none;
   }
 
-  &__label {
-    flex: 1 1 65%;
-    font-weight: 700;
-    font-size: 90%;
-  }
-
-  &__value {
-    flex: 1 1 35%;
+  &__detail {
+    display: flex;
+    text-align: center;
+    > * + * {
+      margin-left: $--card-padding;
+      padding-left: $--card-padding;
+      border-left: 1px solid $--card-border-color;
+    }
   }
 }
 </style>

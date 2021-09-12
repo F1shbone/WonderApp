@@ -18,6 +18,9 @@ export function convertUTCToDate(date) {
 export function convertUTCToDateString(date) {
   return convertUTCToDate(date).toLocaleDateString('de-DE');
 }
+export function convertUTCToTimeString(date) {
+  return convertUTCToDate(date).toLocaleTimeString('de-DE');
+}
 export function convertUTCToDateTimeString(date) {
   return `${convertUTCToDateString(date)} - ${convertUTCToDate(date).toLocaleTimeString('de-DE')}`;
 }
