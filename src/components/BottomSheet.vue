@@ -159,7 +159,7 @@ function dragHandler(dragState) {
       transform: translate(-50%, -50%);
       display: block;
       height: 0.3rem;
-      width: 8rem;
+      width: 4rem;
       border-radius: 0.35rem;
       background-color: #000;
     }
