@@ -7,7 +7,7 @@
           <kbd><i class="el-icon-right" /></kbd>
         </button>
       </div>
-      <div class="keyboard__btns keyboard__stepper keyboard__stepper--3rows" v-if="props.score.id === SCORES.COINS.id">
+      <div class="keyboard__btns keyboard__stepper" v-if="props.score.id === SCORES.COINS.id">
         <button @click="incMeta('+1')"><i class="el-icon-arrow-up" /></button>
         <button @click="incMeta('+3')"><i class="el-icon-arrow-up" /></button>
         <button @click="incMeta('+6')"><i class="el-icon-arrow-up" /></button>
@@ -29,6 +29,39 @@
         <button @click="decMeta('+1')"><i class="el-icon-arrow-down" /></button>
         <button @click="decMeta('+3')"><i class="el-icon-arrow-down" /></button>
         <button @click="decMeta('+6')"><i class="el-icon-arrow-down" /></button>
+      </div>
+      <div
+        class="keyboard__btns keyboard__stepper keyboard__stepper--4cols"
+        v-else-if="props.score.id === SCORES.MILITARY.id"
+      >
+        <button @click="incMeta('-1')"><i class="el-icon-arrow-up" /></button>
+        <button @click="incMeta('+1')"><i class="el-icon-arrow-up" /></button>
+        <button @click="incMeta('+3')"><i class="el-icon-arrow-up" /></button>
+        <button @click="incMeta('+5')"><i class="el-icon-arrow-up" /></button>
+        <div class="keyboard__stepper--center">
+          <el-badge :value="props.value.meta['-1']" type="danger">
+            <img alt="Science Tablet" src="../assets/military__-1.png" />
+          </el-badge>
+        </div>
+        <div class="keyboard__stepper--center">
+          <el-badge :value="props.value.meta['+1']" type="danger">
+            <img alt="Science Cog" src="../assets/military__+1.png" />
+          </el-badge>
+        </div>
+        <div class="keyboard__stepper--center">
+          <el-badge :value="props.value.meta['+3']" type="danger">
+            <img alt="Science Compass" src="../assets/military__+3.png" />
+          </el-badge>
+        </div>
+        <div class="keyboard__stepper--center">
+          <el-badge :value="props.value.meta['+5']" type="danger">
+            <img alt="Science Compass" src="../assets/military__+5.png" />
+          </el-badge>
+        </div>
+        <button @click="decMeta('-1')"><i class="el-icon-arrow-down" /></button>
+        <button @click="decMeta('+1')"><i class="el-icon-arrow-down" /></button>
+        <button @click="decMeta('+3')"><i class="el-icon-arrow-down" /></button>
+        <button @click="decMeta('+4')"><i class="el-icon-arrow-down" /></button>
       </div>
       <div
         class="keyboard__btns keyboard__stepper keyboard__stepper--4rows"
@@ -63,7 +96,6 @@
         >
           <img alt="Aristotle" src="../assets/science__aristotle.png" />
         </el-checkbox-button>
-        <span />
       </div>
       <div class="keyboard__btns keyboard__default" v-else>
         <button @click="add('1')">1</button>
@@ -105,7 +137,7 @@ const props = defineProps({
     type: Object,
   },
 });
-const emit = defineEmits(['update:visible', 'update:value', 'nextCell']);
+const emit = defineEmits(['update:visible', 'update:value', 'update:meta', 'nextCell']);
 //#endregion
 
 function close() {
@@ -159,7 +191,7 @@ function toggleAristotle() {
   $line-height: 1.375;
 
   height: 100%;
-  padding-bottom: 20px;
+  margin-bottom: 20px;
 
   &__value {
     position: relative;
@@ -211,13 +243,20 @@ function toggleAristotle() {
   &__stepper {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
     gap: 0;
 
-    &--3rows {
-      grid-template-rows: 1fr 1fr 1fr;
-    }
     &--4rows {
       grid-template-rows: 1fr 1fr 1fr 1fr;
+    }
+    &--4cols {
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      > *:nth-child(3n) {
+        border-right: $--table-border !important;
+      }
+      > *:nth-child(4n) {
+        border-right: none !important;
+      }
     }
 
     &--fullRow {
