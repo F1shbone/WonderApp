@@ -1,44 +1,47 @@
 <template>
-  <div class="settings">
-    <h1>Settings</h1>
+  <signed-in>
+    <div class="settings">
+      <h1>Settings</h1>
 
-    <el-card full>
-      <template #header>
-        <h3>Expansions</h3>
-      </template>
-      <el-card-list flush>
-        <el-card-list-item class="listItem" v-for="expansion in expansions" :key="expansion.id">
-          <div>{{ expansion.label }}</div>
-          <div>
-            <el-switch :model-value="expansion.owned" @change="toggleOwned(expansion)" />
-          </div>
-        </el-card-list-item>
-      </el-card-list>
-    </el-card>
+      <el-card full>
+        <template #header>
+          <h3>Expansions</h3>
+        </template>
+        <el-card-list flush>
+          <el-card-list-item class="listItem" v-for="expansion in expansions" :key="expansion.id">
+            <div>{{ expansion.label }}</div>
+            <div>
+              <el-switch :model-value="expansion.owned" @change="toggleOwned(expansion)" />
+            </div>
+          </el-card-list-item>
+        </el-card-list>
+      </el-card>
 
-    <el-card full>
-      <template #header>
-        <h3>Players</h3>
-        <el-button type="text" @click="addPlayer">New Player</el-button>
-      </template>
-      <el-card-list flush>
-        <el-card-list-item class="listItem" v-for="player in players" :key="player.name">
-          <div>
-            {{ player.name }} <br /><small class="text-secondary">Added: {{ player.added }}</small>
-          </div>
-          <div>
-            <el-button circle icon="el-icon-delete" @click="removePlayer(player)" />
-          </div>
-        </el-card-list-item>
-      </el-card-list>
-    </el-card>
-  </div>
+      <el-card full>
+        <template #header>
+          <h3>Players</h3>
+          <el-button type="text" @click="addPlayer">New Player</el-button>
+        </template>
+        <el-card-list flush>
+          <el-card-list-item class="listItem" v-for="player in players" :key="player.name">
+            <div>
+              {{ player.name }} <br /><small class="text-secondary">Added: {{ player.added }}</small>
+            </div>
+            <div>
+              <el-button circle icon="el-icon-delete" @click="removePlayer(player)" />
+            </div>
+          </el-card-list-item>
+        </el-card-list>
+      </el-card>
+    </div>
+  </signed-in>
 </template>
 
 <script setup>
 import { computed } from 'vue';
 import { useStore } from 'vuex';
 
+import SignedIn from '../layouts/SignedIn.vue';
 import ElCard from '@/components/ElCard.vue';
 import ElCardList from '@/components/ElCardList.vue';
 import ElCardListItem from '@/components/ElCardListItem.vue';
@@ -48,8 +51,8 @@ const store = useStore();
 
 //#region Expansions
 const expansions = computed(() => store.getters['expansions/expansions']);
-function toggleOwned(expansion) {
-  store.commit('expansions/TOGGLE_OWNED', expansion.id);
+async function toggleOwned(expansion) {
+  await store.dispatch('expansions/toggleOwned', { id: expansion.id });
 }
 //#endregion
 
@@ -73,7 +76,7 @@ function removePlayer(player) {
 </script>
 
 <style lang="scss">
-@import '../theme/variables';
+@import '../../theme/variables';
 
 .settings {
   .el-card__body {

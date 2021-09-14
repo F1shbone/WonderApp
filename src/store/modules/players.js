@@ -1,36 +1,11 @@
 import { convertUTCToDateString, createDateAsUTC } from '@/utils/date';
+import { useFirebase } from '../../firebase/';
 
 export default {
   namespaced: true,
   state() {
     return {
-      players: [
-        {
-          name: 'Romina',
-          id: 1,
-          added: 'Wed Jul 28 2021 17:25:40 GMT+0200 (Central European Summer Time)',
-        },
-        {
-          name: 'Bernhard',
-          id: 2,
-          added: 'Wed Jul 28 2021 17:25:40 GMT+0200 (Central European Summer Time)',
-        },
-        {
-          name: 'Simon',
-          id: 3,
-          added: 'Wed Jul 28 2021 17:25:40 GMT+0200 (Central European Summer Time)',
-        },
-        {
-          name: 'Daniel',
-          id: 4,
-          added: 'Wed Jul 28 2021 17:25:40 GMT+0200 (Central European Summer Time)',
-        },
-        {
-          name: 'Christian',
-          id: 5,
-          added: 'Wed Jul 28 2021 17:25:40 GMT+0200 (Central European Summer Time)',
-        },
-      ],
+      players: [],
     };
   },
   getters: {
@@ -54,6 +29,18 @@ export default {
     },
   },
   actions: {
+    async initFromFirestore({ commit }) {
+      const { store } = useFirebase();
+      commit('RESET_PLAYERS');
+
+      const players = await store.getPlayers();
+      for (const id in players) {
+        if (!Object.prototype.hasOwnProperty.call(players, id)) continue;
+
+        const { name, added } = players[id];
+        commit('ADD_PLAYER', { id, name, added });
+      }
+    },
     addPlayer({ commit, getters }, { name }) {
       commit('ADD_PLAYER', {
         name,
@@ -63,6 +50,9 @@ export default {
     },
   },
   mutations: {
+    RESET_PLAYERS(state) {
+      state.players.length = 0;
+    },
     ADD_PLAYER(state, player) {
       state.players.push(player);
     },

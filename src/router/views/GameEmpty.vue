@@ -7,8 +7,8 @@
 <script setup></script>
 
 <style lang="scss">
-@import '../theme/variables';
-@import '../theme/mixins';
+@import '../../theme/variables';
+@import '../../theme/mixins';
 
 .game__empty {
   height: 100%;
