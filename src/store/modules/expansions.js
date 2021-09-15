@@ -1,51 +1,53 @@
 import { ARMADA, BABEL_PROJECT, BABEL_TOWER, BASE, CITIES, LEADERS, WONDER_PACK } from '../gameInfo/expansions';
 import * as WONDERS from '../gameInfo/wonders';
+import { useFireStore } from '../../firebase/';
 
 export default {
   namespaced: true,
   state() {
     return {
+      $initialized: false,
       [BASE.id]: {
         id: BASE.id,
         label: BASE.label,
         wonders: BASE.wonders.map(({ id }) => id),
         scores: BASE.score.map(({ id }) => id),
-        owned: true,
+        owned: false,
       },
       [LEADERS.id]: {
         id: LEADERS.id,
         label: LEADERS.label,
         wonders: LEADERS.wonders.map(({ id }) => id),
         scores: LEADERS.score.map(({ id }) => id),
-        owned: true,
+        owned: false,
       },
       [CITIES.id]: {
         id: CITIES.id,
         label: CITIES.label,
         wonders: CITIES.wonders.map(({ id }) => id),
         scores: CITIES.score.map(({ id }) => id),
-        owned: true,
+        owned: false,
       },
       [WONDER_PACK.id]: {
         id: WONDER_PACK.id,
         label: WONDER_PACK.label,
         wonders: WONDER_PACK.wonders.map(({ id }) => id),
         scores: WONDER_PACK.score.map(({ id }) => id),
-        owned: true,
+        owned: false,
       },
       [BABEL_TOWER.id]: {
         id: BABEL_TOWER.id,
         label: BABEL_TOWER.label,
         wonders: BABEL_TOWER.wonders.map(({ id }) => id),
         scores: BABEL_TOWER.score.map(({ id }) => id),
-        owned: true,
+        owned: false,
       },
       [BABEL_PROJECT.id]: {
         id: BABEL_PROJECT.id,
         label: BABEL_PROJECT.label,
         wonders: BABEL_PROJECT.wonders.map(({ id }) => id),
         scores: BABEL_PROJECT.score.map(({ id }) => id),
-        owned: true,
+        owned: false,
       },
       [ARMADA.id]: {
         id: ARMADA.id,
@@ -84,11 +86,35 @@ export default {
       }, []),
   },
   actions: {
-    toggleOwned({ commit }, { id }) {
+    async initFromFirestore({ commit }) {
+      const { getExpansions } = useFireStore();
+      const expansions = await getExpansions();
+      for (const id in expansions) {
+        if (!Object.prototype.hasOwnProperty.call(expansions, id)) continue;
+        commit('SET_OWNED', { id, owned: expansions[id].owned });
+      }
+      commit('INITIALIZED');
+    },
+    async toggleOwned({ commit, state }, { id }) {
+      const { setExpansionOwned } = useFireStore();
+      const old = state[id].owned;
       commit('TOGGLE_OWNED', id);
+      try {
+        await setExpansionOwned(id, {
+          owned: !old,
+        });
+      } catch {
+        commit('SET_OWNED', { id, owned: old });
+      }
     },
   },
   mutations: {
+    INITIALIZED(state) {
+      state.$initialized = true;
+    },
+    SET_OWNED(state, { id, owned }) {
+      state[id].owned = owned;
+    },
     TOGGLE_OWNED(state, id) {
       state[id].owned = !state[id].owned;
     },

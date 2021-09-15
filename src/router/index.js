@@ -1,11 +1,25 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
-import store from '@/store';
+import store, { initStore } from '@/store';
 
-import Game from '../views/Game.vue';
-import Results from '../views/Results.vue';
-import GameEmpty from '../views/GameEmpty.vue';
+import Game from './views/Game.vue';
+import Results from './views/Results.vue';
+import GameEmpty from './views/GameEmpty.vue';
+import Login from './views/Login.vue';
+import Loading from './views/Loading.vue';
+
+import { useFireAuth } from '../firebase/index';
 
 const routes = [
+  {
+    path: '/loading',
+    name: 'Loading',
+    component: Loading,
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: Login,
+  },
   {
     path: '/game',
     component: Game,
@@ -28,7 +42,7 @@ const routes = [
           // if the match module is missing there is no active match
           return store.hasModule('match') ? true : { path: '/game/empty' };
         },
-        component: () => import(/* webpackChunkName: "game" */ '../views/GameActive.vue'),
+        component: () => import(/* webpackChunkName: "game" */ './views/GameActive.vue'),
       },
     ],
   },
@@ -39,11 +53,11 @@ const routes = [
     children: [
       {
         path: '',
-        component: () => import(/* webpackChunkName: "results" */ '../views/ResultsList.vue'),
+        component: () => import(/* webpackChunkName: "results" */ './views/ResultsList.vue'),
       },
       {
         path: ':id',
-        component: () => import(/* webpackChunkName: "results" */ '../views/ResultsDetail.vue'),
+        component: () => import(/* webpackChunkName: "results" */ './views/ResultsDetail.vue'),
         beforeEnter({ params }) {
           if (+params.id < store.state.results.results.length) {
             return true;
@@ -57,12 +71,12 @@ const routes = [
   {
     path: '/stats',
     name: 'Stats',
-    component: () => import(/* webpackChunkName: "stats" */ '../views/Stats.vue'),
+    component: () => import(/* webpackChunkName: "stats" */ './views/Stats.vue'),
   },
   {
     path: '/settings',
     name: 'Settings',
-    component: () => import(/* webpackChunkName: "settings" */ '../views/Settings.vue'),
+    component: () => import(/* webpackChunkName: "settings" */ './views/Settings.vue'),
   },
   {
     path: '/:pathMatch(.*)*',
@@ -73,6 +87,23 @@ const routes = [
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
   routes,
+});
+router.beforeEach(async (to, from, next) => {
+  const { user } = useFireAuth();
+
+  if (to.path === '/loading' || to.path === '/login') {
+    next();
+  } else if (user.value.uid && user.value.email) {
+    await initStore();
+    next();
+  } else {
+    next({
+      path: '/loading',
+      query: {
+        redirect: to.fullPath,
+      },
+    });
+  }
 });
 
 export default router;

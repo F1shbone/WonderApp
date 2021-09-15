@@ -13,4 +13,14 @@ const store = createStore({
   },
 });
 
+export const initStore = async () => {
+  const promises = [];
+  for (const module in store.state) {
+    if (store.state[module].$initialized === false) {
+      promises.push(store.dispatch(`${module}/initFromFirestore`));
+    }
+  }
+  await Promise.all(promises);
+};
+
 export default store;

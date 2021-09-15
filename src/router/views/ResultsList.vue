@@ -39,8 +39,8 @@ const results = computed(() => store.state.results.results);
 </script>
 
 <style lang="scss">
-@import '../theme/variables';
-@import '../theme/mixins';
+@import '../../theme/variables';
+@import '../../theme/mixins';
 
 .results-list {
   list-style-type: none;

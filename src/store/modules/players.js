@@ -1,36 +1,12 @@
 import { convertUTCToDateString, createDateAsUTC } from '@/utils/date';
+import { useFireStore } from '../../firebase/';
 
 export default {
   namespaced: true,
   state() {
     return {
-      players: [
-        {
-          name: 'Romina',
-          id: 1,
-          added: 'Wed Jul 28 2021 17:25:40 GMT+0200 (Central European Summer Time)',
-        },
-        {
-          name: 'Bernhard',
-          id: 2,
-          added: 'Wed Jul 28 2021 17:25:40 GMT+0200 (Central European Summer Time)',
-        },
-        {
-          name: 'Simon',
-          id: 3,
-          added: 'Wed Jul 28 2021 17:25:40 GMT+0200 (Central European Summer Time)',
-        },
-        {
-          name: 'Daniel',
-          id: 4,
-          added: 'Wed Jul 28 2021 17:25:40 GMT+0200 (Central European Summer Time)',
-        },
-        {
-          name: 'Christian',
-          id: 5,
-          added: 'Wed Jul 28 2021 17:25:40 GMT+0200 (Central European Summer Time)',
-        },
-      ],
+      $initialized: false,
+      players: [],
     };
   },
   getters: {
@@ -54,15 +30,43 @@ export default {
     },
   },
   actions: {
-    addPlayer({ commit, getters }, { name }) {
-      commit('ADD_PLAYER', {
+    async initFromFirestore({ commit }) {
+      const { getPlayers } = useFireStore();
+      commit('RESET_PLAYERS');
+      const players = await getPlayers();
+      for (const playerId in players) {
+        if (!Object.prototype.hasOwnProperty.call(players, playerId)) continue;
+        const { name, added, id } = players[playerId];
+        commit('ADD_PLAYER', { id, name, added });
+      }
+      commit('INITIALIZED');
+    },
+    async addPlayer({ commit, getters }, { name }) {
+      const { addPlayer } = useFireStore();
+      const player = {
         name,
-        id: getters.index + 1,
+        id: +getters.index + 1,
         added: createDateAsUTC(new Date()),
-      });
+      };
+      commit('ADD_PLAYER', player);
+      try {
+        await addPlayer({
+          id: player.id,
+          name: player.name,
+          added: player.added.toString(),
+        });
+      } catch (e) {
+        commit('REMOVE_PLAYER', { id: player.id });
+      }
     },
   },
   mutations: {
+    INITIALIZED(state) {
+      state.$initialized = true;
+    },
+    RESET_PLAYERS(state) {
+      state.players.length = 0;
+    },
     ADD_PLAYER(state, player) {
       state.players.push(player);
     },
