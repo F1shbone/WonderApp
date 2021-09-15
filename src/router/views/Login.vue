@@ -36,7 +36,7 @@ const onSubmit = async () => {
   try {
     await signIn(form.value.user, form.value.password);
 
-    router.push({ path: router.currentRoute.value.query.redirect });
+    router.push({ path: router.currentRoute.value.query?.redirect ?? '/game/empty' });
   } catch (error) {
     console.warn(error);
   }
