@@ -1,5 +1,5 @@
 import { convertUTCToDateString, createDateAsUTC } from '@/utils/date';
-import { useFirebase } from '../../firebase/';
+// import { useFirebase } from '../../firebase/';
 
 export default {
   namespaced: true,
@@ -29,24 +29,33 @@ export default {
     },
   },
   actions: {
-    async initFromFirestore({ commit }) {
-      const { store } = useFirebase();
-      commit('RESET_PLAYERS');
-
-      const players = await store.getPlayers();
-      for (const id in players) {
-        if (!Object.prototype.hasOwnProperty.call(players, id)) continue;
-
-        const { name, added } = players[id];
-        commit('ADD_PLAYER', { id, name, added });
-      }
-    },
-    addPlayer({ commit, getters }, { name }) {
-      commit('ADD_PLAYER', {
+    // async initFromFirestore({ commit }) {
+    //   const { store } = useFirebase();
+    //   commit('RESET_PLAYERS');
+    //   const players = await store.getPlayers();
+    //   for (const playerId in players) {
+    //     if (!Object.prototype.hasOwnProperty.call(players, playerId)) continue;
+    //     const { name, added, id } = players[playerId];
+    //     commit('ADD_PLAYER', { id, name, added });
+    //   }
+    // },
+    async addPlayer({ commit, getters }, { name }) {
+      // const { store } = useFirebase();
+      const player = {
         name,
-        id: getters.index + 1,
+        id: +getters.index + 1,
         added: createDateAsUTC(new Date()),
-      });
+      };
+      commit('ADD_PLAYER', player);
+      // try {
+      //   await store.addPlayer({
+      //     id: player.id,
+      //     name: player.name,
+      //     added: player.added.toString(),
+      //   });
+      // } catch (e) {
+      //   commit('REMOVE_PLAYER', { id: player.id });
+      // }
     },
   },
   mutations: {

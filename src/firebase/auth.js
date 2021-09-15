@@ -1,21 +1,42 @@
-import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { browserLocalPersistence, getAuth, setPersistence, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 
-export default class Fireauth {
-  constructor() {
-    this.auth = getAuth();
-  }
+import { ref } from 'vue';
 
-  async signIn(email, password) {
-    const userCredentials = await signInWithEmailAndPassword(this.auth, email, password);
-    this.user = {
-      uid: userCredentials.user.uid,
-      email: userCredentials.user.email,
+export default function create() {
+  const $auth = getAuth();
+  const $user = ref({
+    uid: undefined,
+    email: undefined,
+  });
+  const isReady = new Promise((resolve) => {
+    $auth.onAuthStateChanged((user) => {
+      if (user !== null) {
+        $user.value.uid = user.uid;
+        $user.value.email = user.email;
+      }
+      resolve($user);
+    });
+  });
+
+  return function useFireAuth() {
+    return {
+      isReady,
+      user: $user,
+      signIn: async (email, password) => {
+        await setPersistence($auth, browserLocalPersistence);
+        const { user } = await signInWithEmailAndPassword($auth, email, password);
+
+        $user.value.uid = user.uid;
+        $user.value.email = user.email;
+
+        return $user;
+      },
+      signOut: async () => {
+        $user.value.uid = undefined;
+        $user.value.email = undefined;
+
+        await signOut($auth);
+      },
     };
-
-    return userCredentials;
-  }
-
-  signOut() {
-    return signOut(this.auth);
-  }
+  };
 }

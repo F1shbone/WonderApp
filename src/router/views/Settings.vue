@@ -33,6 +33,19 @@
           </el-card-list-item>
         </el-card-list>
       </el-card>
+
+      <el-card full>
+        <template #header>
+          <h3>Account</h3>
+        </template>
+        <!-- <el-card-list flush>
+          <el-card-list-item> -->
+        <div class="account__signout">
+          <el-button type="danger" class="el-button--block" @click="onSignOut">Sign Out</el-button>
+        </div>
+        <!-- </el-card-list-item>
+        </el-card-list> -->
+      </el-card>
     </div>
   </signed-in>
 </template>
@@ -40,6 +53,8 @@
 <script setup>
 import { computed } from 'vue';
 import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
+import { useFireAuth } from '../../firebase/';
 
 import SignedIn from '../layouts/SignedIn.vue';
 import ElCard from '@/components/ElCard.vue';
@@ -48,6 +63,8 @@ import ElCardListItem from '@/components/ElCardListItem.vue';
 import { ElMessageBox } from 'element-plus';
 
 const store = useStore();
+const router = useRouter();
+const { signOut } = useFireAuth();
 
 //#region Expansions
 const expansions = computed(() => store.getters['expansions/expansions']);
@@ -72,6 +89,13 @@ function addPlayer() {
 function removePlayer(player) {
   store.commit('players/REMOVE_PLAYER', player);
 }
+//#endregion
+
+//#region Account
+const onSignOut = async () => {
+  await signOut();
+  router.push({ path: '/login' });
+};
 //#endregion
 </script>
 
@@ -110,6 +134,11 @@ function removePlayer(player) {
     .el-button {
       margin-left: auto;
     }
+  }
+
+  .account__signout {
+    padding-top: $--card-padding;
+    padding-bottom: $--card-padding;
   }
 }
 .el-message-box {

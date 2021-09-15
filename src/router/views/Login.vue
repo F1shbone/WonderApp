@@ -13,23 +13,19 @@
 
         <el-button type="primary" native-type="submit" class="el-button--block">Login</el-button>
       </el-form>
-
-      <img src="../../assets/splash.webp" alt="splash" class="login__splash" />
     </div>
   </signed-out>
 </template>
 
 <script setup>
 import { ref } from 'vue';
-import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
-import { useFirebase } from '../../firebase/';
+import { useFireAuth } from '../../firebase/';
 
 import SignedOut from '../layouts/SignedOut.vue';
 
-const store = useStore();
 const router = useRouter();
-const { auth } = useFirebase();
+const { signIn } = useFireAuth();
 
 const form = ref({
   user: '',
@@ -38,14 +34,16 @@ const form = ref({
 
 const onSubmit = async () => {
   try {
-    await auth.signIn(form.value.user, form.value.password);
-    await Promise.all([
-      store.dispatch('expansions/initFromFirestore'),
-      store.dispatch('players/initFromFirestore'),
-      //
-    ]);
+    await signIn(form.value.user, form.value.password);
 
-    router.push({ path: '/game/active' });
+    // import { useStore } from 'vuex';
+    // await Promise.all([
+    //   store.dispatch('expansions/initFromFirestore'),
+    //   store.dispatch('players/initFromFirestore'),
+    //   //
+    // ]);
+
+    router.push({ path: router.currentRoute.value.query.redirect });
   } catch (error) {
     console.warn(error);
   }
@@ -66,7 +64,6 @@ const onSubmit = async () => {
   padding: $--main-padding;
   background-color: $--color-info-lighter;
   box-sizing: border-box;
-  overflow: hidden;
 
   &__form {
     position: absolute;
@@ -83,15 +80,6 @@ const onSubmit = async () => {
       font-size: 1.125rem;
       text-align: center;
     }
-  }
-
-  &__splash {
-    position: absolute;
-    bottom: 0;
-    left: -10%;
-    right: -10%;
-    max-width: 120%;
-    filter: saturate(0.5);
   }
 }
 </style>

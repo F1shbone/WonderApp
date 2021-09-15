@@ -25,7 +25,7 @@ function getDocuments(db, document) {
 function setDocument(db, document, path, value) {
   const docRef = doc(db, document, path);
 
-  return setDoc(docRef, value, { merge: true });
+  return setDoc(docRef, value);
 }
 
 export default class store {
@@ -47,5 +47,9 @@ export default class store {
 
   async getPlayers() {
     return getDocuments(this.firestore, `users/${this.auth.user.uid}/players`);
+  }
+  async addPlayer(player) {
+    console.log(player, typeof player.added);
+    return setDocument(this.firestore, `users/${this.auth.user.uid}/players`, `${player.id}`, player);
   }
 }

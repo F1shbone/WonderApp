@@ -5,8 +5,16 @@ import Game from './views/Game.vue';
 import Results from './views/Results.vue';
 import GameEmpty from './views/GameEmpty.vue';
 import Login from './views/Login.vue';
+import Loading from './views/Loading.vue';
+
+import { useFireAuth } from '../firebase/index';
 
 const routes = [
+  {
+    path: '/loading',
+    name: 'Loading',
+    component: Loading,
+  },
   {
     path: '/login',
     name: 'Login',
@@ -79,6 +87,20 @@ const routes = [
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
   routes,
+});
+router.beforeEach(async (to, from, next) => {
+  const { user } = useFireAuth();
+
+  if (to.path === '/loading' || to.path === '/login' || (user.value.uid && user.value.email)) {
+    next();
+  } else {
+    next({
+      path: '/loading',
+      query: {
+        redirect: to.fullPath,
+      },
+    });
+  }
 });
 
 export default router;

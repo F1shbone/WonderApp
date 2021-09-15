@@ -1,6 +1,6 @@
 import { ARMADA, BABEL_PROJECT, BABEL_TOWER, BASE, CITIES, LEADERS, WONDER_PACK } from '../gameInfo/expansions';
 import * as WONDERS from '../gameInfo/wonders';
-import { useFirebase } from '../../firebase/';
+// import { useFirebase } from '../../firebase/';
 
 export default {
   namespaced: true,
@@ -85,28 +85,26 @@ export default {
       }, []),
   },
   actions: {
-    async initFromFirestore({ commit }) {
-      const { store } = useFirebase();
-
-      const expansions = await store.getExpansions();
-      for (const id in expansions) {
-        if (!Object.prototype.hasOwnProperty.call(expansions, id)) continue;
-
-        commit('SET_OWNED', { id, owned: expansions[id].owned });
-      }
-    },
-    async toggleOwned({ commit, state }, { id }) {
-      const { store } = useFirebase();
-      const old = state[id].owned;
-
+    // async initFromFirestore({ commit }) {
+    //   const { store } = useFirebase();
+    //   const expansions = await store.getExpansions();
+    //   for (const id in expansions) {
+    //     if (!Object.prototype.hasOwnProperty.call(expansions, id)) continue;
+    //     commit('SET_OWNED', { id, owned: expansions[id].owned });
+    //   }
+    // },
+    // async toggleOwned({ commit, state }, { id }) {
+    async toggleOwned({ commit }, { id }) {
+      // const { store } = useFirebase();
+      // const old = state[id].owned;
       commit('TOGGLE_OWNED', id);
-      try {
-        await store.setExpansionOwned(id, {
-          owned: !old,
-        });
-      } catch {
-        commit('SET_OWNED', { id, owned: old });
-      }
+      // try {
+      //   await store.setExpansionOwned(id, {
+      //     owned: !old,
+      //   });
+      // } catch {
+      //   commit('SET_OWNED', { id, owned: old });
+      // }
     },
   },
   mutations: {
