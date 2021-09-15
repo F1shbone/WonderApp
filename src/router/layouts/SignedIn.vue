@@ -38,12 +38,6 @@
             <span>Settings</span>
           </router-link>
         </li>
-        <li>
-          <router-link class="el-menu-item" to="/login" @click="blur">
-            <i class="el-icon-lock" />
-            <span>Login</span>
-          </router-link>
-        </li>
       </el-menu>
     </el-footer>
   </el-container>

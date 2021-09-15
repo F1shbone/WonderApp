@@ -36,13 +36,6 @@ const onSubmit = async () => {
   try {
     await signIn(form.value.user, form.value.password);
 
-    // import { useStore } from 'vuex';
-    // await Promise.all([
-    //   store.dispatch('expansions/initFromFirestore'),
-    //   store.dispatch('players/initFromFirestore'),
-    //   //
-    // ]);
-
     router.push({ path: router.currentRoute.value.query.redirect });
   } catch (error) {
     console.warn(error);

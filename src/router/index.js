@@ -1,5 +1,5 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
-import store from '@/store';
+import store, { initStore } from '@/store';
 
 import Game from './views/Game.vue';
 import Results from './views/Results.vue';
@@ -91,7 +91,10 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
   const { user } = useFireAuth();
 
-  if (to.path === '/loading' || to.path === '/login' || (user.value.uid && user.value.email)) {
+  if (to.path === '/loading' || to.path === '/login') {
+    next();
+  } else if (user.value.uid && user.value.email) {
+    await initStore();
     next();
   } else {
     next({

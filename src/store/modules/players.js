@@ -1,10 +1,11 @@
 import { convertUTCToDateString, createDateAsUTC } from '@/utils/date';
-// import { useFirebase } from '../../firebase/';
+import { useFireStore } from '../../firebase/';
 
 export default {
   namespaced: true,
   state() {
     return {
+      $initialized: false,
       players: [],
     };
   },
@@ -29,36 +30,40 @@ export default {
     },
   },
   actions: {
-    // async initFromFirestore({ commit }) {
-    //   const { store } = useFirebase();
-    //   commit('RESET_PLAYERS');
-    //   const players = await store.getPlayers();
-    //   for (const playerId in players) {
-    //     if (!Object.prototype.hasOwnProperty.call(players, playerId)) continue;
-    //     const { name, added, id } = players[playerId];
-    //     commit('ADD_PLAYER', { id, name, added });
-    //   }
-    // },
+    async initFromFirestore({ commit }) {
+      const { getPlayers } = useFireStore();
+      commit('RESET_PLAYERS');
+      const players = await getPlayers();
+      for (const playerId in players) {
+        if (!Object.prototype.hasOwnProperty.call(players, playerId)) continue;
+        const { name, added, id } = players[playerId];
+        commit('ADD_PLAYER', { id, name, added });
+      }
+      commit('INITIALIZED');
+    },
     async addPlayer({ commit, getters }, { name }) {
-      // const { store } = useFirebase();
+      const { addPlayer } = useFireStore();
       const player = {
         name,
         id: +getters.index + 1,
         added: createDateAsUTC(new Date()),
       };
       commit('ADD_PLAYER', player);
-      // try {
-      //   await store.addPlayer({
-      //     id: player.id,
-      //     name: player.name,
-      //     added: player.added.toString(),
-      //   });
-      // } catch (e) {
-      //   commit('REMOVE_PLAYER', { id: player.id });
-      // }
+      try {
+        await addPlayer({
+          id: player.id,
+          name: player.name,
+          added: player.added.toString(),
+        });
+      } catch (e) {
+        commit('REMOVE_PLAYER', { id: player.id });
+      }
     },
   },
   mutations: {
+    INITIALIZED(state) {
+      state.$initialized = true;
+    },
     RESET_PLAYERS(state) {
       state.players.length = 0;
     },

@@ -1,11 +1,12 @@
 import { ARMADA, BABEL_PROJECT, BABEL_TOWER, BASE, CITIES, LEADERS, WONDER_PACK } from '../gameInfo/expansions';
 import * as WONDERS from '../gameInfo/wonders';
-// import { useFirebase } from '../../firebase/';
+import { useFireStore } from '../../firebase/';
 
 export default {
   namespaced: true,
   state() {
     return {
+      $initialized: false,
       [BASE.id]: {
         id: BASE.id,
         label: BASE.label,
@@ -85,29 +86,32 @@ export default {
       }, []),
   },
   actions: {
-    // async initFromFirestore({ commit }) {
-    //   const { store } = useFirebase();
-    //   const expansions = await store.getExpansions();
-    //   for (const id in expansions) {
-    //     if (!Object.prototype.hasOwnProperty.call(expansions, id)) continue;
-    //     commit('SET_OWNED', { id, owned: expansions[id].owned });
-    //   }
-    // },
-    // async toggleOwned({ commit, state }, { id }) {
-    async toggleOwned({ commit }, { id }) {
-      // const { store } = useFirebase();
-      // const old = state[id].owned;
+    async initFromFirestore({ commit }) {
+      const { getExpansions } = useFireStore();
+      const expansions = await getExpansions();
+      for (const id in expansions) {
+        if (!Object.prototype.hasOwnProperty.call(expansions, id)) continue;
+        commit('SET_OWNED', { id, owned: expansions[id].owned });
+      }
+      commit('INITIALIZED');
+    },
+    async toggleOwned({ commit, state }, { id }) {
+      const { setExpansionOwned } = useFireStore();
+      const old = state[id].owned;
       commit('TOGGLE_OWNED', id);
-      // try {
-      //   await store.setExpansionOwned(id, {
-      //     owned: !old,
-      //   });
-      // } catch {
-      //   commit('SET_OWNED', { id, owned: old });
-      // }
+      try {
+        await setExpansionOwned(id, {
+          owned: !old,
+        });
+      } catch {
+        commit('SET_OWNED', { id, owned: old });
+      }
     },
   },
   mutations: {
+    INITIALIZED(state) {
+      state.$initialized = true;
+    },
     SET_OWNED(state, { id, owned }) {
       state[id].owned = owned;
     },

@@ -1,4 +1,5 @@
 import { getFirestore, doc, collection, getDoc, getDocs, setDoc } from 'firebase/firestore';
+import { useFireAuth } from '.';
 
 function getDocument(db, document, path) {
   const docRef = doc(db, document, path);
@@ -28,28 +29,30 @@ function setDocument(db, document, path, value) {
   return setDoc(docRef, value);
 }
 
-export default class store {
-  constructor(auth) {
-    this.auth = auth;
-    this.firestore = getFirestore();
-  }
+export default function create() {
+  const { user } = useFireAuth();
+  const $db = getFirestore();
 
-  async getUser() {
-    return getDocument(this.firestore, 'users', this.auth.user.uid);
-  }
+  return function useFireStore() {
+    return {
+      async getUser() {
+        return getDocument($db, 'users', user.value.uid);
+      },
 
-  async getExpansions() {
-    return getDocuments(this.firestore, `users/${this.auth.user.uid}/expansions`);
-  }
-  async setExpansionOwned(expansionId, owned) {
-    return setDocument(this.firestore, `users/${this.auth.user.uid}/expansions`, expansionId, owned);
-  }
+      async getExpansions() {
+        return getDocuments($db, `users/${user.value.uid}/expansions`);
+      },
+      async setExpansionOwned(expansionId, owned) {
+        return setDocument($db, `users/${user.value.uid}/expansions`, expansionId, owned);
+      },
 
-  async getPlayers() {
-    return getDocuments(this.firestore, `users/${this.auth.user.uid}/players`);
-  }
-  async addPlayer(player) {
-    console.log(player, typeof player.added);
-    return setDocument(this.firestore, `users/${this.auth.user.uid}/players`, `${player.id}`, player);
-  }
+      async getPlayers() {
+        return getDocuments($db, `users/${user.value.uid}/players`);
+      },
+      async addPlayer(player) {
+        console.log(player, typeof player.added);
+        return setDocument($db, `users/${user.value.uid}/players`, `${player.id}`, player);
+      },
+    };
+  };
 }

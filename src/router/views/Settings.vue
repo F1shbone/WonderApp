@@ -38,13 +38,15 @@
         <template #header>
           <h3>Account</h3>
         </template>
-        <!-- <el-card-list flush>
-          <el-card-list-item> -->
+        <el-card-list flush>
+          <el-card-list-item class="listItem">
+            <div>E-Mail</div>
+            <div>{{ user.email }}</div>
+          </el-card-list-item>
+        </el-card-list>
         <div class="account__signout">
           <el-button type="danger" class="el-button--block" @click="onSignOut">Sign Out</el-button>
         </div>
-        <!-- </el-card-list-item>
-        </el-card-list> -->
       </el-card>
     </div>
   </signed-in>
@@ -64,7 +66,7 @@ import { ElMessageBox } from 'element-plus';
 
 const store = useStore();
 const router = useRouter();
-const { signOut } = useFireAuth();
+const { user, signOut } = useFireAuth();
 
 //#region Expansions
 const expansions = computed(() => store.getters['expansions/expansions']);
@@ -139,6 +141,7 @@ const onSignOut = async () => {
   .account__signout {
     padding-top: $--card-padding;
     padding-bottom: $--card-padding;
+    border-top: 1px solid $--card-border-color;
   }
 }
 .el-message-box {
