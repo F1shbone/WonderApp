@@ -1,4 +1,4 @@
-import { getFirestore, doc, collection, getDoc, getDocs, setDoc } from 'firebase/firestore';
+import { getFirestore, doc, collection, getDoc, getDocs, setDoc, deleteDoc } from 'firebase/firestore';
 import { useFireAuth } from '.';
 
 function getDocument(db, document, path) {
@@ -29,6 +29,12 @@ function setDocument(db, document, path, value) {
   return setDoc(docRef, value);
 }
 
+function deleteDocument(db, document, path) {
+  const docRef = doc(db, document, path);
+
+  return deleteDoc(docRef);
+}
+
 export default function create() {
   const { user } = useFireAuth();
   const $db = getFirestore();
@@ -50,8 +56,10 @@ export default function create() {
         return getDocuments($db, `users/${user.value.uid}/players`);
       },
       async addPlayer(player) {
-        console.log(player, typeof player.added);
         return setDocument($db, `users/${user.value.uid}/players`, `${player.id}`, player);
+      },
+      async deletePlayer(playerId) {
+        return deleteDocument($db, `users/${user.value.uid}/players`, `${playerId}`);
       },
     };
   };

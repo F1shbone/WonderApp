@@ -55,9 +55,17 @@ export default {
           name: player.name,
           added: player.added.toString(),
         });
-      } catch (e) {
+      } catch {
         commit('REMOVE_PLAYER', { id: player.id });
       }
+    },
+    async removePlayer({ commit }, { id }) {
+      const { deletePlayer } = useFireStore();
+      commit('REMOVE_PLAYER', id);
+      try {
+        await deletePlayer(id);
+        // eslint-disable-next-line no-empty
+      } catch {}
     },
   },
   mutations: {

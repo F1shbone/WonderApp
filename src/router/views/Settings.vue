@@ -89,7 +89,7 @@ function addPlayer() {
 }
 
 function removePlayer(player) {
-  store.commit('players/REMOVE_PLAYER', player);
+  store.dispatch('players/removePlayer', player);
 }
 //#endregion
 
