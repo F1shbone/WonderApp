@@ -72,7 +72,12 @@ const activeStat = ref(undefined);
 
 const playerBestCategory = computed(() => {
   return props.players.map((player) => {
-    let acc = { score: 0 };
+    let acc = {
+      id: SCORES.WONDER.id,
+      playerId: props.players[0].id,
+      score: props.players[0].score[SCORES.WONDER.id].score,
+      meta: props.players[0].score[SCORES.WONDER.id].meta,
+    };
     Object.keys(player.score).forEach((scoreId) => {
       if (player.score[scoreId].score > acc.score || acc.id === undefined) {
         acc = {
@@ -102,19 +107,21 @@ const categoryTopScorer = computed(() => {
           return acc;
         }
       },
-      { score: 0 }
+      {
+        id: scoreId,
+        playerId: props.players[0].id,
+        score: props.players[0].score[scoreId].score,
+        meta: props.players[0].score[scoreId].meta,
+      }
     );
   });
 });
 
 const categoryHighestScore = computed(() => {
-  return categoryTopScorer.value.reduce(
-    (acc, val) => {
-      if (val.score > acc.score) return val;
-      return acc;
-    },
-    { score: 0 }
-  );
+  return categoryTopScorer.value.reduce((acc, val) => {
+    if (val.score > acc.score) return val;
+    return acc;
+  }, categoryTopScorer.value[0]);
 });
 </script>
 
