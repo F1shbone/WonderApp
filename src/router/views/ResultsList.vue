@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="results.length > 0">
     <h1>Results List</h1>
 
     <ul class="results-list">
@@ -26,6 +26,9 @@
         </router-link>
       </li>
     </ul>
+  </div>
+  <div v-else class="results-list__empty">
+    <el-empty description="No past games" />
   </div>
 </template>
 
@@ -83,6 +86,19 @@ const results = computed(() => store.state.results.results);
       margin-left: $--card-padding;
       padding-left: $--card-padding;
       border-left: 1px solid $--card-border-color;
+    }
+  }
+
+  &__empty {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: $--body-bg;
+    z-index: $--z-index-empty;
+
+    .el-empty {
+      padding-top: 0;
     }
   }
 }

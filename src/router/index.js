@@ -94,7 +94,7 @@ router.beforeEach(async (to, from, next) => {
   if (to.path === '/loading' || to.path === '/login') {
     next();
   } else if (user.value.uid && user.value.email) {
-    await initStore();
+    await initStore(); // init's store if not already initiated
     next();
   } else {
     next({
