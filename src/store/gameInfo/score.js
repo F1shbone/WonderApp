@@ -13,7 +13,7 @@ export const COINS = {
   getScore() {
     return {
       get score() {
-        return this.meta['+1'] * 1 + this.meta['+3'] * 3 + this.meta['+6'] * 6;
+        return Math.floor((this.meta['+1'] * 1 + this.meta['+3'] * 3 + this.meta['+6'] * 6) / 3);
       },
       meta: {
         '+1': 0,
