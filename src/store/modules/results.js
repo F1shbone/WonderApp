@@ -1,5 +1,37 @@
-import { v4 } from 'uuid';
 import { useFireStore } from '../../firebase';
+
+function getResultId(date) {
+  const yyyy = date.getFullYear();
+  let mm = date.getMonth() + 1;
+  mm = (mm > 9 ? '' : '0') + mm;
+  let dd = date.getDate();
+  dd = (dd > 9 ? '' : '0') + dd;
+
+  let hash = Math.random()
+    .toString(36)
+    .replace(/[^a-z0-9]+/g, '')
+    .substr(0, 12);
+
+  return `${yyyy}-${mm}-${dd}-${hash}`;
+}
+
+function placePlayers(a, b) {
+  // 1st sort by total VP
+  const total = b.total - a.total;
+  if (total !== 0) return total;
+  // 2nd if total VP are the same, sort by coin value
+  const coins = b.score.COINS.score - a.score.COINS.score;
+  if (coins !== 0) return coins;
+  // 3rd if coin VP are the same, sort by +6 coin amount
+  const coins6 = b.score.COINS.meta['+6'] - a.score.COINS.meta['+6'];
+  if (coins6 !== 0) return coins6;
+  // 4th if coin VP are the same, sort by +3 coin amount
+  const coins3 = b.score.COINS.meta['+3'] - a.score.COINS.meta['+3'];
+  if (coins3 !== 0) return coins3;
+  // 5th if coin VP are the same, sort by +1 coin amount
+  const coins1 = b.score.COINS.meta['+1'] - a.score.COINS.meta['+1'];
+  return coins1;
+}
 
 export default {
   namespaced: true,
@@ -24,14 +56,16 @@ export default {
     },
     async addMatch({ commit, state, rootState }) {
       const { addResult } = useFireStore();
-      const players = rootState.match.players.map((player) => {
-        return JSON.parse(
-          JSON.stringify({
-            ...player,
-            total: Object.values(player.score).reduce((acc, val) => (acc += val.score), 0),
-          })
-        );
-      });
+      const players = rootState.match.players
+        .map((player) => {
+          return JSON.parse(
+            JSON.stringify({
+              ...player,
+              total: Object.values(player.score).reduce((acc, val) => (acc += val.score), 0),
+            })
+          );
+        })
+        .sort(placePlayers);
       const result = {
         label: `Match ${state.results.length + 1}`,
         date: rootState.match.date,
@@ -40,7 +74,7 @@ export default {
         players,
       };
 
-      await addResult(v4(), result);
+      await addResult(getResultId(result.date), result);
       commit('ADD_RESULT', result);
 
       return state.results.length - 1;

@@ -35,10 +35,6 @@ const props = defineProps({
     required: true,
     type: Array,
   },
-  playersSorted: {
-    required: true,
-    type: Array,
-  },
   scoreIds: {
     required: true,
     type: Array,
@@ -55,9 +51,9 @@ const props = defineProps({
 
 const playersFiltered = computed(() => {
   if (props.hideTop3) {
-    return props.playersSorted.slice(3);
+    return props.players.slice(3);
   } else {
-    return props.playersSorted;
+    return props.players;
   }
 });
 
