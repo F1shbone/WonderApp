@@ -6,7 +6,6 @@
 
 <script setup>
 import { onMounted } from 'vue';
-// import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 import { useFireAuth } from '../../firebase/';
 

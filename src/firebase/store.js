@@ -61,6 +61,13 @@ export default function create() {
       async deletePlayer(playerId) {
         return deleteDocument($db, `users/${user.value.uid}/players`, `${playerId}`);
       },
+
+      async getResults() {
+        return getDocuments($db, `users/${user.value.uid}/results`);
+      },
+      async addResult(id, result) {
+        return setDocument($db, `users/${user.value.uid}/results`, id, result);
+      },
     };
   };
 }

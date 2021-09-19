@@ -7,10 +7,11 @@
           <kbd><i class="el-icon-right" /></kbd>
         </button>
       </div>
-      <div class="keyboard__btns keyboard__stepper" v-if="props.score.id === SCORES.COINS.id">
+      <div class="keyboard__btns keyboard__stepper keyboard__stepper--4cols" v-if="props.score.id === SCORES.COINS.id">
         <button @click="incMeta('+1')"><i class="el-icon-arrow-up" /></button>
         <button @click="incMeta('+3')"><i class="el-icon-arrow-up" /></button>
         <button @click="incMeta('+6')"><i class="el-icon-arrow-up" /></button>
+        <button @click="incMeta('-1')"><i class="el-icon-arrow-up" /></button>
         <div class="keyboard__stepper--center">
           <el-badge :value="props.value.meta['+1']" type="danger">
             <img alt="Coins +1" src="../assets/coin__+1.png" />
@@ -26,9 +27,15 @@
             <img alt="Coins +6" src="../assets/coin__+6.png" />
           </el-badge>
         </div>
+        <div class="keyboard__stepper--center">
+          <el-badge :value="props.value.meta['-1']" type="danger">
+            <img alt="Coins +6" src="../assets/coin__-1.png" />
+          </el-badge>
+        </div>
         <button @click="decMeta('+1')"><i class="el-icon-arrow-down" /></button>
         <button @click="decMeta('+3')"><i class="el-icon-arrow-down" /></button>
         <button @click="decMeta('+6')"><i class="el-icon-arrow-down" /></button>
+        <button @click="decMeta('-1')"><i class="el-icon-arrow-down" /></button>
       </div>
       <div
         class="keyboard__btns keyboard__stepper keyboard__stepper--4cols"
