@@ -13,12 +13,13 @@ export const COINS = {
   getScore() {
     return {
       get score() {
-        return Math.floor((this.meta['+1'] * 1 + this.meta['+3'] * 3 + this.meta['+6'] * 6) / 3);
+        return Math.floor((this.meta['+1'] * 1 + this.meta['+3'] * 3 + this.meta['+6'] * 6) / 3) - this.meta['-1'];
       },
       meta: {
         '+1': 0,
         '+3': 0,
         '+6': 0,
+        '-1': 0,
       },
     };
   },
