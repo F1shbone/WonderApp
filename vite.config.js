@@ -1,5 +1,4 @@
-import path from 'path';
-import process from 'process';
+import { fileURLToPath, URL } from 'node:url';
 
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
@@ -8,15 +7,8 @@ import vue from '@vitejs/plugin-vue';
 export default defineConfig({
   plugins: [vue()],
   resolve: {
-    alias: [
-      {
-        find: /~(.+)/,
-        replacement: path.resolve(process.cwd(), 'node_modules/$1'),
-      },
-      {
-        find: /@\//,
-        replacement: path.resolve(process.cwd(), './src') + '/',
-      },
-    ],
+    alias: {
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+    },
   },
 });
